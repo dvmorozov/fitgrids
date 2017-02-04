@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="4">
+    <PathDelim Value="\"/>
+    <Name Value="FitGrids"/>
+    <Type Value="RunAndDesignTime"/>
+    <AddToProjectUsesSection Value="True"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <PathDelim Value="\"/>
+      <SearchPaths>
+        <OtherUnitFiles Value="."/>
+        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+      </SearchPaths>
+      <Parsing>
+        <SyntaxOptions>
+          <SyntaxMode Value="Delphi"/>
+          <CStyleOperator Value="False"/>
+          <UseAnsiStrings Value="False"/>
+        </SyntaxOptions>
+      </Parsing>
+    </CompilerOptions>
+    <Version Minor="1"/>
+    <Files Count="10">
+      <Item1>
+        <Filename Value="NumericGrid.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="NumericGrid"/>
+      </Item1>
+      <Item2>
+        <Filename Value="Tools.pas"/>
+        <AddToUsesPkgSection Value="False"/>
+        <UnitName Value="Tools"/>
+      </Item2>
+      <Item3>
+        <Filename Value="SimpMath.pas"/>
+        <AddToUsesPkgSection Value="False"/>
+        <UnitName Value="SimpMath"/>
+      </Item3>
+      <Item4>
+        <Filename Value="TableComp.pas"/>
+        <AddToUsesPkgSection Value="False"/>
+        <UnitName Value="TableComp"/>
+      </Item4>
+      <Item5>
+        <Filename Value="SelfSaved.pas"/>
+        <AddToUsesPkgSection Value="False"/>
+        <UnitName Value="SelfSaved"/>
+      </Item5>
+      <Item6>
+        <Filename Value="MyExceptions.pas"/>
+        <AddToUsesPkgSection Value="False"/>
+        <UnitName Value="MyExceptions"/>
+      </Item6>
+      <Item7>
+        <Filename Value="CBRCComponent.pas"/>
+        <AddToUsesPkgSection Value="False"/>
+        <UnitName Value="CBRCComponent"/>
+      </Item7>
+      <Item8>
+        <Filename Value="ComponentList.pas"/>
+        <AddToUsesPkgSection Value="False"/>
+        <UnitName Value="ComponentList"/>
+      </Item8>
+      <Item9>
+        <Filename Value="ClassInheritIDs.pas"/>
+        <AddToUsesPkgSection Value="False"/>
+        <UnitName Value="ClassInheritIDs"/>
+      </Item9>
+      <Item10>
+        <Filename Value="SelfCopied.pas"/>
+        <AddToUsesPkgSection Value="False"/>
+        <UnitName Value="SelfCopied"/>
+      </Item10>
+    </Files>
+    <RequiredPkgs Count="1">
+      <Item1>
+        <PackageName Value="LCL"/>
+        <MinVersion Major="1" Valid="True"/>
+        <DefaultFilename Value="$(LazarusDir)\lcl\"/>
+      </Item1>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+      <IgnoreBinaries Value="False"/>
+    </PublishOptions>
+    <CustomOptions Items="ExternHelp" Version="2">
+      <_ExternHelp Items="Count"/>
+    </CustomOptions>
+  </Package>
+</CONFIG>
