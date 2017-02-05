@@ -10,7 +10,9 @@
 ------------------------------------------------------------------------------}
 unit SelfCopied;
 
+{$IFDEF Lazarus}
 {$MODE Delphi}
+{$ENDIF}
 
 interface
 
