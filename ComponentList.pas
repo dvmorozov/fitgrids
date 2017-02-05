@@ -10,12 +10,17 @@
 ------------------------------------------------------------------------------}
 unit ComponentList;
 
+{$IFDEF Lazarus}
 {$MODE Delphi}
+{$ENDIF}
 
 interface
 
 uses
-    LCLIntf,  SysUtils,  Classes, CBRCComponent, Tools;
+{$IFDEF Lazarus}
+    LCLIntf,
+{$ENDIF}
+    SysUtils,  Classes, CBRCComponent, Tools;
 
 type
     ISelfChecked = interface

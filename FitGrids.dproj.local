@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.870,=E:\04 - github repos\fitgrids\examplesmain.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.935,=E:\04 - github repos\fitgrids\ComponentList.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.044,=rtl.dcp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.717,E:\04 - github repos\fitgrids\examplesmain.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.072,=E:\04 - github repos\fitgrids\TableComp.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.422,=vclx.dcp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.028,=E:\04 - github repos\fitgrids\SimpMath.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.888,=E:\04 - github repos\fitgrids\ClassInheritIDs.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.833,=vcl.dcp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.898,=E:\04 - github repos\fitgrids\MyExceptions.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.996,=E:\04 - github repos\fitgrids\SelfSaved.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.870,=E:\04 - github repos\fitgrids\CBRCComponent.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.973,=E:\04 - github repos\fitgrids\SelfCopied.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.933,=E:\04 - github repos\fitgrids\NumericGrid.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.121,=E:\04 - github repos\fitgrids\Tools.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.391,=designide.dcp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.584,E:\04 - github repos\fitgrids\FitGrids.dproj=C:\Users\Dmitry\Documents\Embarcadero\Studio\Projects\Package1.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.407,=vclactnband.dcp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.440,=xmlrtl.dcp</Transaction>
+  </Transactions>
+	<ProjectSortOrder AutoSort="0" SortType="0">
+    <File Path="CBRCComponent.pas"/>
+    <File Path="ClassInheritIDs.pas"/>
+    <File Path="ComponentList.pas"/>
+    <File Path="MyExceptions.pas"/>
+    <File Path="NumericGrid.pas"/>
+    <File Path="SelfCopied.pas"/>
+    <File Path="SelfSaved.pas"/>
+    <File Path="SimpMath.pas"/>
+    <File Path="TableComp.pas"/>
+    <File Path="Tools.pas"/>
+    <File Path="designide.dcp"/>
+    <File Path="rtl.dcp"/>
+    <File Path="vcl.dcp"/>
+    <File Path="vclactnband.dcp"/>
+    <File Path="vclx.dcp"/>
+    <File Path="xmlrtl.dcp"/>
+  </ProjectSortOrder>
+</BorlandProject>

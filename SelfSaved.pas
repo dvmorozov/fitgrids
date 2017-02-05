@@ -10,7 +10,9 @@
 ------------------------------------------------------------------------------}
 unit SelfSaved;
 
+{$IFDEF Lazarus}
 {$MODE Delphi}
+{$ENDIF}
 
 interface
 

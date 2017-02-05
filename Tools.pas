@@ -10,7 +10,9 @@
 ------------------------------------------------------------------------------}
 unit Tools;
 
+{$IFDEF Lazarus}
 {$MODE Delphi}
+{$ENDIF}
 
 interface
 
@@ -164,8 +166,8 @@ function DoubleVector3AsString(const Vect: TDoubleVector3;
 var St: string;
     SavedDecimalSeparator: Char;
 begin
-    SavedDecimalSeparator := DecimalSeparator;
-    DecimalSeparator := '.';
+    SavedDecimalSeparator := FormatSettings.DecimalSeparator;
+    FormatSettings.DecimalSeparator := '.';
     St := '(';
     if FixedMode then begin
         St := St + FloatToStrF(Vect[1], ffFixed, Precision, Digits) + ', ';
@@ -177,7 +179,7 @@ begin
         St := St + FloatToStr(Vect[3]);
     end;
     St := St + ')';
-    DecimalSeparator := SavedDecimalSeparator;
+    FormatSettings.DecimalSeparator := SavedDecimalSeparator;
     Result := St;
 end;
 
@@ -386,8 +388,8 @@ const ParamRequest: FParamRequest): Double;
 var SaveDecimalSeparator: Char;
 begin
     ErrorCode := CALC_NO_ERRORS;
-    SaveDecimalSeparator := DecimalSeparator;
-    DecimalSeparator := '.';
+    SaveDecimalSeparator := FormatSettings.DecimalSeparator;
+    FormatSettings.DecimalSeparator := '.';
     MakeAllOper(Expression, ['*', '/'], ErrorCode, ParamRequest);
     MakeAllOper(Expression, ['+', '-'], ErrorCode, ParamRequest);
     try Result := StrToFloat(Expression);
@@ -405,7 +407,7 @@ begin
         end
         else begin Result := 0; ErrorCode := CALC_INVALID_PARAMETER; Exit end;
     end;
-    DecimalSeparator := SaveDecimalSeparator;
+    FormatSettings.DecimalSeparator := SaveDecimalSeparator;
 end;
 
 function CalculateExpr(var Expression: string;
@@ -417,8 +419,8 @@ var Index, Index2: LongInt;
     SaveDecimalSeparator: Char;
 begin
     ErrorCode := CALC_NO_ERRORS;
-    SaveDecimalSeparator := DecimalSeparator;
-    DecimalSeparator := '.';
+    SaveDecimalSeparator := FormatSettings.DecimalSeparator;
+    FormatSettings.DecimalSeparator := '.';
     repeat
         Index := GetCharPosition(Expression, ')', 1, 1);
         if Index <> -1 then
@@ -433,7 +435,7 @@ begin
         end;
     until Index = -1;
     Result := CalculateSimpExpr(Expression, ErrorCode, ParamRequest);
-    DecimalSeparator := SaveDecimalSeparator;
+    FormatSettings.DecimalSeparator := SaveDecimalSeparator;
 end;
 
 function GetRandomWithSign: Double;

@@ -1,11 +1,13 @@
 unit ExamplesMain;
 
+{$IFDEF Lazarus}
 {$mode objfpc}{$H+}
+{$ENDIF}
 
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, NumericGrid;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, NumericGrid;
 
 type
 

@@ -11,7 +11,9 @@
 unit SimpMath;
 
 //{$mode objfpc}{$H+}
+{$IFDEF Lazarus}
 {$MODE Delphi}
+{$ENDIF}
 
 interface
 

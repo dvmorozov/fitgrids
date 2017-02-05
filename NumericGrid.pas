@@ -10,13 +10,19 @@
 ------------------------------------------------------------------------------}
 unit NumericGrid;
 
+{$IFDEF Lazarus}
 {$MODE Delphi}
-{$define lazarus}   //  выключает части специфичные для Delphi
+{$ENDIF}
 
 interface
 
 uses
-    LCLIntf, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+{$IFDEF Lazarus}
+    LCLIntf,
+{$ELSE}
+    System.Types, Windows,
+{$ENDIF}
+    Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
     Grids, ClipBrd, Tools, MyExceptions;
 
 var
@@ -1189,7 +1195,7 @@ const DelimiterChars: set of Char = [#9, #10, #13];
 
     function ExtractString(Buffer: array of Char;
     const Count: LongInt; var Index: LongInt): string;
-    var St: ShortString;
+    var St: string;
         i, j, k: LongInt;
     const BadSymbols: set of Char = [#10, #13];
     begin
@@ -1203,7 +1209,7 @@ const DelimiterChars: set of Char = [#9, #10, #13];
                     if not (Buffer[j] in BadSymbols) then
                     begin
                         St[Length(St) + 1] := Buffer[j];
-                        Inc(St[0]);
+                        SetLength(St, Length(St) + 1);
                     end;
                 end;
                 j := i;
@@ -1811,7 +1817,7 @@ const DelimiterChars: set of Char = [#9, #10, #13];
 
     function ExtractString(Buffer: array of Char;
         const Count: LongInt; var Index: LongInt): string;
-    var St: ShortString;
+    var St: string;
         i, j, k: LongInt;
     const BadSymbols: set of Char = [#10, #13];
     begin
@@ -1825,7 +1831,7 @@ const DelimiterChars: set of Char = [#9, #10, #13];
                     if not (Buffer[j] in BadSymbols) then
                     begin
                         St[Length(St) + 1] := Buffer[j];
-                        Inc(St[0]);
+                        SetLength(St, Length(St) + 1);
                     end;
                 end;
                 j := i;

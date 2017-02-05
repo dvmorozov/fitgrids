@@ -10,7 +10,9 @@
 ------------------------------------------------------------------------------}
 unit TableComp;
 
+{$IFDEF Lazarus}
 {$MODE Delphi}
+{$ENDIF}
 
 interface
 

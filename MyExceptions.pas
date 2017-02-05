@@ -7,7 +7,9 @@
 ------------------------------------------------------------------------------}
 unit MyExceptions;
 
+{$IFDEF Lazarus}
 {$MODE Delphi}
+{$ENDIF}
 
 interface
 
