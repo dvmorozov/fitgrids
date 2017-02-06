@@ -19,6 +19,9 @@
           <UseAnsiStrings Value="False"/>
         </SyntaxOptions>
       </Parsing>
+      <Other>
+        <CustomOptions Value="-dLazarus"/>
+      </Other>
     </CompilerOptions>
     <Version Minor="1"/>
     <Files Count="10">

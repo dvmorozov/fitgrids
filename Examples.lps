@@ -32,6 +32,9 @@
         <DefaultSyntaxHighlighter Value="XML"/>
       </Unit2>
     </Units>
+    <CustomDefines Count="1">
+      <Define0 Value="Lazarus"/>
+    </CustomDefines>
     <JumpHistory HistoryIndex="-1"/>
   </ProjectSession>
 </CONFIG>
