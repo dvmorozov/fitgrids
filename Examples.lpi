@@ -31,9 +31,6 @@
       <Item1>
         <PackageName Value="LCL"/>
       </Item1>
-      <Item2>
-        <PackageName Value="FitGrids"/>
-      </Item2>
     </RequiredPackages>
     <Units Count="2">
       <Unit0>
@@ -67,6 +64,9 @@
         </Win32>
       </Options>
     </Linking>
+    <Other>
+      <CustomOptions Value="-dLazarus"/>
+    </Other>
   </CompilerOptions>
   <Debugging>
     <Exceptions Count="3">
