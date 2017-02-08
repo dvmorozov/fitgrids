@@ -7,7 +7,7 @@ unit ExamplesMain;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, NumericGrid;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, NumericGrid;
 
 type
 
@@ -19,6 +19,13 @@ type
     DataGrid1: TDataGrid;
     GEFGrid1: TGEFGrid;
     IDAGrid1: TIDAGrid;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
     NumericGrid1: TNumericGrid;
   private
     { private declarations }
@@ -32,6 +39,8 @@ var
 implementation
 
 {$R *.lfm}
+
+{ TForm1 }
 
 end.
 
