@@ -4,11 +4,11 @@
     <PathDelim Value="\"/>
     <Version Value="9"/>
     <BuildModes Active="Default"/>
-    <Units Count="3">
+    <Units Count="6">
       <Unit0>
         <Filename Value="Examples.lpr"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="92"/>
       </Unit0>
       <Unit1>
         <Filename Value="examplesmain.pas"/>
@@ -18,7 +18,9 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="ExamplesMain"/>
         <IsVisibleTab Value="True"/>
-        <UsageCount Value="20"/>
+        <TopLine Value="14"/>
+        <CursorPos X="10" Y="24"/>
+        <UsageCount Value="92"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit1>
@@ -28,13 +30,130 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="13"/>
         <DefaultSyntaxHighlighter Value="XML"/>
       </Unit2>
+      <Unit3>
+        <Filename Value="NumericGrid.pas"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="427"/>
+        <CursorPos X="81" Y="443"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="C:\lazarus\components\ideintf\propedits.pp"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="5"/>
+        <CursorPos X="15" Y="20"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="C:\lazarus\lcl\include\control.inc"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="3652"/>
+        <CursorPos Y="3667"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit5>
     </Units>
     <CustomDefines Count="1">
       <Define0 Value="Lazarus"/>
     </CustomDefines>
-    <JumpHistory HistoryIndex="-1"/>
+    <JumpHistory Count="24" HistoryIndex="23">
+      <Position1>
+        <Filename Value="NumericGrid.pas"/>
+      </Position1>
+      <Position2>
+        <Filename Value="NumericGrid.pas"/>
+        <Caret Line="21" Column="16" TopLine="15"/>
+      </Position2>
+      <Position3>
+        <Filename Value="NumericGrid.pas"/>
+        <Caret Line="352" Column="183" TopLine="348"/>
+      </Position3>
+      <Position4>
+        <Filename Value="NumericGrid.pas"/>
+        <Caret Line="28" Column="4" TopLine="13"/>
+      </Position4>
+      <Position5>
+        <Filename Value="C:\lazarus\components\ideintf\propedits.pp"/>
+      </Position5>
+      <Position6>
+        <Filename Value="NumericGrid.pas"/>
+        <Caret Line="28" Column="3" TopLine="13"/>
+      </Position6>
+      <Position7>
+        <Filename Value="NumericGrid.pas"/>
+        <Caret Line="21" Column="14" TopLine="6"/>
+      </Position7>
+      <Position8>
+        <Filename Value="NumericGrid.pas"/>
+        <Caret Line="619" Column="26" TopLine="526"/>
+      </Position8>
+      <Position9>
+        <Filename Value="NumericGrid.pas"/>
+        <Caret Line="21" Column="23" TopLine="10"/>
+      </Position9>
+      <Position10>
+        <Filename Value="NumericGrid.pas"/>
+        <Caret Line="558" Column="28" TopLine="554"/>
+      </Position10>
+      <Position11>
+        <Filename Value="NumericGrid.pas"/>
+        <Caret Line="21" Column="39"/>
+      </Position11>
+      <Position12>
+        <Filename Value="NumericGrid.pas"/>
+        <Caret Line="230" Column="37" TopLine="215"/>
+      </Position12>
+      <Position13>
+        <Filename Value="examplesmain.pas"/>
+        <Caret Line="15" Column="45" TopLine="4"/>
+      </Position13>
+      <Position14>
+        <Filename Value="NumericGrid.pas"/>
+        <Caret Line="622" Column="137" TopLine="613"/>
+      </Position14>
+      <Position15>
+        <Filename Value="NumericGrid.pas"/>
+      </Position15>
+      <Position16>
+        <Filename Value="NumericGrid.pas"/>
+        <Caret Line="409" Column="16" TopLine="384"/>
+      </Position16>
+      <Position17>
+        <Filename Value="NumericGrid.pas"/>
+        <Caret Line="415" Column="27" TopLine="390"/>
+      </Position17>
+      <Position18>
+        <Filename Value="NumericGrid.pas"/>
+        <Caret Line="416" Column="50" TopLine="391"/>
+      </Position18>
+      <Position19>
+        <Filename Value="NumericGrid.pas"/>
+        <Caret Line="430" Column="79" TopLine="405"/>
+      </Position19>
+      <Position20>
+        <Filename Value="NumericGrid.pas"/>
+      </Position20>
+      <Position21>
+        <Filename Value="NumericGrid.pas"/>
+        <Caret Line="611" Column="28" TopLine="596"/>
+      </Position21>
+      <Position22>
+        <Filename Value="NumericGrid.pas"/>
+        <Caret Line="43" Column="45" TopLine="31"/>
+      </Position22>
+      <Position23>
+        <Filename Value="examplesmain.pas"/>
+        <Caret Line="15" Column="45" TopLine="4"/>
+      </Position23>
+      <Position24>
+        <Filename Value="examplesmain.pas"/>
+        <Caret Line="45" TopLine="17"/>
+      </Position24>
+    </JumpHistory>
   </ProjectSession>
 </CONFIG>

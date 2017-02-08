@@ -1,54 +1,77 @@
 object Form1: TForm1
-  Left = 188
-  Height = 535
-  Top = 192
-  Width = 974
+  Left = 365
+  Height = 680
+  Top = 123
+  Width = 922
+  BorderStyle = bsDialog
   Caption = 'FitGrids Examples'
-  ClientHeight = 535
-  ClientWidth = 974
+  ClientHeight = 680
+  ClientWidth = 922
   LCLVersion = '1.4.4.0'
   object ColorStringGrid1: TColorStringGrid
-    Left = 16
-    Height = 138
-    Top = 8
-    Width = 426
+    Left = 8
+    Height = 166
+    Top = 56
+    Width = 448
     ColCount = 5
     RowCount = 5
     TabOrder = 0
     OddRowColor = clWhite
-    NotOddRowColor = clYellow
-    SelectedRegionColor = 2790064
+    EvenRowColor = clAqua
+    SelectedRegionColor = clYellow
     ColNumFixed = False
     RowNumFixed = False
+    ColWidths = (
+      64
+      134
+      64
+      64
+      64
+    )
+    Cells = (
+      4
+      0
+      0
+      'FixedColor'
+      1
+      1
+      'SelectedRegionColor'
+      1
+      2
+      'EvenRowColor'
+      1
+      3
+      'OddRowColor'
+    )
   end
   object NumericGrid1: TNumericGrid
-    Left = 16
-    Height = 160
-    Top = 176
-    Width = 424
+    Left = 8
+    Height = 190
+    Top = 256
+    Width = 450
     ColCount = 5
     RowCount = 5
     TabOrder = 1
     OddRowColor = clWhite
-    NotOddRowColor = clYellow
+    EvenRowColor = clYellow
     SelectedRegionColor = 2790064
     ColNumFixed = False
     RowNumFixed = False
     DisabledColor = clGray
   end
   object GEFGrid1: TGEFGrid
-    Left = 16
-    Height = 136
-    Top = 360
-    Width = 424
+    Left = 464
+    Height = 190
+    Top = 480
+    Width = 450
     TabOrder = 2
     Modified = False
   end
   object IDAGrid1: TIDAGrid
-    Left = 472
-    Height = 139
-    Top = 8
-    Width = 464
+    Left = 464
+    Height = 190
+    Top = 32
+    Width = 450
     TabOrder = 3
     Modified = False
     ColNumFixed = False
@@ -56,10 +79,10 @@ object Form1: TForm1
     Changeable = True
   end
   object DataGrid1: TDataGrid
-    Left = 472
-    Height = 160
-    Top = 176
-    Width = 464
+    Left = 464
+    Height = 190
+    Top = 256
+    Width = 450
     TabOrder = 4
     Modified = False
     ColNumFixed = False
@@ -67,18 +90,74 @@ object Form1: TForm1
     Changeable = True
   end
   object ColoredGrid1: TColoredGrid
-    Left = 472
-    Height = 136
-    Top = 360
-    Width = 464
+    Left = 8
+    Height = 190
+    Top = 480
+    Width = 450
     TabOrder = 5
     Modified = False
     ColNumFixed = False
     RowNumFixed = False
     Changeable = True
     OddRowColor = clWhite
-    NotOddRowColor = clYellow
+    EvenRowColor = clYellow
     SelectedRegionColor = 2790064
     DisabledColor = clBlack
+  end
+  object Label1: TLabel
+    Left = 8
+    Height = 15
+    Top = 8
+    Width = 88
+    Caption = 'TColorStringGrid'
+    ParentColor = False
+  end
+  object Label2: TLabel
+    Left = 8
+    Height = 15
+    Top = 232
+    Width = 75
+    Caption = 'TNumericGrid'
+    ParentColor = False
+  end
+  object Label3: TLabel
+    Left = 8
+    Height = 15
+    Top = 455
+    Width = 70
+    Caption = 'TColoredGrid'
+    ParentColor = False
+  end
+  object Label4: TLabel
+    Left = 464
+    Height = 15
+    Top = 8
+    Width = 48
+    Caption = 'TIDAGrid'
+    ParentColor = False
+  end
+  object Label5: TLabel
+    Left = 464
+    Height = 15
+    Top = 232
+    Width = 53
+    Caption = 'TDataGrid'
+    ParentColor = False
+  end
+  object Label6: TLabel
+    Left = 464
+    Height = 15
+    Top = 456
+    Width = 48
+    Caption = 'TGEFGrid'
+    ParentColor = False
+  end
+  object Label7: TLabel
+    Left = 8
+    Height = 15
+    Top = 32
+    Width = 363
+    Caption = 'Grid allows setting up colors of different types of cells at design time.'
+    ParentColor = False
   end
 end

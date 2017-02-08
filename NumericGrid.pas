@@ -18,7 +18,7 @@ interface
 
 uses
 {$IFDEF Lazarus}
-    LCLIntf,
+    LCLIntf, PropEdits, GraphPropEdits,
 {$ELSE}
     System.Types, Windows,
 {$ENDIF}
@@ -406,14 +406,14 @@ type
     TColoredGrid = class(TDataGrid)
     protected
         FOddRowColor: TColor;
-        FNotOddRowColor: TColor;
+        FEvenRowColor: TColor;
         FSelectedRegionColor: TColor;
         FDisabledColor: TColor;
 
         function GetOddRowColor: TColor; virtual;
         procedure SetOddRowColor(const AOddRowColor: TColor); virtual;
-        function GetNotOddRowColor: TColor; virtual;
-        procedure SetNotOddRowColor(const ANotOddRowColor: TColor); virtual;
+        function GetEvenRowColor: TColor; virtual;
+        procedure SetEvenRowColor(const AEvenRowColor: TColor); virtual;
         function GetSelectedRegionColor: TColor; virtual;
         procedure SetSelectedRegionColor(const ASelectedRegionColor: TColor); virtual;
         function GetDisabledColor: TColor; virtual;
@@ -427,7 +427,7 @@ type
 
     published
         property OddRowColor: TColor read GetOddRowColor write SetOddRowColor;
-        property NotOddRowColor: TColor read GetNotOddRowColor write SetNotOddRowColor;
+        property EvenRowColor: TColor read GetEvenRowColor write SetEvenRowColor;
         property SelectedRegionColor: TColor
             read GetSelectedRegionColor write SetSelectedRegionColor;
         property DisabledColor: TColor
@@ -440,21 +440,19 @@ type
     TGetCellColorEvent = procedure(Sender: TObject;
     ColNum, RowNum: LongInt; var CellColor: TColor) of object;
 
+    // Grid allows setting up colors of different types of cells at design time.
     TColorStringGrid = class(TStringGrid)
-        //  сетка раскрашивающая разные типы ячеек
-        //  !!! перекрытые свойства ColCount и RowCount не работают в
-        //  design-time - вместо них используются свойства предка !!!
     protected
         FColorMatrix: array of array of TColor;
         FOddRowColor: TColor;
-        FNotOddRowColor: TColor;
+        FEvenRowColor: TColor;
         FSelectedRegionColor: TColor;
         FOnGetCellColor: TGetCellColorEvent;
         FColNumFixed: Boolean;  //  число колонок не может изменяться
         FRowNumFixed: Boolean;  //  число столбцов не может изменяться
 
         procedure SetOddRowColor(Color: TColor);
-        procedure SetNotOddRowColor(Color: TColor);
+        procedure SetEvenRowColor(Color: TColor);
         procedure SetSelectedRegionColor(Color: TColor);
         procedure DrawCell(ACol, ARow: Longint; ARect: TRect;
                   AState: TGridDrawState); override;
@@ -494,9 +492,9 @@ type
         property DoubleBuffered;
         property OddRowColor: TColor
             read FOddRowColor           write SetOddRowColor;
-        property NotOddRowColor: TColor
+        property EvenRowColor: TColor
             //   https://www.evernote.com/shard/s132/nl/14501366/28b37bf8-5cce-4a99-a6f5-8249dd0bad1c
-            read FNotOddRowColor        write SetNotOddRowColor;
+            read FEvenRowColor          write SetEvenRowColor;
         property SelectedRegionColor: TColor
             read FSelectedRegionColor   write SetSelectedRegionColor;
         property ColNumFixed: Boolean
@@ -615,11 +613,11 @@ begin
     RegisterComponents('Fit', [TIDAGrid]);
     RegisterComponents('Fit', [TDataGrid]);
     RegisterComponents('Fit', [TColoredGrid]);
-    (*
+
     RegisterPropertyEditor(TypeInfo(TColor), TColorStringGrid,
         'OddRowColor', TColorProperty);
     RegisterPropertyEditor(TypeInfo(TColor), TColorStringGrid,
-        'NotOddRowColor', TColorProperty);
+        'EvenRowColor', TColorProperty);
     RegisterPropertyEditor(TypeInfo(TColor), TColorStringGrid,
         'SelectedRegionColor', TColorProperty);
     RegisterPropertyEditor(TypeInfo(TColor), TColorStringGrid,
@@ -636,7 +634,7 @@ begin
     RegisterPropertyEditor(
         TypeInfo(TColor), TColoredGrid, 'OddRowColor', TColorProperty);
     RegisterPropertyEditor(
-        TypeInfo(TColor), TColoredGrid, 'NotOddRowColor', TColorProperty);
+        TypeInfo(TColor), TColoredGrid, 'EvenRowColor', TColorProperty);
     RegisterPropertyEditor(
         TypeInfo(TColor), TColoredGrid, 'SelectedRegionColor', TColorProperty);
     RegisterPropertyEditor(
@@ -659,7 +657,6 @@ begin
     RegisterPropertyEditor(
         TypeInfo(TGridModified), TGEFGrid,
         'OnGridModified', TMethodProperty);
-    *)
 end;
 
 procedure TIDAGrid.MouseUp;
@@ -940,7 +937,7 @@ procedure TColoredGrid.DrawCell(ACol, ARow: Longint;
     function GetColorByDefault(ACol, ARow: LongInt): TColor;
     begin
         if Odd(ARow) then Result := OddRowColor
-        else Result := NotOddRowColor;
+        else Result := EvenRowColor;
     end;
 
 var SaveColor, TempColor: TColor;
@@ -987,7 +984,7 @@ constructor TColoredGrid.Create;
 begin
      inherited Create(AOwner);
      OddRowColor := CL_ODD_ROW;
-     NotOddRowColor := CL_EVEN_ROW;
+     EvenRowColor := CL_EVEN_ROW;
      SelectedRegionColor := CL_SELECTED;
 end;
 
@@ -1113,14 +1110,14 @@ begin
     FOddRowColor := AOddRowColor;
 end;
 
-function TColoredGrid.GetNotOddRowColor: TColor;
+function TColoredGrid.GetEvenRowColor: TColor;
 begin
-    Result := FNotOddRowColor;
+    Result := FEvenRowColor;
 end;
 
-procedure TColoredGrid.SetNotOddRowColor(const ANotOddRowColor: TColor);
+procedure TColoredGrid.SetEvenRowColor(const AEvenRowColor: TColor);
 begin
-    FNotOddRowColor := ANotOddRowColor;
+    FEvenRowColor := AEvenRowColor;
 end;
 
 function TColoredGrid.GetSelectedRegionColor: TColor;
@@ -1665,7 +1662,7 @@ begin
             Result := CellsColors[ColNum, RowNum]
          else
              if Odd(RowNum) then Result := OddRowColor
-             else Result := NotOddRowColor;
+             else Result := EvenRowColor;
 end;
 
 constructor TColorStringGrid.Create;
@@ -1674,7 +1671,7 @@ begin
      if csDesigning in ComponentState then
      begin
           OddRowColor := clWhite;
-          NotOddRowColor := clYellow;
+          EvenRowColor := clYellow;
           SelectedRegionColor := $0064CCEA - $003A3A3A;
      end;
 end;
@@ -1722,10 +1719,10 @@ begin
   //Repaint;
 end;
 
-procedure TColorStringGrid.SetNotOddRowColor(Color: TColor);
+procedure TColorStringGrid.SetEvenRowColor(Color: TColor);
 var i, j: LongInt;
 begin
-  FNotOddRowColor := Color;
+  FEvenRowColor := Color;
   if Assigned(FColorMatrix) then
   begin
        for i := 0 to Length(FColorMatrix) - 1 do
@@ -2055,7 +2052,7 @@ begin
                    SetLength(FColorMatrix[i], Value);
                    for j := SavedLength to Length(FColorMatrix[i]) - 1 do
                        if Odd(i) then FColorMatrix[i, j] := OddRowColor
-                   else FColorMatrix[i, j] := NotOddRowColor;
+                   else FColorMatrix[i, j] := EvenRowColor;
               end;
      end;
      TStringGrid(Self).ColCount := Value;
@@ -2105,7 +2102,7 @@ begin
                     SetLength(FColorMatrix[i], ColCount);
                     for j := 0 to ColCount - 1 do
                         if Odd(i) then FColorMatrix[i, j] := OddRowColor
-                        else FColorMatrix[i, j] := NotOddRowColor;
+                        else FColorMatrix[i, j] := EvenRowColor;
                end;
           end;
      end;
