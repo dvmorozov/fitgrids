@@ -158,8 +158,6 @@ type
         procedure SetModified(const AModified: Boolean);
             //  вызывает событие OnGridModified
 
-    public
-
     published
         property Modified: Boolean
             //  свойство показывает, что содержимое текущей €чейки
@@ -531,7 +529,7 @@ type
         function CheckingTextValidity(St: string; ACol,
             ARow: LongInt): Boolean; override;
         constructor Create(AOwner: TComponent); override;
-        (*???function CanEditAcceptKey(Key: Char): Boolean; override;*)
+        function CanEditAcceptKey(Key: Char): Boolean; virtual;
         procedure MouseUp(Button: TMouseButton; Shift: TShiftState;
             X, Y: Integer); override;
         procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
@@ -1205,8 +1203,7 @@ const DelimiterChars: set of Char = [#9, #10, #13];
                 begin
                     if not (Buffer[j] in BadSymbols) then
                     begin
-                        St[Length(St) + 1] := Buffer[j];
-                        SetLength(St, Length(St) + 1);
+                        St := St + Buffer[j];
                     end;
                 end;
                 j := i;
@@ -1368,7 +1365,7 @@ begin
     Enabled := False;
     Color := clLtGray;
 end;
-(*???
+
 function TNumericGrid.CanEditAcceptKey(Key: Char): Boolean;
 begin
   case ColOptions[Col] of
@@ -1383,7 +1380,7 @@ begin
     else CanEditAcceptKey := True;
   end;
 end;
-*)
+
 procedure TNumericGrid.SetColOption(Index: LongInt; Value: TColOption);
 var i: LongInt;
 begin
@@ -1827,8 +1824,7 @@ const DelimiterChars: set of Char = [#9, #10, #13];
                 begin
                     if not (Buffer[j] in BadSymbols) then
                     begin
-                        St[Length(St) + 1] := Buffer[j];
-                        SetLength(St, Length(St) + 1);
+                        St := St + Buffer[j];
                     end;
                 end;
                 j := i;
