@@ -1788,20 +1788,28 @@ begin
 end;
 
 function TColorStringGrid.PasteFromClipBoard: Boolean;
-const DelimiterChars: set of Char = [#9, #10, #13];
+
+    const DelimiterChars: set of Char = [#9, #10, #13, ' ', ',', ';'];
 
     procedure ExtractGridSizes(Buffer: array of Char;
         const Count: LongInt; var BufferCols, BufferRows: LongInt);
     var i: LongInt;
-        Flag: Boolean;
+        Flag, PrevIsDelimiter: Boolean;
     begin
         BufferCols := 0; BufferRows := 0;
-        Flag := True;
+        Flag := True; PrevIsDelimiter := False;
         for i := 0 to Count - 1 do
         begin
-            if (Buffer[i] in DelimiterChars) and Flag then Inc(BufferCols);
-            if Buffer[i] = #10 then Flag := False;
-            if Buffer[i] = #13 then
+            if (Buffer[i] in DelimiterChars) then
+            begin
+                if Flag and not PrevIsDelimiter then Inc(BufferCols);
+                PrevIsDelimiter := True;
+            end
+            else
+                PrevIsDelimiter := False;
+
+            if Buffer[i] = #13 then Flag := False;
+            if Buffer[i] = #10 then
             begin
                 Flag := False;
                 Inc(BufferRows);
