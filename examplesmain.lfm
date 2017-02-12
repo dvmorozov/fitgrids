@@ -1,12 +1,13 @@
 object Form1: TForm1
-  Left = 616
+  Left = 846
   Height = 680
-  Top = 100
+  Top = 95
   Width = 922
   BorderStyle = bsDialog
   Caption = 'FitGrids Examples'
   ClientHeight = 680
   ClientWidth = 922
+  OnCreate = FormCreate
   LCLVersion = '1.4.4.0'
   object ColorStringGrid1: TColorStringGrid
     Left = 8
@@ -46,10 +47,11 @@ object Form1: TForm1
   end
   object NumericGrid1: TNumericGrid
     Left = 8
-    Height = 190
-    Top = 256
+    Height = 166
+    Top = 280
     Width = 450
-    ColCount = 5
+    ColCount = 6
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goSmoothScroll]
     RowCount = 5
     TabOrder = 1
     OddRowColor = clWhite
@@ -58,6 +60,24 @@ object Form1: TForm1
     ColNumFixed = False
     RowNumFixed = False
     DisabledColor = clGray
+    Cells = (
+      5
+      1
+      0
+      'coReal'
+      2
+      0
+      'coInteger'
+      3
+      0
+      'coChars'
+      4
+      0
+      'coText'
+      5
+      0
+      'coDisabled'
+    )
   end
   object GEFGrid1: TGEFGrid
     Left = 464
@@ -377,5 +397,13 @@ object Form1: TForm1
     }
     OnClick = BitBtn5Click
     TabOrder = 9
+  end
+  object Label9: TLabel
+    Left = 8
+    Height = 15
+    Top = 256
+    Width = 342
+    Caption = 'Grid allows to filter input characters based on assigned data type.'
+    ParentColor = False
   end
 end

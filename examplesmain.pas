@@ -36,11 +36,13 @@ type
     Label6: TLabel;
     Label7: TLabel;
     Label8: TLabel;
+    Label9: TLabel;
     NumericGrid1: TNumericGrid;
     procedure BitBtn2Click(Sender: TObject);
     procedure BitBtn3Click(Sender: TObject);
     procedure BitBtn4Click(Sender: TObject);
     procedure BitBtn5Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
     procedure GEFGrid1GridEditingFinished(Sender: TObject; Col, Row: LongInt);
   private
     { private declarations }
@@ -75,6 +77,15 @@ end;
 procedure TForm1.BitBtn5Click(Sender: TObject);
 begin
     GEFGrid1.PasteFromClipBoard;
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+    NumericGrid1.ColOptions[1] := coReal;
+    NumericGrid1.ColOptions[2] := coInteger;
+    NumericGrid1.ColOptions[3] := coChars;
+    NumericGrid1.ColOptions[4] := coText;
+    NumericGrid1.ColOptions[5] := coDisabled;
 end;
 
 procedure TForm1.GEFGrid1GridEditingFinished(Sender: TObject; Col, Row: LongInt

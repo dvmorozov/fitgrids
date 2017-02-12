@@ -547,19 +547,22 @@ type
         function GetColOption(index: LongInt): TColOption;
         procedure SetOptCount(AColOptCount: LongInt);
         procedure SetDisabledColor(Color: TColor);
-        procedure KeyPress(var Key: Char); override;
         procedure SetColCount(Value: Longint); override;
         function CheckingTextValidity(St: string; ACol,
             ARow: LongInt): Boolean; override;
 
-    public
-        constructor Create(AOwner: TComponent); override;
         function CanEditAcceptKey(Key: Char): Boolean; virtual;
+        procedure KeyPress(var Key: Char); override;
+
         procedure MouseUp(Button: TMouseButton; Shift: TShiftState;
             X, Y: Integer); override;
         procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
         procedure MouseDown(Button: TMouseButton; Shift: TShiftState;
             X, Y: Integer); override;
+
+    public
+        constructor Create(AOwner: TComponent); override;
+
         procedure InsertRows(StartPos, Count: LongInt; Clear: Boolean); virtual;
         procedure DeleteRows(StartPos, Count: LongInt); virtual;
         procedure SetColWidthByDefault(ACol: LongInt);
@@ -568,6 +571,7 @@ type
             //  чтобы все данные были видны
         procedure DeleteSelection;
         destructor Destroy; override;
+
         property ColOptions[index: LongInt]: TColOption
             read GetColOption       write SetColOption;
 
@@ -613,15 +617,6 @@ function GetMaxTextWidth(
 function GetMaxTextHeight(
     //  возвращает максимальную высоту текста в строке RowNum данного Grid'а
     const Grid: TStringGrid; const RowNum: LongInt): LongInt;
-
-const
-    REAL_SET: set of Char = ['0'..'9', '.', '-', '+'];
-    POS_REAL_SET: set of Char = ['0'..'9', '.', '+'];
-        //  положительные вещественные числа
-    INT_SET: set of Char = ['0'..'9', '-', '+'];
-    POS_INT_SET: set of Char = ['0'..'9', '+'];
-        //  положительные целые числа
-    CHAR_SET: set of Char = ['A'..'Z', 'a'..'z'];
 
 procedure Register;
 
@@ -1304,18 +1299,39 @@ begin
 end;
 
 function TNumericGrid.CanEditAcceptKey(Key: Char): Boolean;
+const
+    REAL_SET: set of Char = ['0'..'9', '.', ',', '-', '+'];
+    //  Positive real numbers.
+    //POS_REAL_SET: set of Char = ['0'..'9', '.', ',', '+'];
+    INT_SET: set of Char = ['0'..'9', '-', '+'];
+    //  Positive integer numbers.
+    //POS_INT_SET: set of Char = ['0'..'9', '+'];
+    CHAR_SET: set of Char = ['A'..'Z', 'a'..'z'];
+
 begin
-  case ColOptions[Col] of
-    coReal : if Key in REAL_SET then CanEditAcceptKey := True
-             else CanEditAcceptKey := False;
-    coInteger : if Key in INT_SET then CanEditAcceptKey := True
-             else CanEditAcceptKey := False;
-    coChars : if Key in CHAR_SET then CanEditAcceptKey := True
-             else CanEditAcceptKey := False;
-    coText : CanEditAcceptKey := True;
-    coDisabled : CanEditAcceptKey := False;
-    else CanEditAcceptKey := True;
-  end;
+    if Key >= #20 then
+
+        case ColOptions[Col] of
+            coReal :
+                if Key in REAL_SET then Result := True
+                else Result := False;
+
+            coInteger :
+                if Key in INT_SET then Result := True
+                else Result := False;
+
+            coChars :
+                if Key in CHAR_SET then Result := True
+                else Result := False;
+
+            coText : Result := True;
+
+            coDisabled : Result := False;
+
+            else Result := True;
+        end
+    //  Special characters processing.
+    else Result := True;
 end;
 
 procedure TNumericGrid.SetColOption(Index: LongInt; Value: TColOption);
@@ -1948,23 +1964,36 @@ end;
 procedure TNumericGrid.KeyPress(var Key: Char);
 var i: LongInt;
     St: string;
+
 begin
-  inherited KeyPress(Key);
-  case Key of
-    #9 : begin
-           if not RowNumFixed then
-             if (Col = 1) and (Row = 1) then
-             begin
-               RowCount := RowCount + 1;
-               Str(RowCount - 1, St);
-               Cells[0, RowCount - 1] := St;
-               Col := 1;
-               Row := RowCount - 1;
-               for i := 1 to ColCount - 1 do Cells[i, Row] := '';
-             end
-         end;
-    ',' : Key := '.';
-  end;
+    if goEditing in Options then
+    begin
+        if CanEditAcceptKey(Key) then
+            inherited KeyPress(Key)
+        //  Block further processing.
+        else Key := #0;
+    end
+    else
+        inherited KeyPress(Key);
+
+    case Key of
+        #9 : begin
+                 if not RowNumFixed then
+                     if (Col = 1) and (Row = 1) then
+                     begin
+                         RowCount := RowCount + 1;
+                         Str(RowCount - 1, St);
+                         Cells[0, RowCount - 1] := St;
+                         Col := 1;
+                         Row := RowCount - 1;
+                         for i := 1 to ColCount - 1 do Cells[i, Row] := '';
+                     end
+             end;
+
+        ',' :
+            //  Substitute decimal separator.
+            if ColOptions[Col] = coReal then Key := '.';
+    end;
 end;
 
 procedure TNumericGrid.ResetColWidths;
