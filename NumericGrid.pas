@@ -127,7 +127,41 @@ type
 
     TGridModified = procedure(Sender: TObject) of object;
 
-    TGEFGrid = class(TStringGrid)
+    TClipboardGrid = class(TStringGrid)
+    protected
+        procedure EnumerateRows;
+        function CheckingTextValidity(St: string;
+            ACol, ARow: LongInt): Boolean; virtual;
+
+        //  методы объ€влены как private -
+        //  нельз€ перекрыть - нужно переопределить
+        procedure SetColCount(Value: Longint); virtual;
+        function GetColCount: LongInt; virtual;
+        procedure SetRowCount(Value: Longint); virtual;
+        function GetRowCount: LongInt; virtual;
+
+        const DelimiterChars: set of Char = [#9, #10, #13, ' ', ',', ';'];
+        //  Maximum size of pasted data.
+        const BufCount = 10240;
+
+        procedure ExtractGridSizes(Buffer: array of Char;
+            const Count: LongInt; var BufferCols, BufferRows: LongInt);
+        function ExtractString(Buffer: array of Char;
+            const Count: LongInt; var Index: LongInt): string;
+        procedure ClearFixed;
+
+    public
+        function CopyToClipBoard: Boolean; virtual;
+        function PasteFromClipBoard: Boolean; virtual;
+
+    published
+        property ColCount: LongInt
+            read GetColCount            write SetColCount;
+        property RowCount: LongInt
+            read GetRowCount            write SetRowCount;
+    end;
+
+    TGEFGrid = class(TClipboardGrid)
         //  сетка, контролирующа€ выход из режима редактировани€ €чейки
         //  в момент выхода из редактируемой €чейки вызываетс€ событие
         //  типа TGridEditingFinished; выход из €чейки редактировани€
@@ -241,8 +275,7 @@ type
     public
         constructor Create(AOwner: TComponent); override;
 
-        procedure PasteFromClipBoard; virtual;
-        procedure CopyToClipBoard; virtual;
+        function PasteFromClipBoard: Boolean; override;
 
         procedure MouseUp(Button: TMouseButton;
             Shift: TShiftState; X, Y: Integer
@@ -436,30 +469,6 @@ type
 
     TGetCellColorEvent = procedure(Sender: TObject;
     ColNum, RowNum: LongInt; var CellColor: TColor) of object;
-
-    TClipboardGrid = class(TStringGrid)
-    protected
-        procedure EnumerateRows;
-        function CheckingTextValidity(St: string;
-            ACol, ARow: LongInt): Boolean; virtual;
-
-        //  методы объ€влены как private -
-        //  нельз€ перекрыть - нужно переопределить
-        procedure SetColCount(Value: Longint); virtual;
-        function GetColCount: LongInt; virtual;
-        procedure SetRowCount(Value: Longint); virtual;
-        function GetRowCount: LongInt; virtual;
-
-    public
-        function CopyToClipBoard: Boolean; virtual;
-        function PasteFromClipBoard: Boolean; virtual;
-
-    published
-        property ColCount: LongInt
-            read GetColCount            write SetColCount;
-        property RowCount: LongInt
-            read GetRowCount            write SetRowCount;
-    end;
 
     // Grid allows setting up colors of different types of cells at design time.
     TColorStringGrid = class(TClipboardGrid)
@@ -1154,95 +1163,7 @@ begin
     FDisabledColor := ADisabledColor;
 end;
 
-procedure TIDAGrid.CopyToClipBoard;
-var St, St2, St3: string;
-    i, j: LongInt;
-begin
-    with Selection do
-    begin
-        if (Top = Bottom) and (Left = Right) then
-        begin
-            MessageDlg('It is necessary to choose area for copying...', mtWarning, [mbOk], 0);
-            Exit;
-        end;
-
-        St := '';
-        for i := Top to Bottom do
-        begin
-            St2 := '';
-            for j := Left to Right do
-            begin
-                if j <> Right then St3 := Cells[j, i] + #9
-                else St3 := Cells[j, i];
-                St2 := St2 + St3;
-            end;
-            St := St + St2 + #13#10;
-        end;
-        ClipBoard.SetTextBuf(PChar(St));
-    end; {with Selection do...}
-end;
-
-procedure TIDAGrid.PasteFromClipBoard;
-const DelimiterChars: set of Char = [#9, #10, #13];
-
-    procedure ExtractGridSizes(Buffer: array of Char;
-        const Count: LongInt; var BufferCols, BufferRows: LongInt);
-    var i: LongInt;
-        Flag: Boolean;
-    begin
-        BufferCols := 0; BufferRows := 0;
-        Flag := True;
-        for i := 0 to Count - 1 do
-        begin
-            if (Buffer[i] in DelimiterChars) and Flag then Inc(BufferCols);
-            if Buffer[i] = #10 then Flag := False;
-            if Buffer[i] = #13 then
-            begin
-                Flag := False;
-                Inc(BufferRows);
-            end;
-        end;
-    end;
-
-    function ExtractString(Buffer: array of Char;
-    const Count: LongInt; var Index: LongInt): string;
-    var St: string;
-        i, j, k: LongInt;
-    const BadSymbols: set of Char = [#10, #13];
-    begin
-        St := '';
-        for i := Index to Count - 1 do
-        begin
-            if Buffer[i] in DelimiterChars then
-            begin
-                for j := Index to i - 1 do
-                begin
-                    if not (Buffer[j] in BadSymbols) then
-                    begin
-                        St := St + Buffer[j];
-                    end;
-                end;
-                j := i;
-                if Buffer[j] = #9 then k := j + 1
-                else for k := j to Count - 1 do
-                if not (Buffer[k] in DelimiterChars) then Break;
-                Index := k;
-                Result := St;
-                Exit;
-            end;
-        end;
-    end;
-
-    procedure ClearFixed;
-    var i, j: LongInt;
-    begin
-        for i := 0 to FixedRows - 1 do
-            for j := 0 to ColCount - 1 do Cells[j, i] := '';
-        for i := 0 to FixedCols - 1 do
-            for j := FixedRows to RowCount - 1 do Cells[i, j] := '';
-    end;
-
-const BufCount = 10240;
+function TIDAGrid.PasteFromClipBoard: Boolean;
 var Count: Longint;
     Buffer: array[0..BufCount] of Char;
     St: string;
@@ -1829,77 +1750,73 @@ begin
     Result := True;
 end;
 
-function TClipboardGrid.PasteFromClipBoard: Boolean;
-
-    const DelimiterChars: set of Char = [#9, #10, #13, ' ', ',', ';'];
-
-    procedure ExtractGridSizes(Buffer: array of Char;
-        const Count: LongInt; var BufferCols, BufferRows: LongInt);
-    var i: LongInt;
-        Flag, PrevIsDelimiter: Boolean;
+procedure TClipboardGrid.ExtractGridSizes(Buffer: array of Char;
+    const Count: LongInt; var BufferCols, BufferRows: LongInt);
+var i: LongInt;
+    Flag, PrevIsDelimiter: Boolean;
+begin
+    BufferCols := 0; BufferRows := 0;
+    Flag := True; PrevIsDelimiter := False;
+    for i := 0 to Count - 1 do
     begin
-        BufferCols := 0; BufferRows := 0;
-        Flag := True; PrevIsDelimiter := False;
-        for i := 0 to Count - 1 do
+        if (Buffer[i] in DelimiterChars) then
         begin
-            if (Buffer[i] in DelimiterChars) then
-            begin
-                if Flag and not PrevIsDelimiter then Inc(BufferCols);
-                PrevIsDelimiter := True;
-            end
-            else
-                PrevIsDelimiter := False;
+            if Flag and not PrevIsDelimiter then Inc(BufferCols);
+            PrevIsDelimiter := True;
+        end
+        else
+            PrevIsDelimiter := False;
 
-            if Buffer[i] = #13 then Flag := False;
-            if Buffer[i] = #10 then
-            begin
-                Flag := False;
-                Inc(BufferRows);
-            end;
+        if Buffer[i] = #13 then Flag := False;
+        if Buffer[i] = #10 then
+        begin
+            Flag := False;
+            Inc(BufferRows);
         end;
     end;
+end;
 
-    function ExtractString(Buffer: array of Char;
-        const Count: LongInt; var Index: LongInt): string;
-    var St: string;
-        i, j, k: LongInt;
-    const BadSymbols: set of Char = [#10, #13];
+function TClipboardGrid.ExtractString(Buffer: array of Char;
+    const Count: LongInt; var Index: LongInt): string;
+var St: string;
+    i, j, k: LongInt;
+const BadSymbols: set of Char = [#10, #13];
+begin
+    St := '';
+    for i := Index to Count - 1 do
     begin
-        St := '';
-        for i := Index to Count - 1 do
+        if Buffer[i] in DelimiterChars then
         begin
-            if Buffer[i] in DelimiterChars then
+            for j := Index to i - 1 do
             begin
-                for j := Index to i - 1 do
+                if not (Buffer[j] in BadSymbols) then
                 begin
-                    if not (Buffer[j] in BadSymbols) then
-                    begin
-                        St := St + Buffer[j];
-                    end;
+                    St := St + Buffer[j];
                 end;
-                j := i;
-                if Buffer[j] = #9 then k := j + 1
-                else
-                    for k := j to Count - 1 do
-                        if not (Buffer[k] in DelimiterChars) then Break;
-                Index := k;
-                Result := St;
-                Exit;
             end;
+            j := i;
+            if Buffer[j] = #9 then k := j + 1
+            else
+                for k := j to Count - 1 do
+                    if not (Buffer[k] in DelimiterChars) then Break;
+            Index := k;
+            Result := St;
+            Exit;
         end;
-        Result := St;
     end;
+    Result := St;
+end;
 
-    procedure ClearFixed;
-    var i, j: LongInt;
-    begin
-        for i := 0 to FixedRows - 1 do
-            for j := 0 to ColCount - 1 do Cells[j, i] := '';
-        for i := 0 to FixedCols - 1 do
-            for j := FixedRows to RowCount - 1 do Cells[i, j] := '';
-    end;
+procedure TClipboardGrid.ClearFixed;
+var i, j: LongInt;
+begin
+    for i := 0 to FixedRows - 1 do
+        for j := 0 to ColCount - 1 do Cells[j, i] := '';
+    for i := 0 to FixedCols - 1 do
+        for j := FixedRows to RowCount - 1 do Cells[i, j] := '';
+end;
 
-const BufCount = 10240;
+function TClipboardGrid.PasteFromClipBoard: Boolean;
 var Count: Longint;
     Buffer: array[0..BufCount] of Char;
     St: string;
