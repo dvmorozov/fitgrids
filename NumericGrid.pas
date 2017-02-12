@@ -432,14 +432,37 @@ type
             read GetDisabledColor write SetDisabledColor;
     end;
 
-
     TColOption = LongInt;
 
     TGetCellColorEvent = procedure(Sender: TObject;
     ColNum, RowNum: LongInt; var CellColor: TColor) of object;
 
+    TClipboardGrid = class(TStringGrid)
+    protected
+        procedure EnumerateRows;
+        function CheckingTextValidity(St: string;
+            ACol, ARow: LongInt): Boolean; virtual;
+
+        //  методы объ€влены как private -
+        //  нельз€ перекрыть - нужно переопределить
+        procedure SetColCount(Value: Longint); virtual;
+        function GetColCount: LongInt; virtual;
+        procedure SetRowCount(Value: Longint); virtual;
+        function GetRowCount: LongInt; virtual;
+
+    public
+        function CopyToClipBoard: Boolean; virtual;
+        function PasteFromClipBoard: Boolean; virtual;
+
+    published
+        property ColCount: LongInt
+            read GetColCount            write SetColCount;
+        property RowCount: LongInt
+            read GetRowCount            write SetRowCount;
+    end;
+
     // Grid allows setting up colors of different types of cells at design time.
-    TColorStringGrid = class(TStringGrid)
+    TColorStringGrid = class(TClipboardGrid)
     protected
         FColorMatrix: array of array of TColor;
         FOddRowColor: TColor;
@@ -460,10 +483,11 @@ type
 
             //  методы объ€влены как private -
             //  нельз€ перекрыть - нужно переопределить
-        procedure SetColCount(Value: Longint); virtual;
-        function GetColCount: LongInt; virtual;
-        procedure SetRowCount(Value: Longint); virtual;
-        function GetRowCount: LongInt; virtual;
+        procedure SetColCount(Value: Longint); override;
+        function GetColCount: LongInt; override;
+        procedure SetRowCount(Value: Longint); override;
+        function GetRowCount: LongInt; override;
+
         function GetCellsColors(ACol, ARow: LongInt): TColor;
         procedure SetCellsColors(ACol, ARow: LongInt; AColor: TColor);
 
@@ -473,14 +497,10 @@ type
     public
         constructor Create(AOwner: TComponent); override;
         destructor Destroy; override;
-        procedure EnumerateRows;
+
         procedure SelectAll;
         procedure ResetAll;
         procedure ClearSelection;
-        function CopyToClipBoard: Boolean;
-        function PasteFromClipBoard: Boolean;
-        function CheckingTextValidity(St: string;
-            ACol, ARow: LongInt): Boolean; virtual;
 
         property InplaceEditor;
         property CellsColors[ACol, ARow: LongInt]: TColor
@@ -504,10 +524,6 @@ type
             read FRowNumFixed           write FRowNumFixed;
         property OnGetCellColor: TGetCellColorEvent
             read FOnGetCellColor        write FOnGetCellColor;
-        property ColCount: LongInt
-            read GetColCount            write SetColCount;
-        property RowCount: LongInt
-            read GetRowCount            write SetRowCount;
     end;
 
     TNumericGrid = class(TColorStringGrid)
@@ -524,10 +540,10 @@ type
         procedure SetDisabledColor(Color: TColor);
         procedure KeyPress(var Key: Char); override;
         procedure SetColCount(Value: Longint); override;
-
-    public
         function CheckingTextValidity(St: string; ACol,
             ARow: LongInt): Boolean; override;
+
+    public
         constructor Create(AOwner: TComponent); override;
         function CanEditAcceptKey(Key: Char): Boolean; virtual;
         procedure MouseUp(Button: TMouseButton; Shift: TShiftState;
@@ -1738,56 +1754,82 @@ end;
 procedure TNumericGrid.SetDisabledColor(Color: TColor);
 var i, j: LongInt;
 begin
-  FDisabledColor := Color;
-  if Assigned(FColorMatrix) and Assigned(ColOptArray) then
-  begin
-       for i := 0 to RowCount - 1 do
-           if ColCount = Length(ColOptArray) then
-              for j := 0 to ColCount - 1 do
-                  if ColOptArray[j] = coDisabled then CellsColors[j, i] := Color;
-  end;
-  Repaint;
+    FDisabledColor := Color;
+    if Assigned(FColorMatrix) and Assigned(ColOptArray) then
+    begin
+      for i := 0 to RowCount - 1 do
+         if ColCount = Length(ColOptArray) then
+            for j := 0 to ColCount - 1 do
+                if ColOptArray[j] = coDisabled then CellsColors[j, i] := Color;
+    end;
+    Repaint;
 end;
 
-procedure TColorStringGrid.EnumerateRows;
+procedure TClipboardGrid.SetColCount(Value: Longint);
+begin
+    TStringGrid(Self).ColCount := Value;
+end;
+
+function TClipboardGrid.GetColCount: LongInt;
+begin
+    Result := TStringGrid(Self).ColCount;
+end;
+
+procedure TClipboardGrid.SetRowCount(Value: Longint);
+begin
+    TStringGrid(Self).RowCount := Value;
+end;
+
+function TClipboardGrid.GetRowCount: LongInt;
+begin
+    Result := TStringGrid(Self).RowCount;
+end;
+
+procedure TClipboardGrid.EnumerateRows;
 var i: LongInt;
 begin
     if FixedCols <> 0 then
         for i := FixedRows to RowCount - 1 do Cells[0, i] := IntToStr(i);
 end;
 
-function  TColorStringGrid.CopyToClipBoard: Boolean;
+function TClipboardGrid.CopyToClipBoard: Boolean;
 var St, St2, St3: string;
     i, j: LongInt;
 begin
-  Result := False;
-  with Selection do
-  begin
-    if (Top = Bottom) and (Left = Right) then
+    Result := False;
+    with Selection do
     begin
-      MessageDlg('It is necessary to choose area for copying...', mtWarning, [mbOk], 0);
-      Exit;
-    end;
-    try
-      St := '';
-      for i := Top to Bottom do
-      begin
-        St2 := '';
-        for j := Left to Right do
+        if (Top = Bottom) and (Left = Right) then
         begin
-          if j <> Right then St3 := Cells[j, i] + #9
-            else St3 := Cells[j, i];
-          St2 := St2 + St3;
+            MessageDlg('Choose area for copying...', mtWarning, [mbOk], 0);
+            Exit;
         end;
-        St := St + St2 + #13#10;
-      end;
-      ClipBoard.SetTextBuf(PChar(St));
-    except Exit end;
-  end;{With Selection do...}
-  Result := True;
+        try
+            St := '';
+            for i := Top to Bottom do
+            begin
+                St2 := '';
+                for j := Left to Right do
+                begin
+                    if j <> Right then St3 := Cells[j, i] + #9
+                        else St3 := Cells[j, i];
+                    St2 := St2 + St3;
+                end;
+                St := St + St2 + #13#10;
+            end;
+            ClipBoard.SetTextBuf(PChar(St));
+        except Exit end;
+    end;{With Selection do...}
+    Result := True;
 end;
 
-function TColorStringGrid.PasteFromClipBoard: Boolean;
+function TClipboardGrid.CheckingTextValidity(St: string;
+    ACol, ARow: LongInt): Boolean;
+begin
+    Result := True;
+end;
+
+function TClipboardGrid.PasteFromClipBoard: Boolean;
 
     const DelimiterChars: set of Char = [#9, #10, #13, ' ', ',', ';'];
 
@@ -1866,47 +1908,48 @@ var Count: Longint;
     TempCol, TempRow: LongInt;
     i, j: LongInt;
 begin
-  Result := False;
-  if not Clipboard.HasFormat(CF_TEXT) then
-  begin
-    MessageDlg('Clipboard contains no text data...', mtError, [mbOk], 0);
-    Exit;
-  end;
-  if MessageDlg('Overwrite this data ?', mtWarning,
-  [mbYes, mbNo, mbCancel], 0) <> mrYes then Exit;
-
-  (*если нажата кнопка No, то нужно вставить строки, добавл€€ новые строки €чеек*)
-
-  Count := ClipBoard.GetTextBuf(@Buffer, BufCount);
-  ExtractGridSizes(Buffer, Count, BufferColCount, BufferRowCount);
-  if Row < FixedRows then Row := FixedRows;
-  RowCount := BufferRowCount + Row;
-  ColCount := BufferColCount + FixedCols;
-  Col := FixedCols;
-  Index := 0;
-  try
-    for j := 0 to BufferRowCount - 1 do
-      for i := 0 to BufferColCount - 1 do
-      begin
-        St := ExtractString(Buffer, Count, Index);
-        TempCol := FixedCols + i;
-        TempRow := Row + j;
-        if (TempCol <= ColCount - 1) and (TempRow <= RowCount - 1) then
-        begin
-          if not CheckingTextValidity(St, TempCol, TempRow) then
-            Cells[TempCol, TempRow] := ''
-          else Cells[TempCol, TempRow] := St;
-        end;
-      end;
-  except
-    MessageDlg('Vague number of cell, since data do not have tabular format...',
-        mtError, [mbOk], 0);
     Result := False;
-    Exit;
-  end;
-  ClearFixed;
-  EnumerateRows;
-  Result := True;
+    BufferColCount := 0; BufferRowCount := 0;
+    if not Clipboard.HasFormat(CF_TEXT) then
+    begin
+        MessageDlg('Clipboard contains no text data...', mtError, [mbOk], 0);
+        Exit;
+    end;
+    if MessageDlg('Overwrite this data ?', mtWarning,
+        [mbYes, mbNo, mbCancel], 0) <> mrYes then Exit;
+
+    (*если нажата кнопка No, то нужно вставить строки, добавл€€ новые строки €чеек*)
+
+    Count := ClipBoard.GetTextBuf(@Buffer, BufCount);
+    ExtractGridSizes(Buffer, Count, BufferColCount, BufferRowCount);
+    if Row < FixedRows then Row := FixedRows;
+    RowCount := BufferRowCount + Row;
+    ColCount := BufferColCount + FixedCols;
+    Col := FixedCols;
+    Index := 0;
+    try
+        for j := 0 to BufferRowCount - 1 do
+            for i := 0 to BufferColCount - 1 do
+            begin
+                St := ExtractString(Buffer, Count, Index);
+                TempCol := FixedCols + i;
+                TempRow := Row + j;
+                if (TempCol <= ColCount - 1) and (TempRow <= RowCount - 1) then
+                begin
+                    if not CheckingTextValidity(St, TempCol, TempRow) then
+                        Cells[TempCol, TempRow] := ''
+                    else Cells[TempCol, TempRow] := St;
+                end;
+            end;
+    except
+        MessageDlg('Vague number of cell, since data do not have tabular format...',
+            mtError, [mbOk], 0);
+        Result := False;
+        Exit;
+    end;
+    ClearFixed;
+    EnumerateRows;
+    Result := True;
 end;
 
 procedure TColorStringGrid.SelectAll;
@@ -1926,11 +1969,6 @@ begin
     Selection := R;
 end;
 
-function TColorStringGrid.CheckingTextValidity(St: string;
-ACol, ARow: LongInt): Boolean;
-begin
-  Result := True;
-end;
 (*???
 function TColorStringGrid.CreateEditor: TInplaceEdit;
 begin
