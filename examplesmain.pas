@@ -10,7 +10,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Buttons,
   NumericGrid
 {$IFDEF Lazarus}
-  , LCLType, Masks, Grids
+  , LCLType, Masks, Grids, Menus
 {$ENDIF}
   ;
 
@@ -111,6 +111,7 @@ type
     Label1: TLabel;
     Label10: TLabel;
     Label11: TLabel;
+    Label12: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
@@ -119,16 +120,31 @@ type
     Label7: TLabel;
     Label8: TLabel;
     Label9: TLabel;
+    MenuItemAddColumn: TMenuItem;
+    MenuItemAddRow: TMenuItem;
+    MenuItemDeleteRow: TMenuItem;
+    MenuItemDeleteColumn: TMenuItem;
+    MenuItemInsertColumn: TMenuItem;
+    MenuItemInsertRow: TMenuItem;
     NumericGrid1: TNumericGrid;
+    PopupMenuIDAGrid: TPopupMenu;
     procedure BitBtn2Click(Sender: TObject);
     procedure BitBtn3Click(Sender: TObject);
     procedure BitBtn4Click(Sender: TObject);
     procedure BitBtn5Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure GEFGrid1GridEditingFinished(Sender: TObject; Col, Row: LongInt);
+    procedure MenuItemAddColumnClick(Sender: TObject);
+    procedure MenuItemAddRowClick(Sender: TObject);
+    procedure MenuItemDeleteRowClick(Sender: TObject);
+    procedure MenuItemDeleteColumnClick(Sender: TObject);
+    procedure MenuItemInsertColumnClick(Sender: TObject);
+    procedure MenuItemInsertRowClick(Sender: TObject);
   private
     { private declarations }
     DataSource: TDataSource;
+
+    procedure FillIDAGrid;
   public
     { public declarations }
   end;
@@ -174,6 +190,8 @@ begin
 
     DataGrid1.SetGridDataSource(DataSource as IGridDataSource);
     ColoredGrid1.SetGridDataSource(DataSource as IGridDataSource);
+
+    FillIDAGrid;
 end;
 
 procedure TForm1.GEFGrid1GridEditingFinished(Sender: TObject; Col, Row: LongInt
@@ -184,6 +202,36 @@ begin
         ', Row = ' + IntToStr(Row);
     Application.MessageBox(PChar(Msg),
         'Event handler', MB_OK or MB_ICONINFORMATION);
+end;
+
+procedure TForm1.MenuItemAddColumnClick(Sender: TObject);
+begin
+    IDAGrid1.AddColumn;
+end;
+
+procedure TForm1.MenuItemAddRowClick(Sender: TObject);
+begin
+    IDAGrid1.AddRow;
+end;
+
+procedure TForm1.MenuItemDeleteRowClick(Sender: TObject);
+begin
+    IDAGrid1.DeleteRow(IDAGrid1.Row);
+end;
+
+procedure TForm1.MenuItemDeleteColumnClick(Sender: TObject);
+begin
+    IDAGrid1.DeleteColumns(IDAGrid1.Col, 1);
+end;
+
+procedure TForm1.MenuItemInsertColumnClick(Sender: TObject);
+begin
+    IDAGrid1.InsertColumns(IDAGrid1.Col, 1, True);
+end;
+
+procedure TForm1.MenuItemInsertRowClick(Sender: TObject);
+begin
+    IDAGrid1.InsertRows(IDAGrid1.Row, 1, True);
 end;
 
 function TDataSource.ValueToString(const ACol, ARow: LongInt): string;
@@ -428,6 +476,15 @@ end;
 procedure TDataSource.SaveTopRow(const TopRow: LongInt);
 begin
 
+end;
+
+procedure TForm1.FillIDAGrid;
+var i, j: LongInt;
+begin
+    for i := IDAGrid1.FixedRows to IDAGrid1.RowCount - 1 do
+        for j := IDAGrid1.FixedCols to IDAGrid1.ColCount - 1 do
+            IDAGrid1.Cells[j, i] :=
+                '(' + IntToStr(j) + ', ' + IntToStr(i) + ')';
 end;
 
 end.

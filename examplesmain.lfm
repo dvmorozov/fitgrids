@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 575
+  Left = 566
   Height = 678
-  Top = 63
+  Top = 106
   Width = 922
   BorderStyle = bsDialog
   Caption = 'FitGrids Examples'
@@ -94,6 +94,7 @@ object Form1: TForm1
     Height = 166
     Top = 56
     Width = 450
+    PopupMenu = PopupMenuIDAGrid
     TabOrder = 3
     Modified = False
     ColNumFixed = False
@@ -347,7 +348,7 @@ object Form1: TForm1
     TabOrder = 8
   end
   object BitBtn5: TBitBtn
-    Left = 879
+    Left = 880
     Height = 30
     Top = 465
     Width = 35
@@ -525,5 +526,41 @@ object Form1: TForm1
     Width = 371
     Caption = 'Colors of cells are controlled by object implementing IGridDataSource.'
     ParentColor = False
+  end
+  object Label12: TLabel
+    Left = 464
+    Height = 15
+    Top = 32
+    Width = 418
+    Caption = 'Grid providing insert, delete, add operations (right click to select the operation).'
+    ParentColor = False
+  end
+  object PopupMenuIDAGrid: TPopupMenu
+    left = 832
+    top = 168
+    object MenuItemAddColumn: TMenuItem
+      Caption = 'Add Column'
+      OnClick = MenuItemAddColumnClick
+    end
+    object MenuItemDeleteColumn: TMenuItem
+      Caption = 'Delete Column'
+      OnClick = MenuItemDeleteColumnClick
+    end
+    object MenuItemAddRow: TMenuItem
+      Caption = 'Add Row'
+      OnClick = MenuItemAddRowClick
+    end
+    object MenuItemDeleteRow: TMenuItem
+      Caption = 'Delete Row'
+      OnClick = MenuItemDeleteRowClick
+    end
+    object MenuItemInsertColumn: TMenuItem
+      Caption = 'Insert Column'
+      OnClick = MenuItemInsertColumnClick
+    end
+    object MenuItemInsertRow: TMenuItem
+      Caption = 'Insert Row'
+      OnClick = MenuItemInsertRowClick
+    end
   end
 end
