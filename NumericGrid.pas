@@ -23,7 +23,7 @@ uses
     System.Types, Windows,
 {$ENDIF}
     Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-    Grids, ClipBrd, Tools, MyExceptions;
+    Grids, ClipBrd;
 
 var
     //  настройки цветов по умолчанию
@@ -41,6 +41,8 @@ type
     EColorStringGrid = class(Exception);
     ENumericGrid = class(Exception);
     EIDA_Grid = class(Exception);
+
+    TCharSet = set of Char;
 
     IGridDataSource = interface
     ['{401B6CC0-0915-11D5-968F-8FBD7448F374}']
