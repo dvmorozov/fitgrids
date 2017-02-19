@@ -1,7 +1,7 @@
 unit ExamplesMain;
 
 {$IFDEF Lazarus}
-//{$MODE Delphi}
+{$MODE Delphi}
 {$ENDIF}
 
 interface
@@ -97,12 +97,8 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
-    BitBtn2: TBitBtn;
-    BitBtn3: TBitBtn;
-    BitBtn4: TBitBtn;
-    BitBtn5: TBitBtn;
-    BitBtn6: TBitBtn;
-    BitBtn7: TBitBtn;
+    BitBtnColorStringGridCopy: TBitBtn;
+    BitBtnColorStringGridPaste: TBitBtn;
     ColoredGrid1: TColoredGrid;
     ColorStringGrid1: TColorStringGrid;
     DataGrid1: TDataGrid;
@@ -128,9 +124,9 @@ type
     MenuItemInsertRow: TMenuItem;
     NumericGrid1: TNumericGrid;
     PopupMenuIDAGrid: TPopupMenu;
-    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtnColorStringGridCopyClick(Sender: TObject);
     procedure BitBtn3Click(Sender: TObject);
-    procedure BitBtn4Click(Sender: TObject);
+    procedure BitBtnColorStringGridPasteClick(Sender: TObject);
     procedure BitBtn5Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure GEFGrid1GridEditingFinished(Sender: TObject; Col, Row: LongInt);
@@ -158,7 +154,7 @@ implementation
 
 { TForm1 }
 
-procedure TForm1.BitBtn2Click(Sender: TObject);
+procedure TForm1.BitBtnColorStringGridCopyClick(Sender: TObject);
 begin
     ColorStringGrid1.CopyToClipBoard;
 end;
@@ -168,7 +164,7 @@ begin
     GEFGrid1.CopyToClipBoard;
 end;
 
-procedure TForm1.BitBtn4Click(Sender: TObject);
+procedure TForm1.BitBtnColorStringGridPasteClick(Sender: TObject);
 begin
     ColorStringGrid1.PasteFromClipBoard;
 end;
