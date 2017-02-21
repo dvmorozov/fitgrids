@@ -17,6 +17,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="ExamplesMain"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <CursorPos Y="4"/>
         <UsageCount Value="207"/>
@@ -25,8 +26,7 @@
       </Unit1>
       <Unit2>
         <Filename Value="NumericGrid.pas"/>
-        <IsVisibleTab Value="True"/>
-        <CursorPos X="12" Y="1203"/>
+        <CursorPos X="2"/>
         <ExtraEditorCount Value="1"/>
         <ExtraEditor1>
           <WindowIndex Value="1"/>
@@ -87,9 +87,6 @@
     <CustomDefines Count="1">
       <Define0 Value="Lazarus"/>
     </CustomDefines>
-    <General>
-      <ActiveWindowIndexAtStart Value="1"/>
-    </General>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="examplesmain.pas"/>
