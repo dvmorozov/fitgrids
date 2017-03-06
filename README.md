@@ -20,7 +20,7 @@ Theses grids allow setting up colors of different types of cells at design time.
 The grid allows to contol input of numbers.
 
 These grids are used in other projects such as
-[MotifMASTER](http://motifmaster.sourceforge.net/)
-[Fit](http://fiteasily.com/fit/downloads.html)
+[MotifMASTER](http://motifmaster.sourceforge.net/)  
+[Fit](http://fiteasily.com/fit/downloads.html)  
 
 {% include google_ads.html %}
