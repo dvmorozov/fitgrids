@@ -30,22 +30,13 @@ package FitGrids;
 
 requires
   rtl,
-  vcl,
   designide,
+  vcl,
   vclactnband,
   vclx,
   xmlrtl;
 
 contains
-  CBRCComponent in 'CBRCComponent.pas',
-  ClassInheritIDs in 'ClassInheritIDs.pas',
-  ComponentList in 'ComponentList.pas',
-  MyExceptions in 'MyExceptions.pas',
-  SelfCopied in 'SelfCopied.pas',
-  SelfSaved in 'SelfSaved.pas',
-  SimpMath in 'SimpMath.pas',
-  TableComp in 'TableComp.pas',
-  Tools in 'Tools.pas',
   NumericGrid in 'NumericGrid.pas';
 
 end.

@@ -1,4 +1,4 @@
-unit ExamplesMain;
+﻿unit ExamplesMain;
 
 {$IFDEF Lazarus}
 {$MODE Delphi}
@@ -11,6 +11,8 @@ uses
   NumericGrid
 {$IFDEF Lazarus}
   , LCLType, Masks, Grids, Menus
+{$ELSE}
+  , Windows, Vcl.Menus, Grids
 {$ENDIF}
   ;
 
@@ -150,7 +152,7 @@ var
 
 implementation
 
-{$R *.lfm}
+{$R *.dfm}
 
 { TForm1 }
 

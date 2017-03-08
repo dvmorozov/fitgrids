@@ -2,7 +2,7 @@ program Examples;
 
 uses
   Vcl.Forms,
-  DelphiMain in 'DelphiMain.pas' {Form1};
+  examplesmain in 'examplesmain.pas' {Form1};
 
 {$R *.res}
 
