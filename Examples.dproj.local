@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+  <Transactions>
+    <Transaction>2017.02.05 21:33:25.668,=C:\Users\Dmitry\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2017.02.05 21:34:28.101,=C:\Users\Dmitry\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
+    <Transaction>2017.02.05 21:41:39.346,=C:\Users\Dmitry\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2017.02.05 22:11:15.819,E:\04 - github repos\fitgrids\DelphiMain.pas=C:\Users\Dmitry\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2017.02.05 22:11:15.819,E:\04 - github repos\fitgrids\DelphiMain.dfm=C:\Users\Dmitry\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2017.02.05 22:11:23.167,E:\04 - github repos\fitgrids\Examples.dproj=C:\Users\Dmitry\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+  </Transactions>
+</BorlandProject>

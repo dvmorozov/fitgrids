@@ -1,26 +1,29 @@
-//      двойной косой чертой комментируются замечания, сохраняемые во
-//      всех версиях исходника; фигурными скобками комментируются замечания,
-//      сохраняемые только в версии исходника для бесплатного распространения
 {------------------------------------------------------------------------------
-    This software is distributed under GPL (see gpl.txt for details)
-    in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-    without even the warranty of FITNESS FOR A PARTICULAR PURPOSE.
+    This software is distributed under GPL in the hope that it will
+    be useful, but WITHOUT ANY WARRANTY. Without even the warranty
+    of FITNESS FOR A PARTICULAR PURPOSE.
 
-    Copyright (C) 1999-2008 D.Morozov (dvmorozov@mail.ru)
+    Copyright (C) D.Morozov (dvmorozov@hotmail.com)
 ------------------------------------------------------------------------------}
 unit NumericGrid;
 
+{$IFDEF Lazarus}
 {$MODE Delphi}
-{$define lazarus}   //  выключает части специфичные для Delphi
+{$ENDIF}
 
 interface
 
 uses
-    LCLIntf, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-    Grids, ClipBrd, Tools, MyExceptions;
+{$IFDEF Lazarus}
+    LCLIntf, PropEdits, GraphPropEdits,
+{$ELSE}
+    System.Types, Windows,
+{$ENDIF}
+    Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+    Grids, ClipBrd;
 
 var
-    //  настройки цветов по умолчанию
+    //  Cell colors by default.
     CL_ODD_ROW: TColor = clWhite;
     CL_EVEN_ROW: TColor = clYellow;
     CL_DISABLED_ROW: TColor = clGray;
@@ -36,35 +39,31 @@ type
     ENumericGrid = class(Exception);
     EIDA_Grid = class(Exception);
 
+    TCharSet = set of Char;
+
     IGridDataSource = interface
     ['{401B6CC0-0915-11D5-968F-8FBD7448F374}']
+        //  Convert data value obtained from data source into string
+        //  representation. Can be used also to number rows or columns.
         function ValueToString(const ACol, ARow: LongInt): string;
-            //  преобразует значение в источнике данных в строковое
-            //  представление, используется также и для нумерации
-            //  (или другого способа обозначения) Fixed колонок/строк
+        //  Convert string into value.
         procedure StringToValue(const ACol, ARow: LongInt;
-            //  преобразует строку в значение; если преобразовать
-            //  невозможно - вызывается исключение
             const AString: string);
+        //  Set correct "default" value for cell during the cleaning operation.
         procedure SetValueByDefault(const ACol, ARow: LongInt);
-            //  устанавливает правильное значение "по умолчанию"
-            //  для данной ячейки; используется при обработке операции
-            //  очистки ячейки
+        //  Return cell color and True if it should be set, otherwise False.
         function GetCellColor(const ACol, ARow: LongInt; var Color: TColor): Boolean;
-            //  возвращает True, если должен быть установлен цвет Color,
-            //  в противном случае - False
         function GetCellEditMask(const ACol, ARow: LongInt): string;
         function GetCellEnabledCharSet(const ACol, ARow: LongInt): TCharSet;
+        //  Return True if input for given cell is disabled.
         function IsCellDisabled(const ACol, ARow: LongInt): Boolean;
-            //  возвращает признак запрещения ввода в ячейки -
-            //  True - ввод запрещен
+        //  Check if given text is convertible into data source value without
+        //  throwing an exception. However if cell coordinates are invalid
+        //  exception is thrown.
         function IsDataValid(const ACol, ARow: LongInt;
-            //  выполняет "мягкую" проверку данных без возбуждения
-            //  исключения; однако, если координаты строки/колонки
-            //  имеют недорустимые значения исключение вызывается
             const AString: string): Boolean;
 
-        //  функции проверки возможности выполнения действия
+        //  Check if action is possible.
         function MayIDoInsertRows(StartRow, RowsCount: LongInt): Boolean;
         function MayIDoDeleteRows(StartRow, RowsCount: LongInt): Boolean;
         function MayIDoAddRow: Boolean;
@@ -87,10 +86,14 @@ type
 
         procedure AllDataDeleted;
 
-        function GetColCount: LongInt;  //  полное число колонок, включая Fixed
-        function GetRowCount: LongInt;  //  полное число строк, включая Fixed
-        function GetFixedCols: LongInt; //  число фиксированных колонок
-        function GetFixedRows: LongInt; //  число фиксированных строк
+        //  Total number of columns including Fixed.
+        function GetColCount: LongInt;
+        //  Total number of rows including Fixed.
+        function GetRowCount: LongInt;
+        //  Number of fixed columns.
+        function GetFixedCols: LongInt;
+        //  Number of fixed rows.
+        function GetFixedRows: LongInt;
         function GetColNumFixed: Boolean;
         function GetRowNumFixed: Boolean;
 
@@ -98,16 +101,17 @@ type
         procedure SaveColWidth(const Col, Width: LongInt);
         function GetRowHeight(const Row: LongInt): LongInt;
         procedure SaveRowHeight(const Row, Height: LongInt);
+        //  Automatic adjusting cell widths and heights.
         function AutoWidths: Boolean;
         function AutoHeights: Boolean;
-            //  определяют необходимость использования
-            //  автоматической настройки ширины и высоты ячеек
 
         function GetSelection: TGridRect;
         procedure SaveSelection(const Selection: TGridRect);
-        function GetCol: LongInt;       //  номер текущей выбранной колонки
+        //  The number of currently selected column.
+        function GetCol: LongInt;
         procedure SaveCol(const Col: LongInt);
-        function GetRow: LongInt;       //  номер текущей выбранной строки
+        //  The number of currently selected row.
+        function GetRow: LongInt;
         procedure SaveRow(const Row: LongInt);
         function GetLeftCol: LongInt;
         procedure SaveLeftCol(const LeftCol: LongInt);
@@ -116,86 +120,104 @@ type
     end;
 
     TGridEditingFinished = procedure(Sender: TObject;
-        Col, Row: LongInt   //  координаты редактируемой ячейки
+        //  Coordinates of edited cell.
+        Col, Row: LongInt
         ) of object;
 
     TGridModified = procedure(Sender: TObject) of object;
 
-    TGEFGrid = class(TStringGrid)
-        //  сетка, контролирующая выход из режима редактирования ячейки
-        //  в момент выхода из редактируемой ячейки вызывается событие
-        //  типа TGridEditingFinished; выход из ячейки редактирования
-        //  обнаруживается путем контроля событий выхода из таблицы,
-        //  нажатия клавиш и кнопок мыши
+    TClipboardGrid = class(TStringGrid)
+    protected
+        procedure EnumerateRows;
+        function CheckingTextValidity(St: string;
+            ACol, ARow: LongInt): Boolean; virtual;
+
+        //  Methods defined as private in the parent class.
+        //  Must be redefined.
+        procedure SetColCount(Value: Longint); virtual;
+        function GetColCount: LongInt; virtual;
+        procedure SetRowCount(Value: Longint); virtual;
+        function GetRowCount: LongInt; virtual;
+
+        const DelimiterChars: set of Char = [#9, #10, #13, ' ', ',', ';'];
+        //  Maximum size of pasted data.
+        const BufCount = 10240;
+
+        procedure ExtractGridSizes(Buffer: array of Char;
+            const Count: LongInt; var BufferCols, BufferRows: LongInt);
+        function ExtractString(Buffer: array of Char;
+            const Count: LongInt; var Index: LongInt): string;
+        procedure ClearFixed;
+
+    public
+        function CopyToClipBoard: Boolean; virtual;
+        function PasteFromClipBoard: Boolean; virtual;
+
+    published
+        property ColCount: LongInt
+            read GetColCount            write SetColCount;
+        property RowCount: LongInt
+            read GetRowCount            write SetRowCount;
+    end;
+
+    //  The grid controls exit from cell editing. At the moment 
+    //  of exit event of type TGridEditingFinished is generated.
+    TGEFGrid = class(TClipboardGrid)
     protected
         FGridEditingFinished: TGridEditingFinished;
         FGridModified: TGridModified;
         FModified: Boolean;
 
+        //	Control exit from the table.		
         procedure DoExit; override;
-            //  контролирует выход из таблицы
+		//	Check if input into given cell is possible.
         (*???function CanEditAcceptKey(Key: Char): Boolean; override;*)
-            //  проверяет, возможен ли ввод в данную ячейку
+		//	Set Modified state to True if CanEditAcceptKey returns True.
         procedure KeyPress(var Key: Char); override;
-            //  устанавливает состояние Modified в True,
-            //  если CanEditAcceptKey возвращает True
+		//	Call EditingFinished according to Modified state.
         function SelectCell(ACol, ARow: Longint): Boolean; override;
-            //  вызывает EditingFinished в соответствии с
-            //  состоянием Modified
-
+		//	Call OnGridEditingFinished.
         procedure EditingFinished(
-            //  не делает ничего кроме вызова события OnGridEditingFinished;
-            //  нужно перекрывать в потомках для реализации специальных действий
-            const ACol, ARow: LongInt   //  координаты редактируемой ячейки
+            const ACol, ARow: LongInt   //  Coordinates of edited cell.
             ); virtual;
-
+		//	Call OnGridModified.
         procedure SetModified(const AModified: Boolean);
-            //  вызывает событие OnGridModified
-
-    public
 
     published
+		//	The property shows that content of current cell has been modified.
+		//	In such condition EditingFinished is called.
+		//	After cell changing is set to False.
         property Modified: Boolean
-            //  свойство показывает, что содержимое текущей ячейки
-            //  было изменено; при этом условии вызывается EditingFinished;
-            //  после изменения ячейки ввода сбрасывается
             read FModified              write SetModified;
 
         property OnGridEditingFinished: TGridEditingFinished
             read FGridEditingFinished   write FGridEditingFinished;
         property OnGridModified: TGridModified
-            //  событие только отражает факт изменения данных в таблице
+			//	The property shows that data in the grid were modified.
             read FGridModified          write FGridModified;
     end;
 
     TGridResizedEvent = procedure(Sender: TObject) of object;
 
+	//	The grid implements operations of inserting, adding, deleting rows and colums
+	//	as well as pasting/copying text from/in the ClipBooard (IDA = Insert, Delete, Add).
     TIDAGrid = class(TGEFGrid)
-        //  сетка, реализующая операции вставки, удаления добавления строк
-        //  и столбцов, а также вставку/копирование текста в/из ClipBoard
-        //  (IDA = Insert, Delete, Add)
     protected
-        FColNumFixed: Boolean;  //  число колонок не может изменяться
-        FRowNumFixed: Boolean;  //  число столбцов не может изменяться
-        FChangeable: Boolean;   //  текст в ячейках может редактироваться;
-                                //  не влияет на возможность удаления/
-                                //  добавления строк/столбцов (по умолч. = True)
-        //  ??? надо бы также управлять возможностью удаления/добавления
-        //  строк/столбцов
+        FColNumFixed: Boolean;  //  The number of columns can't be changed.
+        FRowNumFixed: Boolean;  //  The number of rows can't be changed.
+        FChangeable: Boolean;   //  Text in cells can be edited.
+                                //  Don't affect possibility of deleting/adding rows/columns (by default = True).
+        SelFlag: Boolean;       //  Is used to control selection of cells by mouse.
 
-        SelFlag: Boolean;       //  используется для организации изменения
-                                //  размера выделенной области по движению мыши
         StartCoord: TGridCoord;
         SavedCoord: TGridCoord;
 
         FOnGridResized: TGridResizedEvent;
 
         (*???function CanEditModify: Boolean; override;*)
+		//	Add new row when key Tab is pressed at the end of row if allowed.
         procedure KeyPress(var Key: Char); override;
-            //  если изменение числа строк разрешено, то добавляет новую
-            //  строку по нажатию клавиши Tab при достижении конца таблицы
 
-            //  виртуальные методы, которые выполняют всю работу
         procedure _InsertRows(StartRow, RowsCount: LongInt; Clear: Boolean
             ); virtual;
         procedure _DeleteRows(StartRow, RowsCount: LongInt
@@ -207,38 +229,30 @@ type
         procedure _DeleteColumns(StartCol, ColsCount: LongInt
             ); virtual;
         procedure _AddColumn; virtual;
-
-        procedure _DeleteAllData; virtual;      //  удаляет все данные,
-                                                //  формируя пустую таблицу
+		//	Delete all data and form empty table.
+        procedure _DeleteAllData; virtual;
+		//	Remove text from selected cells.
         procedure _ClearSelectedArea; virtual;
-            //  очищает ячейки выделенной области
+		//	Remove text from all cells.
         procedure _ClearAllCells; virtual;
-            //  очищает все ячейки таблицы
-
+		//	Clear given table region and call DataChanged.
         procedure ClearArea(
-            //  очищает заданную область таблицы и вызывает DataChanged
             const Left, Top, Right, Bottom: LongInt);
+		//	Handle data changing.
         procedure DataChanged(
-            //  выполняет некоторые действия при изменении
-            //  данных в области таблицы (здесь ничего не делает)
             const Left, Top, Right, Bottom: LongInt); virtual;
+		//	Fill given table region with data.
         procedure FillArea(
-            //  вызывается, когда нужно заполнить некоторую
-            //  область таблицы (здесь ничего не делает)
             const Left, Top, Right, Bottom: LongInt); virtual;
+		//	Fill fixed colums (row headers). Can be used, for example, for rows numeration.
         procedure FillRowHeaders; virtual;
-            //  заполняет фиксированные колонки начиная с
-            //  первой строки, следующей за фиксированными строками
-            //  здесь ничего не делает - ??? можно сделать перенумеровку строк
+		//	Fill fixed rows (column headers).
         procedure FillColHeaders; virtual;
-            //  заполняет фиксированные строки (заголовки колонок таблицы)
-            //  здесь ничего не делает
 
     public
         constructor Create(AOwner: TComponent); override;
 
-        procedure PasteFromClipBoard; virtual;
-        procedure CopyToClipBoard; virtual;
+        function PasteFromClipBoard: Boolean; override;
 
         procedure MouseUp(Button: TMouseButton;
             Shift: TShiftState; X, Y: Integer
@@ -249,7 +263,7 @@ type
             Shift: TShiftState; X, Y: Integer
             ); override;
 
-        //  функции проверки возможности выполнения действия
+        //  Check if actions are possible.
         function MayIDoInsertRows(StartRow, RowsCount: LongInt): Boolean; virtual;
         function MayIDoDeleteRows(StartRow, RowsCount: LongInt): Boolean; virtual;
         function MayIDoAddRow: Boolean; virtual;
@@ -262,8 +276,6 @@ type
         function MayIDoClearSelectedArea: Boolean; virtual;
         function MayIDoClearAllCells: Boolean; virtual;
 
-        //  выполнение действия - перед выполнением
-        //  проверяется возможность выполнения
         procedure InsertRows(StartRow, RowsCount: LongInt; Clear: Boolean);
         procedure DeleteRows(StartRow, RowsCount: LongInt);
         procedure AddRow;
@@ -272,14 +284,14 @@ type
         procedure DeleteColumns(StartCol, ColsCount: LongInt);
         procedure AddColumn;
 
-        procedure DeleteAllData;        //  удаляет все данные, формируя пустую таблицу
-        procedure ClearSelectedArea;    //  очищает клетки выделенной области
-        procedure ClearAllCells;        //  очищает все ячейки таблицы
+        procedure DeleteAllData;        //  Delete all data and form empty table.
+        procedure ClearSelectedArea;    //  Clear cells of selected region.
+        procedure ClearAllCells;        //  Clear all cells of the table.
 
-        procedure DeleteSelection;      //  алгоритм удаления выделенной области
+        procedure DeleteSelection;      //  Delete selected region.
 
-        procedure SelectAll;            //  выбирает все нефиксированные ячейки
-        procedure ClearSelection;       //  сбрасывает область выделения
+        procedure SelectAll;            //  Select all editable cells.
+        procedure ClearSelection;       //  Clear selection.
 
 
         procedure SetAutoColWidth(ACol: LongInt);
@@ -290,11 +302,10 @@ type
     published
         property DoubleBuffered;
 
-            //  установка этих свойств в True запрещает работу методов,
-            //  изменяющих число столбцов или (и) строк таблицы; при
-            //  попытке изменить фиксированный параметр таблица выдает
-            //  сообщение об ошибке; эти свойства на влияют на изменение
-            //  числа строк/столбцов свойствами ColCount, RowCount;
+		//	Setting up these properties to True blocks the methods changing
+		//	number of columns or (and) rows. In attempting change fixed
+		//	parameter the table shows error dialog. These properties don't
+		//	affect changing row/column number by means of ColCount, RowCount.
         property ColNumFixed: Boolean   read FColNumFixed   write FColNumFixed;
         property RowNumFixed: Boolean   read FRowNumFixed   write FRowNumFixed;
         property Changeable: Boolean    read FChangeable    write FChangeable;
@@ -303,28 +314,21 @@ type
             read FOnGridResized write FOnGridResized;
     end;
 
+	//	The grid which can call methods of class - data source 
+	//	and exchange data with objects of that class (class must 
+	//	implement special interface). 
     TDataGrid = class(TIDAGrid)
-        //  таблица, которая может выполнять действия над классом -
-        //  источником данных и обмениваться с ним данными;
-        //  !!! при работе с методами, изменяющими число строк или
-        //  столбцов таблицы предпочтение отдается свойствам
-        //  ColNumFixed, RowNumFixed предка, не зависимо от того,
-        //  поддерживаются ли такие действия классом - источником данных !!!
-        //  в случае, если объект - источник не присоединен, таблица
-        //  просто работает так же как и предок
     protected
         FGridDataSource: IGridDataSource;
 
         function GetMyGridDataSource: IGridDataSource;
+        //  Firstly call DataChanged then inherited method.
         procedure EditingFinished(
-            //  в первую очередь вызывает DataChanged, затем inherited
-            const ACol, ARow: LongInt   //  координаты редактируемой ячейки
+            const ACol, ARow: LongInt   //  Coordinates of edited cell.
             ); override;
         (*???function CanEditAcceptKey(Key: Char): Boolean; override;*)
-            //  проверяет разрешает ли источник данных ввод символа
+        //  Check if cell editing is possible
         (*???function CanEditModify: Boolean; override;*)
-            //  дополнительно проверяет разрешает ли источник
-            //  данных редактировать текущую ячейку
         procedure _InsertRows(StartRow, RowsCount: LongInt; Clear: Boolean
             ); override;
         procedure _DeleteRows(StartRow, RowsCount: LongInt
@@ -337,44 +341,31 @@ type
             ); override;
         procedure _AddColumn; override;
 
-        procedure _DeleteAllData; override;     //  удаляет все данные,
-                                                //  формируя пустую таблицу
+        procedure _DeleteAllData; override;
         procedure _ClearSelectedArea; override;
         procedure _ClearAllCells; override;
 
         procedure DataChanged(
-            //  вызывает обновление данных в объекте - источнике данных;
-            //  если в какой - либо ячейке области находится пустая строка,
-            //  то для этой ячейки устанавливается значение "по умолчанию"
             const Left, Top, Right, Bottom: LongInt); override;
         procedure FillArea(
-            //  заполняет область строками, получаемыми от источника данных
             const Left, Top, Right, Bottom: LongInt); override;
 
-        //  !!! при вызове этих функций предполагается,
-        //  что источник данных не равен nil !!!
+        //  Set up parameters of table based on data source.
         procedure GetTableParams;
-            //  устанавливает параметры таблицы, пользуясь
-            //  функциями объекта - источника данных
+        //  Set up widths and heights of cells based on data source.
         procedure GetWidthsHeights;
-            //  устанавливает ширины и высоты ячеек, пользуясь
-            //  функциями объекта - источника данных
+        //  Save table parameters in data source including
+        //  widths and heights of cells.
         procedure SaveTableParams;
-            //  соханяет параметры таблицы в источнике данных,
-            //  а также ширины и высоты ячеек
+        //  Fill table with data from data source (only data region).
         procedure FillTable;
-            //  выполняет заполнение таблицы данными
-            //  (заполняет только область данных)
+        //  Fill fixed colums (row headers) based on data source.
         procedure FillRowHeaders; override;
-            //  заполняет фиксированные колонки начиная с
-            //  первой строки, следующей за фиксированными строками
+        //	Fill fixed rows (column headers) based on data source.
         procedure FillColHeaders; override;
-            //  заполняет фиксированные строки (заголовки колонок таблицы)
 
     public
-        //  функции проверки возможности выполнения действия;
-        //  дополнительно вызывают проверку возможно выполнения
-        //  действия в объекте - источнике данных
+        //  Check if action is possible by means of data source.
         function MayIDoInsertRows(StartRow, RowsCount: LongInt): Boolean; override;
         function MayIDoDeleteRows(StartRow, RowsCount: LongInt): Boolean; override;
         function MayIDoAddRow: Boolean; override;
@@ -390,24 +381,23 @@ type
         procedure HideTable;
         procedure ShowTable;
 
+        //  Connect data source to the table and initialize table with data.
+        //  Pass nil to disconnect data source.
         procedure SetGridDataSource(
-            //  присоединяет объект - источник данных, выполняет
-            //  первоначальное заполнение таблицы данными; для
-            //  отсоединения объекта нужно передать методу nil
             GridDataSource: IGridDataSource);
     end;
 
     TColoredGrid = class(TDataGrid)
     protected
         FOddRowColor: TColor;
-        FNotOddRowColor: TColor;
+        FEvenRowColor: TColor;
         FSelectedRegionColor: TColor;
         FDisabledColor: TColor;
 
         function GetOddRowColor: TColor; virtual;
         procedure SetOddRowColor(const AOddRowColor: TColor); virtual;
-        function GetNotOddRowColor: TColor; virtual;
-        procedure SetNotOddRowColor(const ANotOddRowColor: TColor); virtual;
+        function GetEvenRowColor: TColor; virtual;
+        procedure SetEvenRowColor(const AEvenRowColor: TColor); virtual;
         function GetSelectedRegionColor: TColor; virtual;
         procedure SetSelectedRegionColor(const ASelectedRegionColor: TColor); virtual;
         function GetDisabledColor: TColor; virtual;
@@ -421,34 +411,31 @@ type
 
     published
         property OddRowColor: TColor read GetOddRowColor write SetOddRowColor;
-        property NotOddRowColor: TColor read GetNotOddRowColor write SetNotOddRowColor;
+        property EvenRowColor: TColor read GetEvenRowColor write SetEvenRowColor;
         property SelectedRegionColor: TColor
             read GetSelectedRegionColor write SetSelectedRegionColor;
         property DisabledColor: TColor
             read GetDisabledColor write SetDisabledColor;
     end;
 
-
     TColOption = LongInt;
 
     TGetCellColorEvent = procedure(Sender: TObject;
     ColNum, RowNum: LongInt; var CellColor: TColor) of object;
 
-    TColorStringGrid = class(TStringGrid)
-        //  сетка раскрашивающая разные типы ячеек
-        //  !!! перекрытые свойства ColCount и RowCount не работают в
-        //  design-time - вместо них используются свойства предка !!!
+    // Grid allows setting up colors of different types of cells at design time.
+    TColorStringGrid = class(TClipboardGrid)
     protected
         FColorMatrix: array of array of TColor;
         FOddRowColor: TColor;
-        FNotOddRowColor: TColor;
+        FEvenRowColor: TColor;
         FSelectedRegionColor: TColor;
         FOnGetCellColor: TGetCellColorEvent;
-        FColNumFixed: Boolean;  //  число колонок не может изменяться
-        FRowNumFixed: Boolean;  //  число столбцов не может изменяться
+        FColNumFixed: Boolean;  //  The number of columns can't be changed.
+        FRowNumFixed: Boolean;  //  The number of rows can't be changed.
 
         procedure SetOddRowColor(Color: TColor);
-        procedure SetNotOddRowColor(Color: TColor);
+        procedure SetEvenRowColor(Color: TColor);
         procedure SetSelectedRegionColor(Color: TColor);
         procedure DrawCell(ACol, ARow: Longint; ARect: TRect;
                   AState: TGridDrawState); override;
@@ -456,12 +443,11 @@ type
         function GetCellColor(const ColNum, RowNum: LongInt): TColor;
         (*function CreateEditor: TInplaceEdit; override;*)
 
-            //  методы объявлены как private -
-            //  нельзя перекрыть - нужно переопределить
-        procedure SetColCount(Value: Longint); virtual;
-        function GetColCount: LongInt; virtual;
-        procedure SetRowCount(Value: Longint); virtual;
-        function GetRowCount: LongInt; virtual;
+        procedure SetColCount(Value: Longint); override;
+        function GetColCount: LongInt; override;
+        procedure SetRowCount(Value: Longint); override;
+        function GetRowCount: LongInt; override;
+
         function GetCellsColors(ACol, ARow: LongInt): TColor;
         procedure SetCellsColors(ACol, ARow: LongInt; AColor: TColor);
 
@@ -471,14 +457,10 @@ type
     public
         constructor Create(AOwner: TComponent); override;
         destructor Destroy; override;
-        procedure EnumerateRows;
+
         procedure SelectAll;
         procedure ResetAll;
         procedure ClearSelection;
-        function CopyToClipBoard: Boolean;
-        function PasteFromClipBoard: Boolean;
-        function CheckingTextValidity(St: string;
-            ACol, ARow: LongInt): Boolean; virtual;
 
         property InplaceEditor;
         property CellsColors[ACol, ARow: LongInt]: TColor
@@ -488,28 +470,23 @@ type
         property DoubleBuffered;
         property OddRowColor: TColor
             read FOddRowColor           write SetOddRowColor;
-        property NotOddRowColor: TColor
-            //   https://www.evernote.com/shard/s132/nl/14501366/28b37bf8-5cce-4a99-a6f5-8249dd0bad1c
-            read FNotOddRowColor        write SetNotOddRowColor;
+        property EvenRowColor: TColor
+            read FEvenRowColor          write SetEvenRowColor;
         property SelectedRegionColor: TColor
             read FSelectedRegionColor   write SetSelectedRegionColor;
         property ColNumFixed: Boolean
             read FColNumFixed           write FColNumFixed;
         property RowNumFixed: Boolean
-            //  установка этого свойства в True запрещает добавление строки в
-            //  таблицу по клавише Tab, удаление строк и изменение количества строк
-            //  вставкой из буфера обмена
+            //  Setting up this property to True blocks adding row by pressing
+            //  the Tab key, deleting rows and changing row number by pasting
+            //  from clipboard.
             read FRowNumFixed           write FRowNumFixed;
         property OnGetCellColor: TGetCellColorEvent
             read FOnGetCellColor        write FOnGetCellColor;
-        property ColCount: LongInt
-            read GetColCount            write SetColCount;
-        property RowCount: LongInt
-            read GetRowCount            write SetRowCount;
     end;
 
+    //  The grid allows to contol input of numbers.
     TNumericGrid = class(TColorStringGrid)
-        //  сетка, кот. может контролировать ввод чисел
     protected
         FDisabledColor: TColor;
         ColOptArray: array of TColOption;
@@ -520,27 +497,30 @@ type
         function GetColOption(index: LongInt): TColOption;
         procedure SetOptCount(AColOptCount: LongInt);
         procedure SetDisabledColor(Color: TColor);
-        procedure KeyPress(var Key: Char); override;
         procedure SetColCount(Value: Longint); override;
-
-    public
         function CheckingTextValidity(St: string; ACol,
             ARow: LongInt): Boolean; override;
-        constructor Create(AOwner: TComponent); override;
-        (*???function CanEditAcceptKey(Key: Char): Boolean; override;*)
+
+        function CanEditAcceptKey(Key: Char): Boolean; virtual;
+        procedure KeyPress(var Key: Char); override;
+
         procedure MouseUp(Button: TMouseButton; Shift: TShiftState;
             X, Y: Integer); override;
         procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
         procedure MouseDown(Button: TMouseButton; Shift: TShiftState;
             X, Y: Integer); override;
+
+    public
+        constructor Create(AOwner: TComponent); override;
+
         procedure InsertRows(StartPos, Count: LongInt; Clear: Boolean); virtual;
         procedure DeleteRows(StartPos, Count: LongInt); virtual;
         procedure SetColWidthByDefault(ACol: LongInt);
+        //  Calculate and set up column widths in such manner to show all the data.
         procedure ResetColWidths;
-            //  вычисляет и устанавливает ширину колонок так,
-            //  чтобы все данные были видны
         procedure DeleteSelection;
         destructor Destroy; override;
+
         property ColOptions[index: LongInt]: TColOption
             read GetColOption       write SetColOption;
 
@@ -549,14 +529,16 @@ type
             read FDisabledColor     write SetDisabledColor;
     end;
 
+    //  Not implemented yet!
+    //  The grid allows showing icons in cells to the left of the text.
+    //  With every cell can be associated pointer to list of images and
+    //  index of image which is shown at the moment.
     TIconicGrid = class(TNumericGrid)
-        //  с каждой клеткой может быть связан указатель на список TImageList
-        //  и индекс картинки, которая будет выведена в клетке левее текста
     end;
 
+    //  Not implemented yet!
+    //  Displayed icons can be animated.
     TAnimatedGrid = class(TIconicGrid)
-        //  выводимые картинки могут анимироваться (сменой индекса картинки
-        //  по таймеру)
     end;
 
 const
@@ -580,21 +562,12 @@ const
         goFixedHorzLine, goVertLine, goHorzLine, goTabs,
         goThumbTracking, goRowSizing, goColSizing];
 
+//  Return max. text width in the column of the grid with given number ColNum.
 function GetMaxTextWidth(
-    //  возвращает максимальную ширину текста в колонке ColNum данного Grid'а
     const Grid: TStringGrid; const ColNum: LongInt): LongInt;
+//  Return max. text height in the row of the grid with given number RowNum.
 function GetMaxTextHeight(
-    //  возвращает максимальную высоту текста в строке RowNum данного Grid'а
     const Grid: TStringGrid; const RowNum: LongInt): LongInt;
-
-const
-    REAL_SET: set of Char = ['0'..'9', '.', '-', '+'];
-    POS_REAL_SET: set of Char = ['0'..'9', '.', '+'];
-        //  положительные вещественные числа
-    INT_SET: set of Char = ['0'..'9', '-', '+'];
-    POS_INT_SET: set of Char = ['0'..'9', '+'];
-        //  положительные целые числа
-    CHAR_SET: set of Char = ['A'..'Z', 'a'..'z'];
 
 procedure Register;
 
@@ -609,11 +582,11 @@ begin
     RegisterComponents('Fit', [TIDAGrid]);
     RegisterComponents('Fit', [TDataGrid]);
     RegisterComponents('Fit', [TColoredGrid]);
-    (*
+
     RegisterPropertyEditor(TypeInfo(TColor), TColorStringGrid,
         'OddRowColor', TColorProperty);
     RegisterPropertyEditor(TypeInfo(TColor), TColorStringGrid,
-        'NotOddRowColor', TColorProperty);
+        'EvenRowColor', TColorProperty);
     RegisterPropertyEditor(TypeInfo(TColor), TColorStringGrid,
         'SelectedRegionColor', TColorProperty);
     RegisterPropertyEditor(TypeInfo(TColor), TColorStringGrid,
@@ -630,7 +603,7 @@ begin
     RegisterPropertyEditor(
         TypeInfo(TColor), TColoredGrid, 'OddRowColor', TColorProperty);
     RegisterPropertyEditor(
-        TypeInfo(TColor), TColoredGrid, 'NotOddRowColor', TColorProperty);
+        TypeInfo(TColor), TColoredGrid, 'EvenRowColor', TColorProperty);
     RegisterPropertyEditor(
         TypeInfo(TColor), TColoredGrid, 'SelectedRegionColor', TColorProperty);
     RegisterPropertyEditor(
@@ -653,7 +626,6 @@ begin
     RegisterPropertyEditor(
         TypeInfo(TGridModified), TGEFGrid,
         'OnGridModified', TMethodProperty);
-    *)
 end;
 
 procedure TIDAGrid.MouseUp;
@@ -671,7 +643,7 @@ begin
     begin
         if (Coord.X > FixedCols - 1) and (Coord.Y > FixedRows - 1) then
         begin
-            //  переход в режим редактирования по клику
+            //  Transition into edit mode by click.
             ClearSelection;
             Col := Coord.X;
             Row := Coord.Y;
@@ -686,7 +658,7 @@ begin
             begin
                 Options := SelectOptions;
                 if (Coord.Y <= FixedRows - 1) and (Coord.X >= FixedCols) then
-                //  выбран столбец
+                //  Column selected.
                 begin
                     SelFlag := True;
                     StartCoord := MouseCoord(X, Y);
@@ -697,7 +669,7 @@ begin
                 end;
 
                 if (Coord.X <= FixedCols - 1) and (Coord.Y >= FixedRows) then
-                //  выбрана строка
+                //  Row selected.
                 begin
                     SelFlag := True;
                     StartCoord := MouseCoord(X, Y);
@@ -708,10 +680,10 @@ begin
                 end;
 
                 if (Coord.X <= FixedCols - 1) and (Coord.Y <= FixedRows - 1) then
-                    //  выбрана вся таблица
+                    //  All table is selected.
                     SelectAll;
             end else begin
-                //  сброс выделенной области
+                //  Reset selected region.
                 ClearSelection;
                 Options := StaticOptions;
         end;
@@ -731,7 +703,7 @@ begin
             if (StartCoord.Y <= FixedRows - 1) and
                (StartCoord.X >= FixedCols) and (Coord.X >= FixedCols) then
             begin
-                //  выбираются столбцы
+                //  Columns are selected.
                 R.Top := FixedRows; R.Bottom := RowCount - 1;
                 if Coord.X < StartCoord.X then
                 begin R.Left := Coord.X; R.Right := StartCoord.X end;
@@ -749,7 +721,7 @@ begin
             if (StartCoord.X <= FixedCols - 1) and
                (StartCoord.Y >= FixedRows) and (Coord.Y >= FixedRows) then
             begin
-                //  выбираются строки
+                //  Rows are selected.
                 R.Left := FixedCols; R.Right := ColCount - 1;
                 if Coord.Y < StartCoord.Y then
                 begin R.Top := Coord.Y; R.Bottom := StartCoord.Y end;
@@ -764,7 +736,7 @@ begin
                    (TopRow > FixedRows) then TopRow := TopRow - 1;
             end;
             SavedCoord := Coord;
-        end;    //  if (Coord.X <> SavedCoord.X) or (Coord.Y <> SavedCoord.Y) then...
+        end;  //  if (Coord.X <> SavedCoord.X) or (Coord.Y <> SavedCoord.Y) then...
     end;
     inherited MouseMove(Shift, X, Y);
 end;
@@ -841,9 +813,8 @@ end;
 
 procedure TIDAGrid.DeleteSelection;
 begin
-    //  очистка всей таблицы - должно идти первым, потому что требует
-    //  одновременного выполнения последующих условий, касающихся удаления
-    //  строк и столбцов
+    //  Deleting all the table.
+    //  Must be the first due to conditions.
     if (Selection.Left = FixedCols) and (Selection.Right = ColCount - 1) and
        (Selection.Top = FixedRows) and (Selection.Bottom = RowCount - 1) then
     begin
@@ -853,21 +824,23 @@ begin
                 [mbYes, mbNo, mbCancel], 0) = mrYes then
             begin
                 DeleteAllData;
-                ClearSelection; //  нужна здесь, так как после удаления всех
-                                //  данный остается как минимум одна пустая ячейка
+                //  Clearing is necessary because after deleting
+                //  all the data at least one cell is remained.
+                ClearSelection;
             end;
         end
         else MessageDlg('Table clearing is impossible...', mtWarning, [mbOk], 0);
         Exit;
     end;
 
-    //  удаление строк таблицы
+    //  Deleting all the rows.
     if (Selection.Left = FixedCols) and (Selection.Right = ColCount - 1) then
     begin
         if MayIDoDeleteRows(Selection.Top, Selection.Bottom - Selection.Top + 1) then
         begin
             if Selection.Top <> Selection.Bottom then
-                //  вопрос задается только если число строк превышает 1
+                //  Confirmation is requested only if the number of
+                //  rows is greater than 1.
                 if MessageDlg('Delete selected rows ?', mtConfirmation,
                     [mbYes, mbNo, mbCancel], 0) <> mrYes then Exit;
 
@@ -881,18 +854,19 @@ begin
                     ClearSelectedArea;
                     ClearSelection;
                 end;
-            end else    //  ничего нельзя сделать
-                MessageDlg('Rows deleting is impossible...', mtWarning, [mbOk], 0);
+            end else
+                MessageDlg('Rows deleting disabled...', mtWarning, [mbOk], 0);
         Exit;
     end;
 
-    //  удаление столбцов таблицы
+    //  Deleting all the columns.
     if (Selection.Top = FixedRows) and (Selection.Bottom = RowCount - 1) then
     begin
         if MayIDoDeleteColumns(Selection.Left, Selection.Right - Selection.Left + 1) then
         begin
             if Selection.Left <> Selection.Right then
-                //  вопрос задается только если число столбцов превышает 1
+                //  Confirmation is requested only if the number of
+                //  columns is greater than 1.
                 if MessageDlg('Delete selected columns ?', mtConfirmation,
                     [mbYes, mbNo, mbCancel], 0) <> mrYes then Exit;
 
@@ -906,12 +880,12 @@ begin
                     ClearSelectedArea;
                     ClearSelection;
                 end;
-            end else    //  ничего нельзя сделать
-                MessageDlg('Columns deleting is impossible...', mtWarning, [mbOk], 0);
+            end else
+                MessageDlg('Columns deleting is disabled...', mtWarning, [mbOk], 0);
         Exit;
     end;
 
-    //  очистка выделенной области таблицы
+    //  Cleaning selected region.
     if ((Selection.Top <> FixedRows) or (Selection.Bottom <> RowCount - 1)) and
        ((Selection.Left <> FixedCols) or (Selection.Right <> ColCount - 1)) then
     begin
@@ -923,8 +897,8 @@ begin
                 ClearSelectedArea;
                 ClearSelection;
             end;
-        end else    //  нельзя очистить таблицу
-            MessageDlg('Clearing is impossible...', mtWarning, [mbOk], 0);
+        end else
+            MessageDlg('Clearing is disabled...', mtWarning, [mbOk], 0);
     end;
 end;
 
@@ -934,7 +908,7 @@ procedure TColoredGrid.DrawCell(ACol, ARow: Longint;
     function GetColorByDefault(ACol, ARow: LongInt): TColor;
     begin
         if Odd(ARow) then Result := OddRowColor
-        else Result := NotOddRowColor;
+        else Result := EvenRowColor;
     end;
 
 var SaveColor, TempColor: TColor;
@@ -944,23 +918,24 @@ begin
     else begin
         SaveColor := Canvas.Brush.Color;
         if not (gdFixed in AState) then
-        (*фиксированные клетки рисуются по старому*)
+        //  Fixed cell are displayed by default.
         begin
-            //  метод предка вызывается для того, чтобы
-            //  нарисовать границы ячейки способом по-умолчанию
+            //  Inherited method is called to draw cell borders
+            //  by the default way.
             inherited DrawCell(ACol, ARow, ARect, AState);
 
             if (gdSelected in AState) or (gdFocused in AState) then
-                (*клетка принадлежит выделенной области - рисовать цветом
-                выделенной области*)
+                //  The cell belongs to selected region.
                 Canvas.Brush.Color := SelectedRegionColor
             else
                 if GetMyGridDataSource <> nil then
                 begin
                     if GetMyGridDataSource.GetCellColor(ACol, ARow, TempColor) then
-                        (*объект - сервер установил новый цвет*)
+                        //  Data source object set up a new color.
                         Canvas.Brush.Color := TempColor
-                    else (*объект - сервер предлагает рисовать цветом по умолчанию*)
+                    else
+                        //  Data source object don't propose a special color.
+                        //  So apply default color.
                         if GetMyGridDataSource.IsCellDisabled(ACol, ARow) then
                             Canvas.Brush.Color := DisabledColor
                         else Canvas.Brush.Color := GetColorByDefault(ACol, ARow);
@@ -972,7 +947,8 @@ begin
             X := ARect.Right - Canvas.TextWidth(Cells[ACol, ARow]) - 2;
             Y := ARect.Bottom - Canvas.TextHeight(Cells[ACol, ARow]) - 2;
             Canvas.TextRect(ARect, X, Y, Cells[ACol, ARow]);
-        end else inherited DrawCell(ACol, ARow, ARect, AState);
+        end
+        else inherited DrawCell(ACol, ARow, ARect, AState);
         Canvas.Brush.Color := SaveColor;
     end;
 end;
@@ -981,19 +957,18 @@ constructor TColoredGrid.Create;
 begin
      inherited Create(AOwner);
      OddRowColor := CL_ODD_ROW;
-     NotOddRowColor := CL_EVEN_ROW;
+     EvenRowColor := CL_EVEN_ROW;
      SelectedRegionColor := CL_SELECTED;
 end;
 
 procedure TDataGrid.SetGridDataSource(
     GridDataSource: IGridDataSource);
 begin
+    //  If new and old data sources are the same then
+    //  parameters aren't saved because the number of
+    //  rows or columns can be changed.
     if (FGridDataSource <> nil) and
        (GridDataSource <> FGridDataSource) then SaveTableParams;
-       //   если предыдущий и новый источник данных совпадают
-       //   это означает попытку обновления данных источника -
-       //   сохранять параметры нельзя - число строк/столбцов
-       //   могло измениться...
 
     FGridDataSource := GridDataSource;
     if GridDataSource <> nil then
@@ -1005,13 +980,13 @@ begin
         FillColHeaders;
         FillTable;
 
-        GetWidthsHeights;   //  д.б. после заполнения таблицы
-                            //  для правильной автоматической
-                            //  установки ширин и высот ячеек
+        //  Must be after table filling to properly
+        //  calculate widths and heights of cells.
+        GetWidthsHeights;
 
-        Changeable := True; //  по умолчанию, при установке
-                            //  пассивного источника, текст
-                            //  в ячейках может редактироваться
+        //  By default in assigning passive data source
+        //  text in cells can be edited.
+        Changeable := True;
     end else HideTable;
 end;
 
@@ -1019,9 +994,9 @@ procedure TDataGrid._DeleteAllData;
 begin
     if GetMyGridDataSource <> nil then
         with GetMyGridDataSource do AllDataDeleted;
-    inherited;  //  здесь, чтобы обеспечить возможность объекту
-                //  сгенерировать исключение в случае ошибки, и
-                //  не дать возможности изменить таблицу
+
+    //  In the case of exception in above lines the table remains unchanged.
+    inherited;
 end;
 
 procedure TDataGrid._ClearSelectedArea;
@@ -1040,27 +1015,27 @@ procedure TDataGrid._InsertRows(StartRow, RowsCount: LongInt; Clear: Boolean);
 begin
     if GetMyGridDataSource <> nil then
         with GetMyGridDataSource do RowsInserted(StartRow, RowsCount);
-    inherited;  //  здесь, чтобы обеспечить возможность объекту
-                //  сгенерировать исключение в случае ошибки, и
-                //  не дать возможности изменить таблицу
+
+    //  In the case of exception in above lines the table remains unchanged.
+    inherited;
 end;
 
 procedure TDataGrid._AddRow;
 begin
     if GetMyGridDataSource <> nil then
         with GetMyGridDataSource do RowAdded;
-    inherited;  //  здесь, чтобы обеспечить возможность объекту
-                //  сгенерировать исключение в случае ошибки, и
-                //  не дать возможности изменить таблицу
+
+    //  In the case of exception in above lines the table remains unchanged.
+    inherited;
 end;
 
 procedure TDataGrid._DeleteRows(StartRow, RowsCount: LongInt);
 begin
     if GetMyGridDataSource <> nil then
         with GetMyGridDataSource do RowsDeleted(StartRow, RowsCount);
-    inherited;  //  здесь, чтобы обеспечить возможность объекту
-                //  сгенерировать исключение в случае ошибки, и
-                //  не дать возможности изменить таблицу
+
+    //  In the case of exception in above lines the table remains unchanged.
+    inherited;
 end;
 
 procedure TDataGrid._InsertColumns(
@@ -1068,9 +1043,9 @@ procedure TDataGrid._InsertColumns(
 begin
     if GetMyGridDataSource <> nil then
         with GetMyGridDataSource do ColumnsInserted(StartCol, ColsCount);
-    inherited;  //  здесь, чтобы обеспечить возможность объекту
-                //  сгенерировать исключение в случае ошибки, и
-                //  не дать возможности изменить таблицу
+
+    //  In the case of exception in above lines the table remains unchanged.
+    inherited;
 end;
 
 function TDataGrid.GetMyGridDataSource: IGridDataSource;
@@ -1083,18 +1058,18 @@ procedure TDataGrid._AddColumn;
 begin
     if GetMyGridDataSource <> nil then
         with GetMyGridDataSource do ColumnAdded;
-    inherited;  //  здесь, чтобы обеспечить возможность объекту
-                //  сгенерировать исключение в случае ошибки, и
-                //  не дать возможности изменить таблицу
+
+    //  In the case of exception in above lines the table remains unchanged.
+    inherited;
 end;
 
 procedure TDataGrid._DeleteColumns(StartCol, ColsCount: LongInt);
 begin
     if GetMyGridDataSource <> nil then
         with GetMyGridDataSource do ColumnsDeleted(StartCol, ColsCount);
-    inherited;  //  здесь, чтобы обеспечить возможность объекту
-                //  сгенерировать исключение в случае ошибки, и
-                //  не дать возможности изменить таблицу
+
+    //  In the case of exception in above lines the table remains unchanged.
+    inherited;
 end;
 
 function TColoredGrid.GetOddRowColor: TColor;
@@ -1107,14 +1082,14 @@ begin
     FOddRowColor := AOddRowColor;
 end;
 
-function TColoredGrid.GetNotOddRowColor: TColor;
+function TColoredGrid.GetEvenRowColor: TColor;
 begin
-    Result := FNotOddRowColor;
+    Result := FEvenRowColor;
 end;
 
-procedure TColoredGrid.SetNotOddRowColor(const ANotOddRowColor: TColor);
+procedure TColoredGrid.SetEvenRowColor(const AEvenRowColor: TColor);
 begin
-    FNotOddRowColor := ANotOddRowColor;
+    FEvenRowColor := AEvenRowColor;
 end;
 
 function TColoredGrid.GetSelectedRegionColor: TColor;
@@ -1137,96 +1112,7 @@ begin
     FDisabledColor := ADisabledColor;
 end;
 
-procedure TIDAGrid.CopyToClipBoard;
-var St, St2, St3: string;
-    i, j: LongInt;
-begin
-    with Selection do
-    begin
-        if (Top = Bottom) and (Left = Right) then
-        begin
-            MessageDlg('It is necessary to choose area for copying...', mtWarning, [mbOk], 0);
-            Exit;
-        end;
-
-        St := '';
-        for i := Top to Bottom do
-        begin
-            St2 := '';
-            for j := Left to Right do
-            begin
-                if j <> Right then St3 := Cells[j, i] + #9
-                else St3 := Cells[j, i];
-                St2 := St2 + St3;
-            end;
-            St := St + St2 + #13#10;
-        end;
-        ClipBoard.SetTextBuf(PChar(St));
-    end; {with Selection do...}
-end;
-
-procedure TIDAGrid.PasteFromClipBoard;
-const DelimiterChars: set of Char = [#9, #10, #13];
-
-    procedure ExtractGridSizes(Buffer: array of Char;
-        const Count: LongInt; var BufferCols, BufferRows: LongInt);
-    var i: LongInt;
-        Flag: Boolean;
-    begin
-        BufferCols := 0; BufferRows := 0;
-        Flag := True;
-        for i := 0 to Count - 1 do
-        begin
-            if (Buffer[i] in DelimiterChars) and Flag then Inc(BufferCols);
-            if Buffer[i] = #10 then Flag := False;
-            if Buffer[i] = #13 then
-            begin
-                Flag := False;
-                Inc(BufferRows);
-            end;
-        end;
-    end;
-
-    function ExtractString(Buffer: array of Char;
-    const Count: LongInt; var Index: LongInt): string;
-    var St: ShortString;
-        i, j, k: LongInt;
-    const BadSymbols: set of Char = [#10, #13];
-    begin
-        St := '';
-        for i := Index to Count - 1 do
-        begin
-            if Buffer[i] in DelimiterChars then
-            begin
-                for j := Index to i - 1 do
-                begin
-                    if not (Buffer[j] in BadSymbols) then
-                    begin
-                        St[Length(St) + 1] := Buffer[j];
-                        Inc(St[0]);
-                    end;
-                end;
-                j := i;
-                if Buffer[j] = #9 then k := j + 1
-                else for k := j to Count - 1 do
-                if not (Buffer[k] in DelimiterChars) then Break;
-                Index := k;
-                Result := St;
-                Exit;
-            end;
-        end;
-    end;
-
-    procedure ClearFixed;
-    var i, j: LongInt;
-    begin
-        for i := 0 to FixedRows - 1 do
-            for j := 0 to ColCount - 1 do Cells[j, i] := '';
-        for i := 0 to FixedCols - 1 do
-            for j := FixedRows to RowCount - 1 do Cells[i, j] := '';
-    end;
-
-const BufCount = 10240;
+function TIDAGrid.PasteFromClipBoard: Boolean;
 var Count: Longint;
     Buffer: array[0..BufCount] of Char;
     St: string;
@@ -1245,16 +1131,11 @@ begin
     if MessageDlg('Overwrite this data ?', mtWarning,
     [mbYes, mbNo, mbCancel], 0) <> mrYes then Exit;
 
-    //  ??? если нажата кнопка No, то нужно вставить
-    //  строки, добавляя новые строки ячеек
-
     Count := ClipBoard.GetTextBuf(@Buffer, BufCount);
     ExtractGridSizes(Buffer, Count, BufferColCount, BufferRowCount);
 
+    //  Coordinates must be saved during paste operation.
     SavedSelection := Selection;
-        //  координаты выделенной области нужно
-        //  сохранить, поскольку после вставки строк/столбцов
-        //  Selection сбрасывается кем-то из предков
 
     SelectionSize := SavedSelection.Bottom - SavedSelection.Top + 1;
     if (BufferRowCount > SelectionSize) and (not RowNumFixed) then
@@ -1282,7 +1163,7 @@ begin
         Exit;
     end;
 
-    //  вычисление координат области которая была вставлена
+    //  Calculation of coordinates of pasted region.
     InsertedArea.Left := SavedSelection.Left;
     InsertedArea.Top := SavedSelection.Top;
     if ColCount - 1 < SavedSelection.Left + BufferColCount - 1 then
@@ -1293,9 +1174,9 @@ begin
         InsertedArea.Bottom := RowCount - 1
     else InsertedArea.Bottom := SavedSelection.Top + BufferRowCount - 1;
 
-    Selection := InsertedArea;  //  вставленные данные выделяются
+    Selection := InsertedArea;  //  Pasted data are selected.
 
-    //  проверка правильности вставленного текста
+    //  Checking for data validity.
     with Selection do DataChanged(Left, Top, Right, Bottom);
     if Assigned(OnGridModified) then OnGridModified(Self);    
 end;
@@ -1319,8 +1200,7 @@ end;
 procedure TIDAGrid.KeyPress(var Key: Char);
 begin
     inherited KeyPress(Key);
-    (* ??? добавление строки д.б. запрещено до тех пор пока не
-    будет механизма обновления данных в таблице по инициативе источника
+    (* It is necessary to design callback to permit adding new row.
     if Key = #9 then
         if (not RowNumFixed) and (Col = 1) and (Row = 1) then
         begin
@@ -1365,22 +1245,43 @@ begin
     Enabled := False;
     Color := clLtGray;
 end;
-(*???
+
 function TNumericGrid.CanEditAcceptKey(Key: Char): Boolean;
+const
+    REAL_SET: set of Char = ['0'..'9', '.', ',', '-', '+'];
+    //  Positive real numbers.
+    //POS_REAL_SET: set of Char = ['0'..'9', '.', ',', '+'];
+    INT_SET: set of Char = ['0'..'9', '-', '+'];
+    //  Positive integer numbers.
+    //POS_INT_SET: set of Char = ['0'..'9', '+'];
+    CHAR_SET: set of Char = ['A'..'Z', 'a'..'z'];
+
 begin
-  case ColOptions[Col] of
-    coReal : if Key in REAL_SET then CanEditAcceptKey := True
-             else CanEditAcceptKey := False;
-    coInteger : if Key in INT_SET then CanEditAcceptKey := True
-             else CanEditAcceptKey := False;
-    coChars : if Key in CHAR_SET then CanEditAcceptKey := True
-             else CanEditAcceptKey := False;
-    coText : CanEditAcceptKey := True;
-    coDisabled : CanEditAcceptKey := False;
-    else CanEditAcceptKey := True;
-  end;
+    if Key >= #20 then
+
+        case ColOptions[Col] of
+            coReal :
+                if Key in REAL_SET then Result := True
+                else Result := False;
+
+            coInteger :
+                if Key in INT_SET then Result := True
+                else Result := False;
+
+            coChars :
+                if Key in CHAR_SET then Result := True
+                else Result := False;
+
+            coText : Result := True;
+
+            coDisabled : Result := False;
+
+            else Result := True;
+        end
+    //  Special characters processing.
+    else Result := True;
 end;
-*)
+
 procedure TNumericGrid.SetColOption(Index: LongInt; Value: TColOption);
 var i: LongInt;
 begin
@@ -1420,8 +1321,7 @@ begin
     
     Coord := MouseCoord(X, Y);
 {$ifndef lazarus}
-    //  в библ. Lazarus это уже реализовано включением
-    //  флага AutoEdit
+    //  In Lazarus this is achieved by turning on the AutoEdit flag.
     if Shift = [ssLeft, ssDouble] then
     begin
         if (Coord.X > FixedCols - 1) and
@@ -1438,7 +1338,7 @@ begin
     end
     else
 {$endif}
-    //  это работает, если включено goRangeSelect
+    //  This works if goRangeSelect is turned on.
     if Shift = [ssLeft] then
     begin
         Coord := MouseCoord(X, Y);
@@ -1448,7 +1348,7 @@ begin
             EditorMode := False;
             
             if (Coord.Y <= FixedRows - 1) and
-               (Coord.X >= FixedCols) then(*выбран столбец*)
+               (Coord.X >= FixedCols) then      //  Column selected.
             begin
                 SelFlag := True;
                 StartCoord := MouseCoord(X, Y);
@@ -1458,7 +1358,7 @@ begin
                 Selection := R;
             end;
             if (Coord.X <= FixedCols - 1) and
-               (Coord.Y >= FixedRows) then(*выбрана строка*)
+               (Coord.Y >= FixedRows) then      //  Row selected.
             begin
                 SelFlag := True;
                 StartCoord := MouseCoord(X, Y);
@@ -1468,7 +1368,7 @@ begin
                 Selection := R;
             end;
             if (Coord.X <= FixedCols - 1) and
-               (Coord.Y <= FixedRows - 1) then(*выбрана вся таблица*)
+               (Coord.Y <= FixedRows - 1) then  //   All table selected.
             begin
                 R.Left := FixedCols; R.Right := ColCount - 1;
                 R.Top := FixedRows; R.Bottom := RowCount - 1;
@@ -1477,7 +1377,7 @@ begin
         end
 {$ifndef lazarus}
         else
-        (*сброс выделенной области*)
+        //  Reset of selected area.
         begin
             R.Left := Coord.X; R.Right := Coord.X;
             R.Top := Coord.Y; R.Bottom := Coord.Y;
@@ -1499,7 +1399,7 @@ begin
     begin
       if (StartCoord.Y <= FixedRows - 1) and
          (StartCoord.X >= FixedCols) and
-         (Coord.X >= FixedCols) then(*выбираются столбцы*)
+         (Coord.X >= FixedCols) then    //  Columns are selected.
       begin
         R.Top := FixedRows; R.Bottom := RowCount - 1;
         if Coord.X < StartCoord.X then
@@ -1516,7 +1416,7 @@ begin
       end;
       if (StartCoord.X <= FixedCols - 1) and
          (StartCoord.Y >= FixedRows) and
-         (Coord.Y >= FixedRows) then(*выбираются строки*)
+         (Coord.Y >= FixedRows) then    //  Rows are selected.
       begin
         R.Left := FixedCols; R.Right := ColCount - 1;
         if Coord.Y < StartCoord.Y then
@@ -1560,7 +1460,7 @@ procedure TNumericGrid.DeleteSelection;
 var i, j: LongInt;
 begin
   if (Selection.Left = FixedCols) and (Selection.Right = ColCount - 1) then
-  (*удаление строк таблицы*)
+  //    Deleting all the rows of table.
   begin
     if not RowNumFixed then
     begin
@@ -1578,7 +1478,7 @@ begin
   end;
 
   if (Selection.Top = FixedRows) and (Selection.Bottom = RowCount - 1) then
-  (*удаление столбцов таблицы*)
+  //    Deleting all the columns of table.
   begin
     if not ColNumFixed then
     begin
@@ -1597,7 +1497,7 @@ begin
 
   if ((Selection.Top <> FixedRows) or (Selection.Bottom <> RowCount - 1)) and
      ((Selection.Left <> FixedCols) or (Selection.Right <> ColCount - 1)) then
-  (*очистка выделенной области таблицы*)
+  //    Cleaning of selected region.
   begin
     if Selection.Top <> Selection.Bottom then
       if MessageDlg('Clear all selected cells ?', mtWarning,
@@ -1616,10 +1516,10 @@ begin
      SaveColor := Canvas.Brush.Color;
      if not (gdFixed in AState) then
      begin
-        //  метод предка вызывается для того, чтобы
-        //  нарисовать границы ячейки способом по-умолчанию
+        //  Inherited method is called to draw cell borders
+        //  by the default way.
         inherited DrawCell(ACol, ARow, ARect, AState);
-        //  перерисовываем содержимое ячейки
+        //  Redrawing content of the cell.
         if (gdSelected in AState) or (gdFocused in AState) then
             Canvas.Brush.Color := SelectedRegionColor
         else Canvas.Brush.Color := GetCellColor(ACol, ARow);
@@ -1659,7 +1559,7 @@ begin
             Result := CellsColors[ColNum, RowNum]
          else
              if Odd(RowNum) then Result := OddRowColor
-             else Result := NotOddRowColor;
+             else Result := EvenRowColor;
 end;
 
 constructor TColorStringGrid.Create;
@@ -1668,7 +1568,7 @@ begin
      if csDesigning in ComponentState then
      begin
           OddRowColor := clWhite;
-          NotOddRowColor := clYellow;
+          EvenRowColor := clYellow;
           SelectedRegionColor := $0064CCEA - $003A3A3A;
      end;
 end;
@@ -1713,20 +1613,18 @@ begin
            for j := 0 to Length(FColorMatrix[i]) - 1 do
                if Odd(i) then FColorMatrix[i, j] := Color;
   end;
-  //Repaint;
 end;
 
-procedure TColorStringGrid.SetNotOddRowColor(Color: TColor);
+procedure TColorStringGrid.SetEvenRowColor(Color: TColor);
 var i, j: LongInt;
 begin
-  FNotOddRowColor := Color;
+  FEvenRowColor := Color;
   if Assigned(FColorMatrix) then
   begin
        for i := 0 to Length(FColorMatrix) - 1 do
            for j := 0 to Length(FColorMatrix[i]) - 1 do
                if not Odd(i) then FColorMatrix[i, j] := Color;
   end;
-  //Repaint;
 end;
 
 procedure TColorStringGrid.SetSelectedRegionColor(Color: TColor);
@@ -1738,119 +1636,148 @@ end;
 procedure TNumericGrid.SetDisabledColor(Color: TColor);
 var i, j: LongInt;
 begin
-  FDisabledColor := Color;
-  if Assigned(FColorMatrix) and Assigned(ColOptArray) then
-  begin
-       for i := 0 to RowCount - 1 do
-           if ColCount = Length(ColOptArray) then
-              for j := 0 to ColCount - 1 do
-                  if ColOptArray[j] = coDisabled then CellsColors[j, i] := Color;
-  end;
-  Repaint;
+    FDisabledColor := Color;
+    if Assigned(FColorMatrix) and Assigned(ColOptArray) then
+    begin
+      for i := 0 to RowCount - 1 do
+         if ColCount = Length(ColOptArray) then
+            for j := 0 to ColCount - 1 do
+                if ColOptArray[j] = coDisabled then CellsColors[j, i] := Color;
+    end;
+    Repaint;
 end;
 
-procedure TColorStringGrid.EnumerateRows;
+procedure TClipboardGrid.SetColCount(Value: Longint);
+begin
+    TStringGrid(Self).ColCount := Value;
+end;
+
+function TClipboardGrid.GetColCount: LongInt;
+begin
+    Result := TStringGrid(Self).ColCount;
+end;
+
+procedure TClipboardGrid.SetRowCount(Value: Longint);
+begin
+    TStringGrid(Self).RowCount := Value;
+end;
+
+function TClipboardGrid.GetRowCount: LongInt;
+begin
+    Result := TStringGrid(Self).RowCount;
+end;
+
+procedure TClipboardGrid.EnumerateRows;
 var i: LongInt;
 begin
     if FixedCols <> 0 then
         for i := FixedRows to RowCount - 1 do Cells[0, i] := IntToStr(i);
 end;
 
-function  TColorStringGrid.CopyToClipBoard: Boolean;
+function TClipboardGrid.CopyToClipBoard: Boolean;
 var St, St2, St3: string;
     i, j: LongInt;
 begin
-  Result := False;
-  with Selection do
-  begin
-    if (Top = Bottom) and (Left = Right) then
+    Result := False;
+    with Selection do
     begin
-      MessageDlg('It is necessary to choose area for copying...', mtWarning, [mbOk], 0);
-      Exit;
-    end;
-    try
-      St := '';
-      for i := Top to Bottom do
-      begin
-        St2 := '';
-        for j := Left to Right do
+        if (Top = Bottom) and (Left = Right) then
         begin
-          if j <> Right then St3 := Cells[j, i] + #9
-            else St3 := Cells[j, i];
-          St2 := St2 + St3;
+            MessageDlg('Choose area for copying...', mtWarning, [mbOk], 0);
+            Exit;
         end;
-        St := St + St2 + #13#10;
-      end;
-      ClipBoard.SetTextBuf(PChar(St));
-    except Exit end;
-  end;{With Selection do...}
-  Result := True;
+        try
+            St := '';
+            for i := Top to Bottom do
+            begin
+                St2 := '';
+                for j := Left to Right do
+                begin
+                    if j <> Right then St3 := Cells[j, i] + #9
+                        else St3 := Cells[j, i];
+                    St2 := St2 + St3;
+                end;
+                St := St + St2 + #13#10;
+            end;
+            ClipBoard.SetTextBuf(PChar(St));
+        except Exit end;
+    end;{With Selection do...}
+    Result := True;
 end;
 
-function TColorStringGrid.PasteFromClipBoard: Boolean;
-const DelimiterChars: set of Char = [#9, #10, #13];
+function TClipboardGrid.CheckingTextValidity(St: string;
+    ACol, ARow: LongInt): Boolean;
+begin
+    Result := True;
+end;
 
-    procedure ExtractGridSizes(Buffer: array of Char;
-        const Count: LongInt; var BufferCols, BufferRows: LongInt);
-    var i: LongInt;
-        Flag: Boolean;
+procedure TClipboardGrid.ExtractGridSizes(Buffer: array of Char;
+    const Count: LongInt; var BufferCols, BufferRows: LongInt);
+var i: LongInt;
+    Flag, PrevIsDelimiter: Boolean;
+begin
+    BufferCols := 0; BufferRows := 0;
+    Flag := True; PrevIsDelimiter := False;
+    for i := 0 to Count - 1 do
     begin
-        BufferCols := 0; BufferRows := 0;
-        Flag := True;
-        for i := 0 to Count - 1 do
+        if (Buffer[i] in DelimiterChars) then
         begin
-            if (Buffer[i] in DelimiterChars) and Flag then Inc(BufferCols);
-            if Buffer[i] = #10 then Flag := False;
-            if Buffer[i] = #13 then
-            begin
-                Flag := False;
-                Inc(BufferRows);
-            end;
+            if Flag and not PrevIsDelimiter then Inc(BufferCols);
+            PrevIsDelimiter := True;
+        end
+        else
+            PrevIsDelimiter := False;
+
+        if Buffer[i] = #13 then Flag := False;
+        if Buffer[i] = #10 then
+        begin
+            Flag := False;
+            Inc(BufferRows);
         end;
     end;
+end;
 
-    function ExtractString(Buffer: array of Char;
-        const Count: LongInt; var Index: LongInt): string;
-    var St: ShortString;
-        i, j, k: LongInt;
-    const BadSymbols: set of Char = [#10, #13];
+function TClipboardGrid.ExtractString(Buffer: array of Char;
+    const Count: LongInt; var Index: LongInt): string;
+var St: string;
+    i, j, k: LongInt;
+const BadSymbols: set of Char = [#10, #13];
+begin
+    St := '';
+    for i := Index to Count - 1 do
     begin
-        St := '';
-        for i := Index to Count - 1 do
+        if Buffer[i] in DelimiterChars then
         begin
-            if Buffer[i] in DelimiterChars then
+            for j := Index to i - 1 do
             begin
-                for j := Index to i - 1 do
+                if not (Buffer[j] in BadSymbols) then
                 begin
-                    if not (Buffer[j] in BadSymbols) then
-                    begin
-                        St[Length(St) + 1] := Buffer[j];
-                        Inc(St[0]);
-                    end;
+                    St := St + Buffer[j];
                 end;
-                j := i;
-                if Buffer[j] = #9 then k := j + 1
-                else
-                    for k := j to Count - 1 do
-                        if not (Buffer[k] in DelimiterChars) then Break;
-                Index := k;
-                Result := St;
-                Exit;
             end;
+            j := i;
+            if Buffer[j] = #9 then k := j + 1
+            else
+                for k := j to Count - 1 do
+                    if not (Buffer[k] in DelimiterChars) then Break;
+            Index := k;
+            Result := St;
+            Exit;
         end;
-        Result := St;
     end;
+    Result := St;
+end;
 
-    procedure ClearFixed;
-    var i, j: LongInt;
-    begin
-        for i := 0 to FixedRows - 1 do
-            for j := 0 to ColCount - 1 do Cells[j, i] := '';
-        for i := 0 to FixedCols - 1 do
-            for j := FixedRows to RowCount - 1 do Cells[i, j] := '';
-    end;
+procedure TClipboardGrid.ClearFixed;
+var i, j: LongInt;
+begin
+    for i := 0 to FixedRows - 1 do
+        for j := 0 to ColCount - 1 do Cells[j, i] := '';
+    for i := 0 to FixedCols - 1 do
+        for j := FixedRows to RowCount - 1 do Cells[i, j] := '';
+end;
 
-const BufCount = 10240;
+function TClipboardGrid.PasteFromClipBoard: Boolean;
 var Count: Longint;
     Buffer: array[0..BufCount] of Char;
     St: string;
@@ -1859,47 +1786,46 @@ var Count: Longint;
     TempCol, TempRow: LongInt;
     i, j: LongInt;
 begin
-  Result := False;
-  if not Clipboard.HasFormat(CF_TEXT) then
-  begin
-    MessageDlg('Clipboard contains no text data...', mtError, [mbOk], 0);
-    Exit;
-  end;
-  if MessageDlg('Overwrite this data ?', mtWarning,
-  [mbYes, mbNo, mbCancel], 0) <> mrYes then Exit;
-
-  (*если нажата кнопка No, то нужно вставить строки, добавляя новые строки ячеек*)
-
-  Count := ClipBoard.GetTextBuf(@Buffer, BufCount);
-  ExtractGridSizes(Buffer, Count, BufferColCount, BufferRowCount);
-  if Row < FixedRows then Row := FixedRows;
-  RowCount := BufferRowCount + Row;
-  ColCount := BufferColCount + FixedCols;
-  Col := FixedCols;
-  Index := 0;
-  try
-    for j := 0 to BufferRowCount - 1 do
-      for i := 0 to BufferColCount - 1 do
-      begin
-        St := ExtractString(Buffer, Count, Index);
-        TempCol := FixedCols + i;
-        TempRow := Row + j;
-        if (TempCol <= ColCount - 1) and (TempRow <= RowCount - 1) then
-        begin
-          if not CheckingTextValidity(St, TempCol, TempRow) then
-            Cells[TempCol, TempRow] := ''
-          else Cells[TempCol, TempRow] := St;
-        end;
-      end;
-  except
-    MessageDlg('Vague number of cell, since data do not have tabular format...',
-        mtError, [mbOk], 0);
     Result := False;
-    Exit;
-  end;
-  ClearFixed;
-  EnumerateRows;
-  Result := True;
+    BufferColCount := 0; BufferRowCount := 0;
+    if not Clipboard.HasFormat(CF_TEXT) then
+    begin
+        MessageDlg('Clipboard contains no text data...', mtError, [mbOk], 0);
+        Exit;
+    end;
+    if MessageDlg('Overwrite this data ?', mtWarning,
+        [mbYes, mbNo, mbCancel], 0) <> mrYes then Exit;
+
+    Count := ClipBoard.GetTextBuf(@Buffer, BufCount);
+    ExtractGridSizes(Buffer, Count, BufferColCount, BufferRowCount);
+    if Row < FixedRows then Row := FixedRows;
+    RowCount := BufferRowCount + Row;
+    ColCount := BufferColCount + FixedCols;
+    Col := FixedCols;
+    Index := 0;
+    try
+        for j := 0 to BufferRowCount - 1 do
+            for i := 0 to BufferColCount - 1 do
+            begin
+                St := ExtractString(Buffer, Count, Index);
+                TempCol := FixedCols + i;
+                TempRow := Row + j;
+                if (TempCol <= ColCount - 1) and (TempRow <= RowCount - 1) then
+                begin
+                    if not CheckingTextValidity(St, TempCol, TempRow) then
+                        Cells[TempCol, TempRow] := ''
+                    else Cells[TempCol, TempRow] := St;
+                end;
+            end;
+    except
+        MessageDlg('Vague number of cell, since data do not have tabular format...',
+            mtError, [mbOk], 0);
+        Result := False;
+        Exit;
+    end;
+    ClearFixed;
+    EnumerateRows;
+    Result := True;
 end;
 
 procedure TColorStringGrid.SelectAll;
@@ -1919,11 +1845,6 @@ begin
     Selection := R;
 end;
 
-function TColorStringGrid.CheckingTextValidity(St: string;
-ACol, ARow: LongInt): Boolean;
-begin
-  Result := True;
-end;
 (*???
 function TColorStringGrid.CreateEditor: TInplaceEdit;
 begin
@@ -1986,23 +1907,36 @@ end;
 procedure TNumericGrid.KeyPress(var Key: Char);
 var i: LongInt;
     St: string;
+
 begin
-  inherited KeyPress(Key);
-  case Key of
-    #9 : begin
-           if not RowNumFixed then
-             if (Col = 1) and (Row = 1) then
-             begin
-               RowCount := RowCount + 1;
-               Str(RowCount - 1, St);
-               Cells[0, RowCount - 1] := St;
-               Col := 1;
-               Row := RowCount - 1;
-               for i := 1 to ColCount - 1 do Cells[i, Row] := '';
-             end
-         end;
-    ',' : Key := '.';
-  end;
+    if goEditing in Options then
+    begin
+        if CanEditAcceptKey(Key) then
+            inherited KeyPress(Key)
+        //  Block further processing.
+        else Key := #0;
+    end
+    else
+        inherited KeyPress(Key);
+
+    case Key of
+        #9 : begin
+                 if not RowNumFixed then
+                     if (Col = 1) and (Row = 1) then
+                     begin
+                         RowCount := RowCount + 1;
+                         Str(RowCount - 1, St);
+                         Cells[0, RowCount - 1] := St;
+                         Col := 1;
+                         Row := RowCount - 1;
+                         for i := 1 to ColCount - 1 do Cells[i, Row] := '';
+                     end
+             end;
+
+        ',' :
+            //  Substitute decimal separator.
+            if ColOptions[Col] = coReal then Key := '.';
+    end;
 end;
 
 procedure TNumericGrid.ResetColWidths;
@@ -2040,7 +1974,7 @@ var i, j: LongInt;
 begin
      if not (csDesigning in ComponentState) then
      begin
-          (*!!! в design-time это не работает !!!*)
+          //    At the design-time this doesn't work.
           if not Assigned(FColorMatrix) then InitColorMatrix;
           for i := 0 to RowCount - 1 do
               if Length(FColorMatrix[i]) <> Value then
@@ -2049,7 +1983,7 @@ begin
                    SetLength(FColorMatrix[i], Value);
                    for j := SavedLength to Length(FColorMatrix[i]) - 1 do
                        if Odd(i) then FColorMatrix[i, j] := OddRowColor
-                   else FColorMatrix[i, j] := NotOddRowColor;
+                   else FColorMatrix[i, j] := EvenRowColor;
               end;
      end;
      TStringGrid(Self).ColCount := Value;
@@ -2083,7 +2017,7 @@ var i, j: LongInt;
 begin
      if not (csDesigning in ComponentState) then
      begin
-          (*!!! в design-time это не работает !!!*)     
+          //    At the design-time this doesn't work.
           if not Assigned(FColorMatrix) then InitColorMatrix;
           if Value < RowCount then
           begin
@@ -2099,11 +2033,10 @@ begin
                     SetLength(FColorMatrix[i], ColCount);
                     for j := 0 to ColCount - 1 do
                         if Odd(i) then FColorMatrix[i, j] := OddRowColor
-                        else FColorMatrix[i, j] := NotOddRowColor;
+                        else FColorMatrix[i, j] := EvenRowColor;
                end;
           end;
      end;
-     //???  inherited; можно ли заменить на это
      TStringGrid(Self).RowCount := Value;
 end;
 
@@ -2152,8 +2085,6 @@ procedure TIDAGrid._DeleteAllData;
 begin
     if not ColNumFixed then ColCount := FixedCols + 1;
     if not RowNumFixed then RowCount := FixedRows + 1;
-    //???    ClearAllCells; можно ввестиновый параметр функции Clear
-    //  и руководствоваться им
     FillArea(FixedCols, FixedRows, ColCount - 1, RowCount - 1);
     FillRowHeaders;
     FillColHeaders;
@@ -2364,15 +2295,13 @@ begin
     if (goEditing in Options)
        (*???and CanEditAcceptKey(Key)*)
        then Modified := True;
-    //  на EditorMode полагаться нельзя - переключается по Enter даже
-    //  когда редактирование таблицы запрещено
     inherited;
 end;
 
 function TGEFGrid.SelectCell(ACol, ARow: Integer): Boolean;
 var MyResult: Boolean;
 begin
-    //  выбираемая ячейка всегда не совпадает с текущей
+    //  Selected cell is not always current cell.
     MyResult := True;
     if Modified then
     begin
@@ -2381,8 +2310,7 @@ begin
             Modified := False;
         except
             MyResult := False;
-            //  нельзя здесь перевозбуждать исключение -
-            //  функция должна завершиться нормально...
+            //  Method must finish without exception.
             MessageDlg('Invalid input...', mtError, [mbOk], 0);
         end;
     end;
@@ -2392,8 +2320,7 @@ end;
 procedure TDataGrid.EditingFinished(const ACol, ARow: Integer);
 begin
     DataChanged(Col, Row, Col, Row);
-    inherited;  //  событие может быть вызвано только
-                //  после выполнения основных действий
+    inherited;
 end;
 
 procedure TDataGrid.DataChanged(const Left, Top, Right,
@@ -2406,21 +2333,12 @@ begin
             for j := Top to Bottom do
                 if Cells[i, j] = '' then
                 begin
-                    //  устанавливается значение "по умолчанию"
                     SetValueByDefault(i, j);
                     Cells[i, j] := ValueToString(i, j);
                 end else
                 begin
-                    //  устанавливается введенное значение
                     if not IsDataValid(i, j, Cells[i, j]) then
-                        // "мягкая" проверка нужна, поскольку
-                        //  функция должна выполниться до конца
-                        //  и обновить все данные, которые возможно
                     begin
-                        //  ??? здесь можно сделать "жескую" проверку
-                        //  в блоке try except с вызовом специального
-                        //  интерфейса для отображения всех сообщений об
-                        //  ошибках конечно нужно сделать специальное окно
                         SetValueByDefault(i, j);
                         Cells[i, j] := ValueToString(i, j);
                     end else StringToValue(i, j, Cells[i, j]);
@@ -2458,8 +2376,7 @@ begin
             Col := GetCol;
             Row := GetRow;
 
-            //  LeftCol, TopRow должны устанавливаться после Col, Row,
-            //  в противном случае устанавливается неправильно
+            //  LeftCol, TopRow must be set up after Col, Row.
             LeftCol := GetLeftCol;
             TopRow := GetTopRow;
 
@@ -2552,8 +2469,7 @@ end;
 constructor TIDAGrid.Create(AOwner: TComponent);
 begin
     inherited;
-    Changeable := True; //  по умолчанию текст в ячейках
-                        //  может редактироваться
+    Changeable := True;
 end;
 (*???
 function TDataGrid.CanEditModify: Boolean;
