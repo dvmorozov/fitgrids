@@ -71,6 +71,7 @@
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <DCC_UnitSearchPath>C:\Program Files (x86)\Embarcadero\Studio\15.0\source\ToolsAPI;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
@@ -85,7 +86,7 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="DelphiMain.pas">
+        <DCCReference Include="examplesmain.pas">
             <Form>Form1</Form>
             <FormType>dfm</FormType>
         </DCCReference>
