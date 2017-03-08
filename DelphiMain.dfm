@@ -1,0 +1,90 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  Caption = 'FitGrids Example'
+  ClientHeight = 419
+  ClientWidth = 691
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object ColorStringGrid1: TColorStringGrid
+    Left = 8
+    Top = 8
+    Width = 320
+    Height = 120
+    ColCount = 5
+    RowCount = 5
+    TabOrder = 0
+    OddRowColor = clWhite
+    NotOddRowColor = clYellow
+    SelectedRegionColor = 2790064
+    ColNumFixed = False
+    RowNumFixed = False
+  end
+  object NumericGrid1: TNumericGrid
+    Left = 8
+    Top = 144
+    Width = 320
+    Height = 120
+    ColCount = 5
+    RowCount = 5
+    TabOrder = 1
+    OddRowColor = clWhite
+    NotOddRowColor = clYellow
+    SelectedRegionColor = 2790064
+    ColNumFixed = False
+    RowNumFixed = False
+    DisabledColor = clGray
+  end
+  object GEFGrid1: TGEFGrid
+    Left = 344
+    Top = 274
+    Width = 320
+    Height = 120
+    TabOrder = 2
+    Modified = False
+  end
+  object IDAGrid1: TIDAGrid
+    Left = 344
+    Top = 8
+    Width = 320
+    Height = 120
+    TabOrder = 3
+    Modified = False
+    ColNumFixed = False
+    RowNumFixed = False
+    Changeable = True
+  end
+  object DataGrid1: TDataGrid
+    Left = 344
+    Top = 144
+    Width = 320
+    Height = 120
+    TabOrder = 4
+    Modified = False
+    ColNumFixed = False
+    RowNumFixed = False
+    Changeable = True
+  end
+  object ColoredGrid1: TColoredGrid
+    Left = 8
+    Top = 274
+    Width = 320
+    Height = 120
+    TabOrder = 5
+    Modified = False
+    ColNumFixed = False
+    RowNumFixed = False
+    Changeable = True
+    OddRowColor = clWhite
+    NotOddRowColor = clYellow
+    SelectedRegionColor = 2790064
+    DisabledColor = clBlack
+  end
+end
