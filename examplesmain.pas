@@ -19,33 +19,29 @@ uses
 type
     TDataSource = class(TInterfacedObject, IGridDataSource)
     public
+      //  Convert data value obtained from data source into string
+      //  representation. Can be used also to number rows or columns.    
       function ValueToString(const ACol, ARow: LongInt): string;
-          //  преобразует значение в источнике данных в строковое
-          //  представление, используется также и для нумерации
-          //  (или другого способа обозначения) Fixed колонок/строк
+      //  Convert string into value.
       procedure StringToValue(const ACol, ARow: LongInt;
-          //  преобразует строку в значение; если преобразовать
-          //  невозможно - вызывается исключение
           const AString: string);
+      //  Set correct "default" value for cell during the cleaning operation.
       procedure SetValueByDefault(const ACol, ARow: LongInt);
-          //  устанавливает правильное значение "по умолчанию"
-          //  для данной ячейки; используется при обработке операции
-          //  очистки ячейки
+      //  Return cell color and True if it should be set, otherwise False.
       function GetCellColor(const ACol, ARow: LongInt; var Color: TColor): Boolean;
           //  возвращает True, если должен быть установлен цвет Color,
           //  в противном случае - False
       function GetCellEditMask(const ACol, ARow: LongInt): string;
       function GetCellEnabledCharSet(const ACol, ARow: LongInt): TCharSet;
+      //  Return True if input for given cell is disabled.
       function IsCellDisabled(const ACol, ARow: LongInt): Boolean;
-          //  возвращает признак запрещения ввода в ячейки -
-          //  True - ввод запрещен
+      //  Check if given text is convertible into data source value without
+      //  throwing an exception. However if cell coordinates are invalid
+      //  exception is thrown.
       function IsDataValid(const ACol, ARow: LongInt;
-          //  выполняет "мягкую" проверку данных без возбуждения
-          //  исключения; однако, если координаты строки/колонки
-          //  имеют недорустимые значения исключение вызывается
           const AString: string): Boolean;
 
-      //  функции проверки возможности выполнения действия
+      //  Check if action is possible.
       function MayIDoInsertRows(StartRow, RowsCount: LongInt): Boolean;
       function MayIDoDeleteRows(StartRow, RowsCount: LongInt): Boolean;
       function MayIDoAddRow: Boolean;
@@ -68,10 +64,14 @@ type
 
       procedure AllDataDeleted;
 
-      function GetColCount: LongInt;  //  полное число колонок, включая Fixed
-      function GetRowCount: LongInt;  //  полное число строк, включая Fixed
-      function GetFixedCols: LongInt; //  число фиксированных колонок
-      function GetFixedRows: LongInt; //  число фиксированных строк
+      //  Total number of columns including Fixed.
+      function GetColCount: LongInt;
+      //  Total number of rows including Fixed.
+      function GetRowCount: LongInt;
+      //  Number of fixed columns.
+      function GetFixedCols: LongInt;
+      //  Number of fixed rows.
+      function GetFixedRows: LongInt;
       function GetColNumFixed: Boolean;
       function GetRowNumFixed: Boolean;
 
@@ -79,16 +79,17 @@ type
       procedure SaveColWidth(const Col, Width: LongInt);
       function GetRowHeight(const Row: LongInt): LongInt;
       procedure SaveRowHeight(const Row, Height: LongInt);
+      //  Automatic adjusting cell widths and heights.
       function AutoWidths: Boolean;
       function AutoHeights: Boolean;
-          //  определяют необходимость использования
-          //  автоматической настройки ширины и высоты ячеек
 
       function GetSelection: TGridRect;
       procedure SaveSelection(const Selection: TGridRect);
-      function GetCol: LongInt;       //  The number of currently selected column.
+      //  The number of currently selected column.
+      function GetCol: LongInt;
       procedure SaveCol(const Col: LongInt);
-      function GetRow: LongInt;       //  The number of currently selected row.
+      //  The number of currently selected row.
+      function GetRow: LongInt;
       procedure SaveRow(const Row: LongInt);
       function GetLeftCol: LongInt;
       procedure SaveLeftCol(const LeftCol: LongInt);
