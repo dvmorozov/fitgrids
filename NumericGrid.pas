@@ -17,7 +17,7 @@ uses
 {$IFDEF Lazarus}
     LCLIntf, PropEdits, GraphPropEdits,
 {$ELSE}
-    System.Types, Windows,
+    System.Types, Windows, DesignIntf, DesignEditors, VclEditors,
 {$ENDIF}
     Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
     Grids, ClipBrd;
