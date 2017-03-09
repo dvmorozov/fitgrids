@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{F126E9CA-2D24-41D8-BF96-60C14C8F9571}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="Examples.dproj">
+            <Dependencies>FitGrids.dproj</Dependencies>
+        </Projects>
+        <Projects Include="FitGrids.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="Examples" DependsOnTargets="FitGrids">
+        <MSBuild Projects="Examples.dproj"/>
+    </Target>
+    <Target Name="Examples:Clean" DependsOnTargets="FitGrids:Clean">
+        <MSBuild Projects="Examples.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Examples:Make" DependsOnTargets="FitGrids:Make">
+        <MSBuild Projects="Examples.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="FitGrids">
+        <MSBuild Projects="FitGrids.dproj"/>
+    </Target>
+    <Target Name="FitGrids:Clean">
+        <MSBuild Projects="FitGrids.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="FitGrids:Make">
+        <MSBuild Projects="FitGrids.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="Examples;FitGrids"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="Examples:Clean;FitGrids:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="Examples:Make;FitGrids:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
