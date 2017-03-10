@@ -1,7 +1,7 @@
 {% seo %}
 
 # fitgrids
-A few grid components for Delphi/Lazarus.
+A few grid components for Delphi & Lazarus.
 
 ## TClipboardGrid
 The grid provides copying and pasting operation with the clipboard.
