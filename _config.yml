@@ -5,4 +5,4 @@ gems:
 title: Delphi & Lazarus grid components
 description: A few free grid components for Delphi & Lazarus.
 site:
-  - show_downloads: True
+  - show_downloads: true
