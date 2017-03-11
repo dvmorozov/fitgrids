@@ -4,5 +4,4 @@ gems:
   - jekyll-seo-tag
 title: Delphi & Lazarus grid components
 description: A few free grid components for Delphi & Lazarus.
-site:
-  - show_downloads: true
+repository: dvmorozov/fitgrids
