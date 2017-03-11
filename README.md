@@ -24,6 +24,8 @@ The grid allows to contol input of numbers.
 ## Class diagram
 ![Class diagram](assets/classes.png)
 
+{% include contacts.html %}
+
 These grids are used in following projects  
 [MotifMASTER](http://motifmaster.sourceforge.net/)  
 [Fit](http://fiteasily.com/fit/downloads.html)  
