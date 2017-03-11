@@ -1,5 +1,5 @@
 # fitgrids
-A few grid components for Delphi & Lazarus.
+Package provides a few grid components for Delphi & Lazarus.
 
 ## TClipboardGrid
 The grid provides copying and pasting operation with the clipboard.
@@ -8,7 +8,7 @@ The grid provides copying and pasting operation with the clipboard.
 The grid controls exit from cell editing. At the moment of exit event of type TGridEditingFinished is generated.
 
 ## TIDAGrid
-The grid implements operations of inserting, adding, deleting rows and colums as well as pasting/copying text from/in the ClipBooard (IDA = Insert, Delete, Add).
+The grid implements operations of inserting, adding, deleting rows and colums as well as pasting/copying text from/in the ClipBooard (IDA is acronym of Insert, Delete, Add).
 
 ## TDataGrid
 The grid which can call methods of class - data source and exchange data with objects of that class (class must implement special interface). 
@@ -23,6 +23,9 @@ The grid allows to contol input of numbers.
 
 ## Class diagram
 ![Class diagram](assets/classes.png)
+
+## Test application
+![Class diagram](assets/2017-03-11_15h21_53.png)
 
 {% include contacts.html %}
 
