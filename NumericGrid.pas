@@ -34,6 +34,15 @@ var
     MIN_HEIGHT: LongInt = 10;
     MIN_WIDTH: LongInt  = 40;
 
+const
+    REAL_SET: set of Char = ['0'..'9', '.', ',', '-', '+'];
+    //  Positive real numbers.
+    POS_REAL_SET: set of Char = ['0'..'9', '.', ',', '+'];
+    INT_SET: set of Char = ['0'..'9', '-', '+'];
+    //  Positive integer numbers.
+    //POS_INT_SET: set of Char = ['0'..'9', '+'];
+    CHAR_SET: set of Char = ['A'..'Z', 'a'..'z'];
+
 type
     EColorStringGrid = class(Exception);
     ENumericGrid = class(Exception);
@@ -128,7 +137,6 @@ type
 
     TClipboardGrid = class(TStringGrid)
     protected
-        procedure EnumerateRows;
         function CheckingTextValidity(St: string;
             ACol, ARow: LongInt): Boolean; virtual;
 
@@ -152,6 +160,7 @@ type
     public
         function CopyToClipBoard: Boolean; virtual;
         function PasteFromClipBoard: Boolean; virtual;
+        procedure EnumerateRows;
 
     published
         property ColCount: LongInt
@@ -1247,15 +1256,6 @@ begin
 end;
 
 function TNumericGrid.CanEditAcceptKey(Key: Char): Boolean;
-const
-    REAL_SET: set of Char = ['0'..'9', '.', ',', '-', '+'];
-    //  Positive real numbers.
-    //POS_REAL_SET: set of Char = ['0'..'9', '.', ',', '+'];
-    INT_SET: set of Char = ['0'..'9', '-', '+'];
-    //  Positive integer numbers.
-    //POS_INT_SET: set of Char = ['0'..'9', '+'];
-    CHAR_SET: set of Char = ['A'..'Z', 'a'..'z'];
-
 begin
     if Key >= #20 then
 
