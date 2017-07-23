@@ -31,5 +31,5 @@ The grid allows to contol input of numbers.
 
 These grids are used in following projects  
 [MotifMASTER](http://motifmaster.sourceforge.net/)  
-[Fit](http://fiteasily.com/fit/downloads.html)  
+[Fit](http://fiteasily.townbreath.com/fit/downloads.html)  
 
