@@ -1,7 +1,7 @@
-{% include google_ads.html %}
-
 # fitgrids
 Package provides a few grid components for Delphi & Lazarus.
+
+{% include google_ads.html %}
 
 ## TClipboardGrid
 The grid provides copying and pasting operation with the clipboard.
@@ -30,6 +30,6 @@ The grid allows to contol input of numbers.
 {% include contacts.html %}
 
 These grids are used in following projects  
-[MotifMASTER](http://motifmaster.sourceforge.net/)  
-[Fit](http://fiteasily.townbreath.com/fit/downloads.html)  
+[MotifMASTER](https://dvmorozov.github.io/motifmaster/)  
+[Fit](https://dvmorozov.github.io/fit/)  
 
