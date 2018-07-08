@@ -1,3 +1,5 @@
+{% include google_ads.html %}
+
 # fitgrids
 Package provides a few grid components for Delphi & Lazarus.
 
@@ -18,8 +20,6 @@ Theses grids allow setting up colors of different types of cells at design time.
 
 ## TNumericGrid
 The grid allows to contol input of numbers.
-
-{% include google_ads.html %}
 
 ## Class diagram
 ![Class diagram](assets/classes.png)
