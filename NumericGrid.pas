@@ -132,7 +132,12 @@ type
         //  Coordinates of edited cell.
         Col, Row: LongInt
         ) of object;
+        
+    const DelimiterChars: set of Char = [#9, #10, #13, ' ', ',', ';'];
+    //  Maximum size of pasted data.
+    const BufCount = 10240;
 
+type
     TGridModified = procedure(Sender: TObject) of object;
 
     TClipboardGrid = class(TStringGrid)
@@ -146,10 +151,6 @@ type
         function GetColCount: LongInt; virtual;
         procedure SetRowCount(Value: Longint); virtual;
         function GetRowCount: LongInt; virtual;
-
-        const DelimiterChars: set of Char = [#9, #10, #13, ' ', ',', ';'];
-        //  Maximum size of pasted data.
-        const BufCount = 10240;
 
         procedure ExtractGridSizes(Buffer: array of Char;
             const Count: LongInt; var BufferCols, BufferRows: LongInt);
