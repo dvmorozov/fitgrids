@@ -19,7 +19,7 @@ uses
 {$ELSE}
     System.Types, Windows, DesignIntf, DesignEditors, VclEditors,
 {$ENDIF}
-    Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+    SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
     Grids, ClipBrd;
 
 var
@@ -250,10 +250,10 @@ type
             const Left, Top, Right, Bottom: LongInt);
 		//	Handle data changing.
         procedure DataChanged(
-            const Left, Top, Right, Bottom: LongInt); virtual;
+            const Left, Top, Right, Bottom: LongInt); virtual; abstract;
 		//	Fill given table region with data.
         procedure FillArea(
-            const Left, Top, Right, Bottom: LongInt); virtual;
+            const Left, Top, Right, Bottom: LongInt); virtual; abstract;
 		//	Fill fixed colums (row headers). Can be used, for example, for rows numeration.
         procedure FillRowHeaders; virtual;
 		//	Fill fixed rows (column headers).
@@ -915,11 +915,13 @@ end;
 procedure TColoredGrid.DrawCell(ACol, ARow: Longint;
     ARect: TRect; AState: TGridDrawState);
 
+    {$hints off}
     function GetColorByDefault(ACol, ARow: LongInt): TColor;
     begin
         if Odd(ARow) then Result := OddRowColor
         else Result := EvenRowColor;
     end;
+    {$hints on}
 
 var SaveColor, TempColor: TColor;
     X, Y: Integer;
@@ -940,6 +942,7 @@ begin
             else
                 if GetMyGridDataSource <> nil then
                 begin
+                    TempColor := clDefault;
                     if GetMyGridDataSource.GetCellColor(ACol, ARow, TempColor) then
                         //  Data source object set up a new color.
                         Canvas.Brush.Color := TempColor
@@ -1133,6 +1136,8 @@ var Count: Longint;
     SavedSelection, InsertedArea: TGridRect;
     SelectionSize: LongInt;
 begin
+    Result := False;
+    
     if not Clipboard.HasFormat(CF_TEXT) then
     begin
         MessageDlg('Clipboard doesn''t contain text data...', mtError, [mbOk], 0);
@@ -1142,6 +1147,7 @@ begin
     [mbYes, mbNo, mbCancel], 0) <> mrYes then Exit;
 
     Count := ClipBoard.GetTextBuf(@Buffer, BufCount);
+    BufferRowCount := 0; BufferColCount := 0;
     ExtractGridSizes(Buffer, Count, BufferColCount, BufferRowCount);
 
     //  Coordinates must be saved during paste operation.
@@ -1188,7 +1194,9 @@ begin
 
     //  Checking for data validity.
     with Selection do DataChanged(Left, Top, Right, Bottom);
-    if Assigned(OnGridModified) then OnGridModified(Self);    
+    if Assigned(OnGridModified) then OnGridModified(Self);
+    
+    Result := True;
 end;
 
 procedure TIDAGrid.SelectAll;
@@ -1552,6 +1560,7 @@ var CellColor: TColor;
 begin
      if Assigned(OnGetCellColor) then
      begin
+          CellColor := clDefault;
           OnGetCellColor(Self, ColNum, RowNum, CellColor);
           Result := CellColor;
      end
@@ -1706,11 +1715,13 @@ begin
     Result := True;
 end;
 
+{$hints off}
 function TClipboardGrid.CheckingTextValidity(St: string;
     ACol, ARow: LongInt): Boolean;
 begin
     Result := True;
 end;
+{$hints on}
 
 procedure TClipboardGrid.ExtractGridSizes(Buffer: array of Char;
     const Count: LongInt; var BufferCols, BufferRows: LongInt);
@@ -1853,6 +1864,8 @@ begin
   Result := inherited CreateEditor;
 end;
 *)
+
+{$hints off}
 function  TNumericGrid.CheckingTextValidity(St: string;
 ACol, ARow: LongInt): Boolean;
 begin
@@ -1872,6 +1885,7 @@ begin
   end;
   Result := True;
 end;
+{$hints on}
 
 procedure TColorStringGrid.ResetAll;
 var i, j: LongInt;
@@ -2170,6 +2184,7 @@ begin
     Result := not (ColNumFixed and RowNumFixed);
 end;
 
+{$hints off}
 function TIDAGrid.MayIDoDeleteColumns(StartCol,
     ColsCount: Integer): Boolean;
 begin
@@ -2191,6 +2206,7 @@ function TIDAGrid.MayIDoInsertRows(StartRow, RowsCount: Integer): Boolean;
 begin
     Result := not RowNumFixed;
 end;
+{$hints on}
 
 function TDataGrid.MayIDoAddColumn: Boolean;
 begin
@@ -2288,7 +2304,7 @@ end;
 procedure TGEFGrid.EditingFinished(const ACol, ARow: Integer);
 begin
     if Assigned(OnGridEditingFinished) then
-        OnGridEditingFinished(Self, Col, Row);
+        OnGridEditingFinished(Self, ACol, ARow);
 end;
 
 procedure TGEFGrid.KeyPress(var Key: Char);
@@ -2400,11 +2416,6 @@ begin
         end;
 end;
 
-procedure TIDAGrid.DataChanged(const Left, Top, Right, Bottom: Integer);
-begin
-
-end;
-
 procedure TIDAGrid.ClearArea(const Left, Top, Right, Bottom: Integer);
 var i, j: LongInt;
 begin
@@ -2491,10 +2502,6 @@ begin
     else Result := inherited CanEditAcceptKey(Key);
 end;
 *)
-procedure TIDAGrid.FillArea(const Left, Top, Right, Bottom: Integer);
-begin
-
-end;
 
 procedure TDataGrid.FillArea(const Left, Top, Right, Bottom: Integer);
 var i, j: LongInt;
