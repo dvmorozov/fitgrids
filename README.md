@@ -7,10 +7,10 @@ Package provides a few grid components for Delphi & Lazarus.
 The grid provides copying and pasting operation with the clipboard.
 
 ## TGEFGrid
-The grid controls exit from cell editing. At the moment of exit event of type TGridEditingFinished is generated.
+The grid controls exit from cell editing, exit event of type TGridEditingFinished is generated.
 
 ## TIDAGrid
-The grid implements operations of inserting, adding, deleting rows and colums as well as pasting/copying text from/in the ClipBooard (IDA is acronym of Insert, Delete, Add).
+The grid implements inserting, adding, deleting rows and colums as well as pasting/copying text from/in the ClipBooard (IDA is acronym of Insert, Delete, Add).
 
 ## TDataGrid
 The grid which can call methods of class - data source and exchange data with objects of that class (class must implement special interface). 
