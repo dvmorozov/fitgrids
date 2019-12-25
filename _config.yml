@@ -2,8 +2,8 @@ theme: jekyll-theme-dinky
 gems: 
   - jekyll-paginate
   - jekyll-seo-tag
-title: Delphi & Lazarus grid components
-description: A few free grid components for Delphi & Lazarus.
+title: Grids for Delphi
+description: Grid components for Delphi & Lazarus (Windows, Linux).
 social:
   name: Dmitry Morozov
   links:
