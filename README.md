@@ -33,3 +33,4 @@ These grids are used in following projects
 [MotifMASTER](https://dvmorozov.github.io/motifmaster/)  
 [Fit](https://dvmorozov.github.io/fit/)  
 
+{% include counter.html %}
