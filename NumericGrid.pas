@@ -584,13 +584,13 @@ implementation
 
 procedure Register;
 begin
-    RegisterComponents('Fit', [TColorStringGrid]);
-    RegisterComponents('Fit', [TNumericGrid]);
+    RegisterComponents('FitGrids', [TColorStringGrid]);
+    RegisterComponents('FitGrids', [TNumericGrid]);
 
-    RegisterComponents('Fit', [TGEFGrid]);
-    RegisterComponents('Fit', [TIDAGrid]);
-    RegisterComponents('Fit', [TDataGrid]);
-    RegisterComponents('Fit', [TColoredGrid]);
+    RegisterComponents('FitGrids', [TGEFGrid]);
+    RegisterComponents('FitGrids', [TIDAGrid]);
+    RegisterComponents('FitGrids', [TDataGrid]);
+    RegisterComponents('FitGrids', [TColoredGrid]);
 
     RegisterPropertyEditor(TypeInfo(TColor), TColorStringGrid,
         'OddRowColor', TColorProperty);
