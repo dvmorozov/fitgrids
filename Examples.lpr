@@ -1,7 +1,5 @@
 program Examples;
 
-{$mode objfpc}{$H+}
-
 uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,

@@ -1,9 +1,5 @@
 ﻿unit ExamplesMain;
 
-{$IFDEF Lazarus}
-{$MODE Delphi}
-{$ENDIF}
-
 interface
 
 uses

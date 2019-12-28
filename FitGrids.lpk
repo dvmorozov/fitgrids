@@ -11,11 +11,16 @@
         <OtherUnitFiles Value="."/>
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
+      <Parsing>
+        <SyntaxOptions>
+          <SyntaxMode Value="Delphi"/>
+        </SyntaxOptions>
+      </Parsing>
       <Other>
         <CustomOptions Value="-dLazarus"/>
       </Other>
     </CompilerOptions>
-    <Version Minor="1" Release="1" Build="1"/>
+    <Version Minor="1" Release="1" Build="2"/>
     <Files Count="1">
       <Item1>
         <Filename Value="NumericGrid.pas"/>
