@@ -31,20 +31,20 @@ var
     MIN_WIDTH: longint = 40;
 
 const
-    REAL_SET: set of char = ['0'..'9', '.', ',', '-', '+'];
+    REAL_SET: set of AnsiChar = ['0'..'9', '.', ',', '-', '+'];
     //  Positive real numbers.
-    POS_REAL_SET: set of char = ['0'..'9', '.', ',', '+'];
-    INT_SET: set of char = ['0'..'9', '-', '+'];
+    POS_REAL_SET: set of AnsiChar = ['0'..'9', '.', ',', '+'];
+    INT_SET: set of AnsiChar = ['0'..'9', '-', '+'];
     //  Positive integer numbers.
     //POS_INT_SET: set of Char = ['0'..'9', '+'];
-    CHAR_SET: set of char = ['A'..'Z', 'a'..'z'];
+    CHAR_SET: set of AnsiChar = ['A'..'Z', 'a'..'z'];
 
 type
     EColorStringGrid = class(Exception);
     ENumericGrid = class(Exception);
     EIDA_Grid = class(Exception);
 
-    TCharSet = set of char;
+    TCharSet = set of AnsiChar;
 
     IGridDataSource = interface
         ['{401B6CC0-0915-11D5-968F-8FBD7448F374}']
@@ -141,7 +141,7 @@ type
         function GetRowCount: longint; virtual;
 
     const
-        DelimiterChars: set of char = [#9, #10, #13, ' ', ',', ';'];
+        DelimiterChars: set of AnsiChar = [#9, #10, #13, ' ', ',', ';'];
         //  Maximum size of pasted data.
     const
         BufCount = 10240;
@@ -485,7 +485,7 @@ type
         function CheckingTextValidity(St: string; ACol, ARow: longint): boolean;
             override;
 
-        function CanEditAcceptKey(Key: char): boolean; virtual;
+        function CanEditAcceptKey(Key: char): boolean; override;
         procedure KeyPress(var Key: char); override;
 
         procedure MouseUp(Button: TMouseButton; Shift: TShiftState;
@@ -1345,19 +1345,19 @@ begin
 
         case ColOptions[Col] of
             coReal:
-                if Key in REAL_SET then
+                if CharInSet(Key, REAL_SET) then
                     Result := True
                 else
                     Result := False;
 
             coInteger:
-                if Key in INT_SET then
+                if CharInSet(Key, INT_SET) then
                     Result := True
                 else
                     Result := False;
 
             coChars:
-                if Key in CHAR_SET then
+                if CharInSet(Key, CHAR_SET) then
                     Result := True
                 else
                     Result := False;
@@ -1883,7 +1883,7 @@ begin
     PrevIsDelimiter := False;
     for i := 0 to Count - 1 do
     begin
-        if (Buffer[i] in DelimiterChars) then
+        if CharInSet(Buffer[i], DelimiterChars) then
         begin
             if Flag and not PrevIsDelimiter then
                 Inc(BufferCols);
@@ -1908,16 +1908,16 @@ var
     St: string;
     i, j, k: longint;
 const
-    BadSymbols: set of char = [#10, #13];
+    BadSymbols: set of AnsiChar = [#10, #13];
 begin
     St := '';
     for i := Index to Count - 1 do
     begin
-        if Buffer[i] in DelimiterChars then
+        if CharInSet(Buffer[i], DelimiterChars) then
         begin
             for j := Index to i - 1 do
             begin
-                if not (Buffer[j] in BadSymbols) then
+                if not CharInSet(Buffer[j], BadSymbols) then
                 begin
                     St := St + Buffer[j];
                 end;
@@ -1927,7 +1927,7 @@ begin
                 k := j + 1
             else
                 for k := j to Count - 1 do
-                    if not (Buffer[k] in DelimiterChars) then
+                    if not CharInSet(Buffer[k], DelimiterChars) then
                         Break;
             Index := k;
             Result := St;
@@ -2110,7 +2110,7 @@ end;
 procedure TNumericGrid.KeyPress(var Key: char);
 var
     i: longint;
-    St: string;
+    St: AnsiString;
 
 begin
     if goEditing in Options then
@@ -2132,7 +2132,7 @@ begin
                 begin
                     RowCount := RowCount + 1;
                     Str(RowCount - 1, St);
-                    Cells[0, RowCount - 1] := St;
+                    Cells[0, RowCount - 1] := string(St);
                     Col := 1;
                     Row := RowCount - 1;
                     for i := 1 to ColCount - 1 do

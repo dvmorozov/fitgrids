@@ -23,7 +23,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="1"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="18"/>
+      <BuildNr Value="19"/>
       <Attributes pvaDebug="True"/>
     </VersionInfo>
     <BuildModes Count="1">
