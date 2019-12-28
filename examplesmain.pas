@@ -430,7 +430,14 @@ end;
 
 function TDataSource.GetSelection: TGridRect;
 begin
+{$IFDEF Lazarus}
     Result := TGridRect.Create(0, 0, 0, 0);
+{$ELSE}
+    Result.Left := 0;
+    Result.Top := 0;
+    Result.Right := 0;
+    Result.Bottom := 0;
+{$ENDIF}
 end;
 
 {$hints off}

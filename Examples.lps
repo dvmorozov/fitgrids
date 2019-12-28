@@ -21,7 +21,6 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="ExamplesMain"/>
-        <IsVisibleTab Value="True"/>
         <TopLine Value="406"/>
         <CursorPos X="4" Y="433"/>
         <UsageCount Value="207"/>
@@ -31,8 +30,9 @@
       </Unit1>
       <Unit2>
         <Filename Value="NumericGrid.pas"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="2714"/>
+        <TopLine Value="2717"/>
         <CursorPos X="43" Y="2748"/>
         <ExtraEditorCount Value="1"/>
         <ExtraEditor1>
