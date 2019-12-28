@@ -7,10 +7,6 @@
 ------------------------------------------------------------------------------}
 unit NumericGrid;
 
-{$IFDEF Lazarus}
-{$MODE Delphi}
-{$ENDIF}
-
 interface
 
 uses
