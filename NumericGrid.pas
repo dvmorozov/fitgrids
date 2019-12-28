@@ -484,8 +484,11 @@ type
         procedure SetColCount(Value: longint); override;
         function CheckingTextValidity(St: string; ACol, ARow: longint): boolean;
             override;
-
+{$IFDEF Lazarus}
+        function CanEditAcceptKey(Key: char): boolean; virtual;
+{$ELSE}
         function CanEditAcceptKey(Key: char): boolean; override;
+{$ENDIF}
         procedure KeyPress(var Key: char); override;
 
         procedure MouseUp(Button: TMouseButton; Shift: TShiftState;
