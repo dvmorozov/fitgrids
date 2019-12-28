@@ -24,7 +24,7 @@ The grid allows to contol input of numbers.
 ## Class diagram
 ![Class diagram](assets/classes.png)
 
-## Test application
+## Demo application
 ![Test application](assets/2017-03-11_15h21_53.png)
 
 {% include contacts.html %}
