@@ -8,8 +8,9 @@
       <Unit0>
         <Filename Value="Examples.lpr"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <CursorPos X="21" Y="16"/>
+        <CursorPos X="5" Y="14"/>
         <UsageCount Value="207"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -21,7 +22,6 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="ExamplesMain"/>
-        <IsVisibleTab Value="True"/>
         <TopLine Value="58"/>
         <CursorPos X="9" Y="12"/>
         <UsageCount Value="207"/>
@@ -52,14 +52,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="699"/>
         <CursorPos X="15" Y="832"/>
-        <UsageCount Value="15"/>
+        <UsageCount Value="14"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
       <Unit4>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\objpas\typinfo.pp"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
-        <UsageCount Value="14"/>
+        <UsageCount Value="13"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
       <Unit5>
@@ -68,7 +68,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="260"/>
         <CursorPos X="12" Y="278"/>
-        <UsageCount Value="101"/>
+        <UsageCount Value="100"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit5>
       <Unit6>
@@ -83,7 +83,7 @@
         <Filename Value="FitGrids.lpk"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="56" Y="10"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="5"/>
         <DefaultSyntaxHighlighter Value="XML"/>
       </Unit7>
     </Units>
