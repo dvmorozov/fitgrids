@@ -1,8 +1,8 @@
 object Form1: TForm1
-  Left = 115
-  Top = 68
+  Left = 304
+  Top = 109
   BorderStyle = bsDialog
-  Caption = 'FitGrids Examples'
+  Caption = 'Fit Grids Examples'
   ClientHeight = 678
   ClientWidth = 921
   Color = clBtnFace
@@ -23,6 +23,7 @@ object Form1: TForm1
     Caption = 'TColorStringGrid'
     Color = clBtnFace
     ParentColor = False
+    Transparent = False
   end
   object Label2: TLabel
     Left = 8
@@ -32,6 +33,7 @@ object Form1: TForm1
     Caption = 'TNumericGrid'
     Color = clBtnFace
     ParentColor = False
+    Transparent = False
   end
   object Label3: TLabel
     Left = 464
@@ -41,6 +43,7 @@ object Form1: TForm1
     Caption = 'TColoredGrid'
     Color = clBtnFace
     ParentColor = False
+    Transparent = False
   end
   object Label4: TLabel
     Left = 464
@@ -50,6 +53,7 @@ object Form1: TForm1
     Caption = 'TIDAGrid'
     Color = clBtnFace
     ParentColor = False
+    Transparent = False
   end
   object Label5: TLabel
     Left = 464
@@ -59,6 +63,7 @@ object Form1: TForm1
     Caption = 'TDataGrid'
     Color = clBtnFace
     ParentColor = False
+    Transparent = False
   end
   object Label6: TLabel
     Left = 8
@@ -68,6 +73,7 @@ object Form1: TForm1
     Caption = 'TGEFGrid'
     Color = clBtnFace
     ParentColor = False
+    Transparent = False
   end
   object Label7: TLabel
     Left = 8
@@ -79,6 +85,7 @@ object Form1: TForm1
       'ign time.'
     Color = clBtnFace
     ParentColor = False
+    Transparent = False
   end
   object Label8: TLabel
     Left = 8
@@ -90,6 +97,7 @@ object Form1: TForm1
       'of cell.'
     Color = clBtnFace
     ParentColor = False
+    Transparent = False
   end
   object Label9: TLabel
     Left = 8
@@ -101,6 +109,7 @@ object Form1: TForm1
       'pe.'
     Color = clBtnFace
     ParentColor = False
+    Transparent = False
   end
   object Label10: TLabel
     Left = 464
@@ -110,6 +119,7 @@ object Form1: TForm1
     Caption = 'Grid is fully controlled by object implementing IGridDataSource.'
     Color = clBtnFace
     ParentColor = False
+    Transparent = False
   end
   object Label11: TLabel
     Left = 464
@@ -121,6 +131,7 @@ object Form1: TForm1
       'ource.'
     Color = clBtnFace
     ParentColor = False
+    Transparent = False
   end
   object Label12: TLabel
     Left = 464
@@ -132,6 +143,7 @@ object Form1: TForm1
       'lect the operation).'
     Color = clBtnFace
     ParentColor = False
+    Transparent = False
   end
   object ColorStringGrid1: TColorStringGrid
     Left = 8
