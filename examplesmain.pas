@@ -244,6 +244,7 @@ begin
         Result := '';
 end;
 
+{$hints off}
 procedure TDataSource.StringToValue(const ACol, ARow: longint; const AString: string);
 begin
 end;
@@ -270,7 +271,7 @@ end;
 
 function TDataSource.GetCellEnabledCharSet(const ACol, ARow: longint): TCharSet;
 begin
-
+    Result := [];
 end;
 
 function TDataSource.IsCellDisabled(const ACol, ARow: longint): boolean;
@@ -294,17 +295,18 @@ begin
     Result := True;
 end;
 
-function TDataSource.MayIDoAddRow: boolean;
-begin
-    Result := True;
-end;
-
 function TDataSource.MayIDoInsertColumns(StartCol, ColsCount: longint): boolean;
 begin
     Result := True;
 end;
 
 function TDataSource.MayIDoDeleteColumns(StartCol, ColsCount: longint): boolean;
+begin
+    Result := True;
+end;
+{$hints on}
+
+function TDataSource.MayIDoAddRow: boolean;
 begin
     Result := True;
 end;
@@ -329,16 +331,13 @@ begin
     Result := True;
 end;
 
+{$hints off}
 procedure TDataSource.RowsDeleted(const StartPos, Count: longint);
 begin
 
 end;
 
 procedure TDataSource.RowsInserted(const StartPos, Count: longint);
-begin
-end;
-
-procedure TDataSource.RowAdded;
 begin
 end;
 
@@ -350,6 +349,11 @@ end;
 procedure TDataSource.ColumnsInserted(const StartPos, Count: longint);
 begin
 
+end;
+{$hints on}
+
+procedure TDataSource.RowAdded;
+begin
 end;
 
 procedure TDataSource.ColumnAdded;
@@ -392,6 +396,7 @@ begin
     Result := True;
 end;
 
+{$hints off}
 function TDataSource.GetColWidth(const Col: longint): longint;
 begin
     Result := 150;
@@ -404,13 +409,14 @@ end;
 
 function TDataSource.GetRowHeight(const Row: longint): longint;
 begin
-    Result := 50;
+    Result := 20;
 end;
 
 procedure TDataSource.SaveRowHeight(const Row, Height: longint);
 begin
 
 end;
+{$hints on}
 
 function TDataSource.AutoWidths: boolean;
 begin
@@ -424,23 +430,20 @@ end;
 
 function TDataSource.GetSelection: TGridRect;
 begin
-
+    Result := TGridRect.Create(0, 0, 0, 0);
 end;
 
+{$hints off}
 procedure TDataSource.SaveSelection(const Selection: TGridRect);
 begin
 
 end;
+{$hints on}
 
 function TDataSource.GetCol: longint;
 begin
     //  Must return valid value in the given range.
     Result := 1;
-end;
-
-procedure TDataSource.SaveCol(const Col: longint);
-begin
-
 end;
 
 function TDataSource.GetRow: longint;
@@ -449,14 +452,15 @@ begin
     Result := 1;
 end;
 
-procedure TDataSource.SaveRow(const Row: longint);
+{$hints off}
+procedure TDataSource.SaveCol(const Col: longint);
 begin
 
 end;
 
-function TDataSource.GetLeftCol: longint;
+procedure TDataSource.SaveRow(const Row: longint);
 begin
-    Result := 0;
+
 end;
 
 procedure TDataSource.SaveLeftCol(const LeftCol: longint);
@@ -464,14 +468,20 @@ begin
 
 end;
 
-function TDataSource.GetTopRow: longint;
+procedure TDataSource.SaveTopRow(const TopRow: longint);
+begin
+
+end;
+{$hints on}
+
+function TDataSource.GetLeftCol: longint;
 begin
     Result := 0;
 end;
 
-procedure TDataSource.SaveTopRow(const TopRow: longint);
+function TDataSource.GetTopRow: longint;
 begin
-
+    Result := 0;
 end;
 
 procedure TForm1.FillIDAGrid;
