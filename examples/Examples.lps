@@ -49,12 +49,14 @@
         <TopLine Value="699"/>
         <CursorPos X="15" Y="832"/>
         <UsageCount Value="14"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
       <Unit4>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\objpas\typinfo.pp"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <UsageCount Value="13"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
       <Unit5>
         <Filename Value="C:\lazarus\lcl\graphics.pp"/>
@@ -63,6 +65,7 @@
         <TopLine Value="260"/>
         <CursorPos X="12" Y="278"/>
         <UsageCount Value="100"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit5>
       <Unit6>
         <Filename Value="FitGrids.pas"/>
@@ -80,7 +83,7 @@
         <DefaultSyntaxHighlighter Value="XML"/>
       </Unit7>
       <Unit8>
-        <Filename Value="\\usr\share\lazarus\2.0.6\components\lazutils\masks.pas"/>
+        <Filename Value="usr\share\lazarus\2.0.6\components\lazutils\masks.pas"/>
         <UnitName Value="Masks"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="7"/>
@@ -89,7 +92,7 @@
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit8>
       <Unit9>
-        <Filename Value="\\usr\share\lazarus\2.0.6\lcl\grids.pas"/>
+        <Filename Value="usr\share\lazarus\2.0.6\lcl\grids.pas"/>
         <UnitName Value="Grids"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="641"/>
@@ -98,7 +101,7 @@
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit9>
       <Unit10>
-        <Filename Value="\\usr\share\fpcsrc\3.0.4\rtl\inc\typshrdh.inc"/>
+        <Filename Value="usr\share\fpcsrc\3.0.4\rtl\inc\typshrdh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="127"/>
         <CursorPos X="3" Y="101"/>
@@ -106,7 +109,7 @@
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit10>
       <Unit11>
-        <Filename Value="\\usr\share\lazarus\2.0.6\packager\registration\lazaruspackageintf.pas"/>
+        <Filename Value="usr\share\lazarus\2.0.6\packager\registration\lazaruspackageintf.pas"/>
         <UnitName Value="LazarusPackageIntf"/>
         <EditorIndex Value="-1"/>
         <UsageCount Value="10"/>
