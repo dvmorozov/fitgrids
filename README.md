@@ -1,5 +1,7 @@
 # fitgrids
-Package provides a few grid components for Delphi & Lazarus.
+A few grid components for Delphi & Lazarus.
+
+This software is distributed under Mozilla Public License 2.0, which allows you to use these components in commercial software.
 
 {% include google_ads.html %}
 
