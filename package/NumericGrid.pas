@@ -238,8 +238,7 @@ type
         procedure DataChanged(const Left, Top, Right, Bottom: longint);
             virtual; abstract;
         //  Fill given table region with data.
-        procedure FillArea(const Left, Top, Right, Bottom: longint);
-            virtual; abstract;
+        procedure FillArea(const Left, Top, Right, Bottom: longint); virtual;
         //  Fill fixed colums (row headers). Can be used, for example, for rows numeration.
         procedure FillRowHeaders; virtual;
         //  Fill fixed rows (column headers).
@@ -334,10 +333,8 @@ type
         procedure _ClearSelectedArea; override;
         procedure _ClearAllCells; override;
 
-        procedure DataChanged(const Left, Top, Right, Bottom: longint);
-            override;
-        procedure FillArea(const Left, Top, Right, Bottom: longint);
-            override;
+        procedure DataChanged(const Left, Top, Right, Bottom: longint); override;
+        procedure FillArea(const Left, Top, Right, Bottom: longint); override;
 
         //  Set up parameters of table based on data source.
         procedure GetTableParams;
@@ -2737,6 +2734,15 @@ constructor TIDAGrid.Create(AOwner: TComponent);
 begin
     inherited;
     Changeable := True;
+end;
+
+procedure TIDAGrid.FillArea(const Left, Top, Right, Bottom: integer);
+var
+    i, j: longint;
+begin
+    for i := Left to Right do
+        for j := Top to Bottom do
+            Cells[i, j] := '';
 end;
 
 (*???
