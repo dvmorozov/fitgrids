@@ -235,8 +235,7 @@ type
         //  Clear given table region and call DataChanged.
         procedure ClearArea(const Left, Top, Right, Bottom: longint);
         //  Handle data changing.
-        procedure DataChanged(const Left, Top, Right, Bottom: longint);
-            virtual; abstract;
+        procedure DataChanged(const Left, Top, Right, Bottom: longint); virtual;
         //  Fill given table region with data.
         procedure FillArea(const Left, Top, Right, Bottom: longint); virtual;
         //  Fill fixed colums (row headers). Can be used, for example, for rows numeration.
@@ -2743,6 +2742,11 @@ begin
     for i := Left to Right do
         for j := Top to Bottom do
             Cells[i, j] := '';
+end;
+
+procedure TIDAGrid.DataChanged(const Left, Top, Right, Bottom: longint);
+begin
+    FillArea(Left, Top, Right, Bottom);
 end;
 
 (*???
