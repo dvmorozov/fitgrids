@@ -20,7 +20,7 @@
         <CustomOptions Value="-dLazarus"/>
       </Other>
     </CompilerOptions>
-    <Version Minor="1" Release="5" Build="6"/>
+    <Version Minor="1" Release="6" Build="7"/>
     <Files Count="1">
       <Item1>
         <Filename Value="NumericGrid.pas"/>
