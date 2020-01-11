@@ -250,7 +250,7 @@ type
             const Left, Top, Right, Bottom: LongInt);
 		//	Handle data changing.
         procedure DataChanged(
-            const Left, Top, Right, Bottom: LongInt); virtual; abstract;
+            const Left, Top, Right, Bottom: LongInt); virtual;
 		//	Fill given table region with data.
         procedure FillArea(
             const Left, Top, Right, Bottom: LongInt); virtual;
@@ -2491,6 +2491,11 @@ begin
     for i := Left to Right do
         for j := Top to Bottom do
             Cells[i, j] := '';
+end;
+
+procedure TIDAGrid.DataChanged(const Left, Top, Right, Bottom: longint);
+begin
+    FillArea(Left, Top, Right, Bottom);
 end;
 
 (*???
