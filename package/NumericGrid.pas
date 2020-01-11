@@ -253,7 +253,7 @@ type
             const Left, Top, Right, Bottom: LongInt); virtual; abstract;
 		//	Fill given table region with data.
         procedure FillArea(
-            const Left, Top, Right, Bottom: LongInt); virtual; abstract;
+            const Left, Top, Right, Bottom: LongInt); virtual;
 		//	Fill fixed colums (row headers). Can be used, for example, for rows numeration.
         procedure FillRowHeaders; virtual;
 		//	Fill fixed rows (column headers).
@@ -2483,6 +2483,16 @@ begin
     inherited;
     Changeable := True;
 end;
+
+procedure TIDAGrid.FillArea(const Left, Top, Right, Bottom: integer);
+var
+    i, j: longint;
+begin
+    for i := Left to Right do
+        for j := Top to Bottom do
+            Cells[i, j] := '';
+end;
+
 (*???
 function TDataGrid.CanEditModify: Boolean;
 begin
