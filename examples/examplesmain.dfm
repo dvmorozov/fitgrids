@@ -1,25 +1,23 @@
 object Form1: TForm1
-  Left = 304
-  Top = 109
+  Left = 472
+  Height = 678
+  Top = 108
+  Width = 921
   BorderStyle = bsDialog
   Caption = 'Fit Grids Examples'
   ClientHeight = 678
   ClientWidth = 921
   Color = clBtnFace
-  Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'Tahoma'
-  Font.Style = []
-  OldCreateOrder = True
   OnCreate = FormCreate
-  PixelsPerInch = 96
-  TextHeight = 13
+  LCLVersion = '2.0.6.0'
   object Label1: TLabel
     Left = 8
+    Height = 13
     Top = 8
     Width = 78
-    Height = 13
     Caption = 'TColorStringGrid'
     Color = clBtnFace
     ParentColor = False
@@ -27,9 +25,9 @@ object Form1: TForm1
   end
   object Label2: TLabel
     Left = 8
+    Height = 13
     Top = 232
     Width = 63
-    Height = 13
     Caption = 'TNumericGrid'
     Color = clBtnFace
     ParentColor = False
@@ -37,9 +35,9 @@ object Form1: TForm1
   end
   object Label3: TLabel
     Left = 464
+    Height = 13
     Top = 455
     Width = 62
-    Height = 13
     Caption = 'TColoredGrid'
     Color = clBtnFace
     ParentColor = False
@@ -47,9 +45,9 @@ object Form1: TForm1
   end
   object Label4: TLabel
     Left = 464
+    Height = 13
     Top = 8
     Width = 43
-    Height = 13
     Caption = 'TIDAGrid'
     Color = clBtnFace
     ParentColor = False
@@ -57,9 +55,9 @@ object Form1: TForm1
   end
   object Label5: TLabel
     Left = 464
+    Height = 13
     Top = 232
     Width = 48
-    Height = 13
     Caption = 'TDataGrid'
     Color = clBtnFace
     ParentColor = False
@@ -67,9 +65,9 @@ object Form1: TForm1
   end
   object Label6: TLabel
     Left = 8
+    Height = 13
     Top = 456
     Width = 44
-    Height = 13
     Caption = 'TGEFGrid'
     Color = clBtnFace
     ParentColor = False
@@ -77,45 +75,39 @@ object Form1: TForm1
   end
   object Label7: TLabel
     Left = 8
+    Height = 13
     Top = 32
     Width = 331
-    Height = 13
-    Caption = 
-      'Grid allows setting up colors of different types of cells at des' +
-      'ign time.'
+    Caption = 'Grid allows setting up colors of different types of cells at design time.'
     Color = clBtnFace
     ParentColor = False
     Transparent = False
   end
   object Label8: TLabel
     Left = 8
+    Height = 13
     Top = 480
     Width = 336
-    Height = 13
-    Caption = 
-      'Grid provides handler for end of editing event with coordinates ' +
-      'of cell.'
+    Caption = 'Grid provides handler for end of editing event with coordinates of cell.'
     Color = clBtnFace
     ParentColor = False
     Transparent = False
   end
   object Label9: TLabel
     Left = 8
+    Height = 13
     Top = 256
     Width = 316
-    Height = 13
-    Caption = 
-      'Grid allows to filter input characters based on assigned data ty' +
-      'pe.'
+    Caption = 'Grid allows to filter input characters based on assigned data type.'
     Color = clBtnFace
     ParentColor = False
     Transparent = False
   end
   object Label10: TLabel
     Left = 464
+    Height = 13
     Top = 256
     Width = 301
-    Height = 13
     Caption = 'Grid is fully controlled by object implementing IGridDataSource.'
     Color = clBtnFace
     ParentColor = False
@@ -123,36 +115,35 @@ object Form1: TForm1
   end
   object Label11: TLabel
     Left = 464
+    Height = 13
     Top = 480
     Width = 334
-    Height = 13
-    Caption = 
-      'Colors of cells are controlled by object implementing IGridDataS' +
-      'ource.'
+    Caption = 'Colors of cells are controlled by object implementing IGridDataSource.'
     Color = clBtnFace
     ParentColor = False
     Transparent = False
   end
   object Label12: TLabel
     Left = 464
+    Height = 13
     Top = 32
     Width = 383
-    Height = 13
-    Caption = 
-      'Grid providing insert, delete, add operations (right click to se' +
-      'lect the operation).'
+    Caption = 'Grid providing insert, delete, add operations (right click to select the operation).'
     Color = clBtnFace
     ParentColor = False
     Transparent = False
   end
   object ColorStringGrid1: TColorStringGrid
     Left = 8
+    Height = 166
     Top = 56
     Width = 450
-    Height = 166
     ColCount = 5
     RowCount = 5
     TabOrder = 0
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
     OddRowColor = clWhite
     EvenRowColor = clAqua
     SelectedRegionColor = clYellow
@@ -163,16 +154,20 @@ object Form1: TForm1
       134
       64
       64
-      64)
+      64
+    )
   end
   object NumericGrid1: TNumericGrid
     Left = 8
+    Height = 166
     Top = 280
     Width = 450
-    Height = 166
     ColCount = 6
     RowCount = 5
     TabOrder = 1
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
     OddRowColor = clWhite
     EvenRowColor = clYellow
     SelectedRegionColor = 2790064
@@ -182,24 +177,30 @@ object Form1: TForm1
   end
   object GEFGrid1: TGEFGrid
     Left = 8
+    Height = 166
     Top = 504
     Width = 450
-    Height = 166
     ColCount = 5
     RowCount = 5
     TabOrder = 2
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
     Modified = False
     OnGridEditingFinished = GEFGrid1GridEditingFinished
   end
   object IDAGrid1: TIDAGrid
     Left = 464
+    Height = 166
     Top = 56
     Width = 450
-    Height = 166
     ColCount = 5
-    RowCount = 5
     PopupMenu = PopupMenuIDAGrid
+    RowCount = 5
     TabOrder = 3
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
     Modified = False
     ColNumFixed = False
     RowNumFixed = False
@@ -207,12 +208,15 @@ object Form1: TForm1
   end
   object DataGrid1: TDataGrid
     Left = 464
+    Height = 166
     Top = 280
     Width = 450
-    Height = 166
     ColCount = 5
     RowCount = 5
     TabOrder = 4
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
     Modified = False
     ColNumFixed = False
     RowNumFixed = False
@@ -220,12 +224,15 @@ object Form1: TForm1
   end
   object ColoredGrid1: TColoredGrid
     Left = 464
+    Height = 166
     Top = 504
     Width = 450
-    Height = 166
     ColCount = 5
     RowCount = 5
     TabOrder = 5
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
     Modified = False
     ColNumFixed = False
     RowNumFixed = False
@@ -237,9 +244,9 @@ object Form1: TForm1
   end
   object BitBtnColorStringGridCopy: TBitBtn
     Left = 384
+    Height = 30
     Top = 17
     Width = 35
-    Height = 30
     Glyph.Data = {
       36050000424D3605000000000000360400002800000010000000100000000100
       08000000000000010000C40E0000C40E00000001000000000000000000004000
@@ -282,15 +289,16 @@ object Form1: TForm1
       FF02FF0000FF02020202E300FF0000000002FFFFFFFF02FF02E3E300FFFFFFFF
       FF02FFFFFFFF0202E3E3E300FF0000FF00020202020202E3E3E3E300FFFFFFFF
       00FF00E3E3E3E3E3E3E3E300FFFFFFFF0000E3E3E3E3E3E3E3E3E30000000000
-      00E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3}
-    TabOrder = 6
+      00E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3
+    }
     OnClick = BitBtnColorStringGridCopyClick
+    TabOrder = 6
   end
   object BitBtnColorStringGridPaste: TBitBtn
     Left = 423
+    Height = 30
     Top = 17
     Width = 35
-    Height = 30
     Glyph.Data = {
       36050000424D3605000000000000360400002800000010000000100000000100
       08000000000000010000C40E0000C40E00000001000000000000000000004000
@@ -333,13 +341,14 @@ object Form1: TForm1
       0202020202020200E3E30092909290929092909290929000E3E3009092000000
       0000000000929200E3E300929200E3E3E3E3E3E300929000E3E30090929000FC
       0000FC0092909200E3E3E30000000000FCFC0000000000E3E3E3E3E3E3E3E300
-      000000E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3}
-    TabOrder = 7
+      000000E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3
+    }
     OnClick = BitBtnColorStringGridPasteClick
+    TabOrder = 7
   end
   object PopupMenuIDAGrid: TPopupMenu
-    Left = 832
-    Top = 168
+    left = 832
+    top = 168
     object MenuItemAddColumn: TMenuItem
       Caption = 'Add Column'
       OnClick = MenuItemAddColumnClick
