@@ -1,26 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <CONFIG>
-  <Package Version="4">
+  <Package Version="3">
     <PathDelim Value="\"/>
     <Name Value="FitGrids"/>
-    <Type Value="RunAndDesignTime"/>
     <CompilerOptions>
-      <Version Value="11"/>
+      <Version Value="5"/>
       <PathDelim Value="\"/>
       <SearchPaths>
-        <OtherUnitFiles Value="."/>
+        <OtherUnitFiles Value=".\"/>
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
-      <Parsing>
-        <SyntaxOptions>
-          <SyntaxMode Value="Delphi"/>
-        </SyntaxOptions>
-      </Parsing>
       <Other>
         <CustomOptions Value="-dLazarus"/>
+        <CompilerPath Value="$(CompPath)"/>
       </Other>
     </CompilerOptions>
-    <Version Minor="1" Release="4" Build="5"/>
+    <Version Minor="1" Release="8" Build="10"/>
     <Files Count="1">
       <Item1>
         <Filename Value="NumericGrid.pas"/>
@@ -28,19 +23,20 @@
         <UnitName Value="NumericGrid"/>
       </Item1>
     </Files>
+    <Type Value="RunAndDesignTime"/>
     <RequiredPkgs Count="3">
       <Item1>
-        <PackageName Value="IDEIntf"/>
+        <PackageName Value="FCL"/>
       </Item1>
       <Item2>
         <PackageName Value="LCL"/>
       </Item2>
       <Item3>
-        <PackageName Value="FCL"/>
+        <PackageName Value="IDEIntf"/>
       </Item3>
     </RequiredPkgs>
     <UsageOptions>
-      <UnitPath Value="$(PkgOutDir)"/>
+      <UnitPath Value="$(PkgOutDir)\"/>
     </UsageOptions>
     <PublishOptions>
       <Version Value="2"/>
