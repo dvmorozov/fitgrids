@@ -40,7 +40,7 @@
           <TopLine Value="160"/>
           <CursorPos X="14" Y="16"/>
         </ExtraEditor1>
-        <UsageCount Value="152"/>
+        <UsageCount Value="151"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit2>
       <Unit3>
@@ -49,14 +49,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="699"/>
         <CursorPos X="15" Y="832"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="12"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
       <Unit4>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\objpas\typinfo.pp"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="11"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
       <Unit5>
@@ -65,7 +65,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="260"/>
         <CursorPos X="12" Y="278"/>
-        <UsageCount Value="99"/>
+        <UsageCount Value="98"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit5>
       <Unit6>
@@ -73,14 +73,14 @@
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <CursorPos X="25" Y="6"/>
-        <UsageCount Value="117"/>
+        <UsageCount Value="116"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit6>
       <Unit7>
         <Filename Value="FitGrids.lpk"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="56" Y="10"/>
-        <UsageCount Value="4"/>
+        <UsageCount Value="3"/>
         <DefaultSyntaxHighlighter Value="XML"/>
       </Unit7>
       <Unit8>
@@ -89,7 +89,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="7"/>
         <CursorPos X="3" Y="22"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit8>
       <Unit9>
@@ -98,7 +98,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="641"/>
         <CursorPos X="21" Y="657"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit9>
       <Unit10>
@@ -106,22 +106,22 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="127"/>
         <CursorPos X="3" Y="101"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit10>
       <Unit11>
         <Filename Value="usr\share\lazarus\2.0.6\packager\registration\lazaruspackageintf.pas"/>
         <UnitName Value="LazarusPackageIntf"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit11>
       <Unit12>
         <Filename Value="..\package\NumericGrid.pas"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="619"/>
-        <CursorPos X="23" Y="680"/>
-        <UsageCount Value="14"/>
+        <TopLine Value="646"/>
+        <CursorPos Y="1479"/>
+        <UsageCount Value="17"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit12>
@@ -131,7 +131,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="96"/>
         <CursorPos Y="114"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit13>
       <Unit14>
         <Filename Value="C:\usr\share\lazarus\2.0.6\lcl\grids.pas"/>
@@ -139,7 +139,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="2513"/>
         <CursorPos Y="2533"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit14>
     </Units>
     <OtherDefines Count="1">
@@ -148,123 +148,123 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="2424" Column="18" TopLine="2394"/>
+        <Caret Line="315" Column="37" TopLine="284"/>
       </Position1>
       <Position2>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="2429" Column="18" TopLine="2398"/>
+        <Caret Line="335" Column="30" TopLine="304"/>
       </Position2>
       <Position3>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="2659" Column="19" TopLine="2646"/>
+        <Caret Line="1066" Column="20" TopLine="1041"/>
       </Position3>
       <Position4>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="2669" Column="19" TopLine="2646"/>
+        <Caret Line="1072" Column="16" TopLine="1041"/>
       </Position4>
       <Position5>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="2674" Column="19" TopLine="2646"/>
+        <Caret Line="1256" Column="20" TopLine="1226"/>
       </Position5>
       <Position6>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="2707" Column="19" TopLine="2685"/>
+        <Caret Line="2568" Column="16" TopLine="2537"/>
       </Position6>
       <Position7>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="2715" Column="19" TopLine="2685"/>
+        <Caret Line="2572" Column="32" TopLine="2562"/>
       </Position7>
       <Position8>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="10" Column="41"/>
+        <Caret Line="2666" Column="16" TopLine="2635"/>
       </Position8>
       <Position9>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="235" Column="58" TopLine="204"/>
+        <Caret Line="2741" Column="45" TopLine="2730"/>
       </Position9>
       <Position10>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="238" Column="30" TopLine="218"/>
+        <Caret Line="627" Column="51" TopLine="609"/>
       </Position10>
       <Position11>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="315" Column="37" TopLine="284"/>
+        <Caret Line="622" TopLine="609"/>
       </Position11>
       <Position12>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="335" Column="30" TopLine="304"/>
+        <Caret Line="679" Column="24" TopLine="651"/>
       </Position12>
       <Position13>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="1066" Column="20" TopLine="1041"/>
+        <Caret Line="1410" Column="33" TopLine="1381"/>
       </Position13>
       <Position14>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="1072" Column="16" TopLine="1041"/>
+        <Caret Line="1415" Column="24" TopLine="1386"/>
       </Position14>
       <Position15>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="1256" Column="20" TopLine="1226"/>
+        <Caret Line="254" Column="28" TopLine="237"/>
       </Position15>
       <Position16>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="2568" Column="16" TopLine="2537"/>
+        <Caret Line="493" Column="28" TopLine="464"/>
       </Position16>
       <Position17>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="2572" Column="32" TopLine="2562"/>
+        <Caret Line="618" Column="23" TopLine="606"/>
       </Position17>
       <Position18>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="2666" Column="16" TopLine="2635"/>
+        <Caret Line="679" Column="24" TopLine="651"/>
       </Position18>
       <Position19>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="2741" Column="45" TopLine="2730"/>
+        <Caret Line="667" Column="30" TopLine="638"/>
       </Position19>
       <Position20>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="627" Column="51" TopLine="609"/>
+        <Caret Line="573" Column="41" TopLine="552"/>
       </Position20>
       <Position21>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="622" TopLine="609"/>
+        <Caret Line="593" Column="36" TopLine="565"/>
       </Position21>
       <Position22>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="679" Column="24" TopLine="651"/>
+        <Caret Line="595" Column="36" TopLine="567"/>
       </Position22>
       <Position23>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="1410" Column="33" TopLine="1381"/>
+        <Caret Line="597" Column="36" TopLine="569"/>
       </Position23>
       <Position24>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="1415" Column="24" TopLine="1386"/>
+        <Caret Line="599" Column="36" TopLine="571"/>
       </Position24>
       <Position25>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="254" Column="28" TopLine="237"/>
+        <Caret Line="601" Column="46" TopLine="573"/>
       </Position25>
       <Position26>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="493" Column="28" TopLine="464"/>
+        <Caret Line="617" Column="29" TopLine="609"/>
       </Position26>
       <Position27>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="618" Column="23" TopLine="606"/>
+        <Caret Line="1416" Column="33" TopLine="456"/>
       </Position27>
       <Position28>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="679" Column="24" TopLine="651"/>
+        <Caret Line="617" Column="29" TopLine="588"/>
       </Position28>
       <Position29>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="1410" Column="33" TopLine="1453"/>
+        <Caret Line="1416" Column="33" TopLine="1387"/>
       </Position29>
       <Position30>
         <Filename Value="..\package\NumericGrid.pas"/>
-        <Caret Line="667" Column="30" TopLine="638"/>
+        <Caret Line="655" TopLine="827"/>
       </Position30>
     </JumpHistory>
     <RunParams>
