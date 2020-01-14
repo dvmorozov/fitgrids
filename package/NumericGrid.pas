@@ -1370,6 +1370,9 @@ begin
                 SavedCoord := StartCoord;
                 R.Top := FixedRows; R.Bottom := RowCount - 1;
                 R.Left := StartCoord.X; R.Right := StartCoord.X;
+                //  Cell must be selected before updating selection.
+                Col := R.Left;
+                Row := R.Top;
                 Selection := R;
             end;
             if (Coord.X <= FixedCols - 1) and
@@ -1380,6 +1383,9 @@ begin
                 SavedCoord := StartCoord;
                 R.Left := FixedCols; R.Right := ColCount - 1;
                 R.Top := StartCoord.Y; R.Bottom := StartCoord.Y;
+                //  Cell must be selected before updating selection.
+                Col := R.Left;
+                Row := R.Top;
                 Selection := R;
             end;
             if (Coord.X <= FixedCols - 1) and
