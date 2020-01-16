@@ -1287,7 +1287,7 @@ end;
 procedure TIDAGrid.KeyPress(var Key: char);
 begin
     inherited KeyPress(Key);
-    (* It is necessary to design callback to permit adding new row.
+    (* TODO: It is necessary to design callback to permit adding new row.
     if Key = #9 then
         if (not RowNumFixed) and (Col = 1) and (Row = 1) then
         begin
@@ -1388,7 +1388,9 @@ begin
             ColOptArray[Index] := Value;
         if Value = coDisabled then
         begin
-            (*???TabStops[Index] := False;*)
+{$IFNDEF Lazarus}
+            TabStops[Index] := False;
+{$ENDIF}
             if Assigned(FColorMatrix) then
                 for i := 0 to RowCount - 1 do
                     CellsColors[Index, i] := DisabledColor;
