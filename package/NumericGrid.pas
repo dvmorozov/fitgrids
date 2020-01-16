@@ -173,7 +173,8 @@ type
         //  Control exit from the table.
         procedure DoExit; override;
         //  Check if input into given cell is possible.
-        (*???function CanEditAcceptKey(Key: Char): Boolean; override;*)
+        function CanEditAcceptKey(Key: Char): Boolean;
+            {$IFNDEF Lazarus} override; {$ELSE} virtual; {$ENDIF}
         //  Set Modified state to True if CanEditAcceptKey returns True.
         procedure KeyPress(var Key: char); override;
         //  Call EditingFinished according to Modified state.
@@ -215,7 +216,7 @@ type
 
         FOnGridResized: TGridResizedEvent;
 
-        (*???function CanEditModify: Boolean; override;*)
+        function CanEditModify: Boolean; {$IFNDEF Lazarus} override; {$ENDIF}
         //  Add new row when key Tab is pressed at the end of row if allowed.
         procedure KeyPress(var Key: char); override;
 
@@ -316,9 +317,10 @@ type
         procedure EditingFinished(
             const ACol, ARow: longint   //  Coordinates of edited cell.
             ); override;
-        (*???function CanEditAcceptKey(Key: Char): Boolean; override;*)
+        function CanEditAcceptKey(Key: Char): Boolean;
+            {$IFNDEF Lazarus} override; {$ELSE} virtual; {$ENDIF}
         //  Check if cell editing is possible
-        (*???function CanEditModify: Boolean; override;*)
+        function CanEditModify: Boolean; {$IFNDEF Lazarus} override; {$ENDIF}
         procedure _InsertRows(StartRow, RowsCount: longint; Clear: boolean); override;
         procedure _DeleteRows(StartRow, RowsCount: longint); override;
         procedure _AddRow; override;
@@ -424,8 +426,6 @@ type
             AState: TGridDrawState); override;
 
         function GetCellColor(const ColNum, RowNum: longint): TColor;
-        (*function CreateEditor: TInplaceEdit; override;*)
-
         procedure SetColCount(Value: longint); override;
         function GetColCount: longint; override;
         procedure SetRowCount(Value: longint); override;
@@ -480,11 +480,8 @@ type
         procedure SetColCount(Value: longint); override;
         function CheckingTextValidity(St: string; ACol, ARow: longint): boolean;
             override;
-{$IFDEF Lazarus}
-        function CanEditAcceptKey(Key: char): boolean; virtual;
-{$ELSE}
-        function CanEditAcceptKey(Key: char): boolean; override;
-{$ENDIF}
+        function CanEditAcceptKey(Key: char): boolean;
+            {$IFNDEF Lazarus} override; {$ELSE} virtual; {$ENDIF}
         procedure KeyPress(var Key: char); override;
 
         procedure MouseUp(Button: TMouseButton; Shift: TShiftState;
@@ -628,8 +625,8 @@ begin
             ClearSelection;
             Col := Coord.X;
             Row := Coord.Y;
-            (*???if CanEditModify then*)
-            Options := EditingOptions;
+            if CanEditModify then
+                Options := EditingOptions;
         end;
     end
     else
@@ -1290,7 +1287,7 @@ end;
 procedure TIDAGrid.KeyPress(var Key: char);
 begin
     inherited KeyPress(Key);
-    (* It is necessary to design callback to permit adding new row.
+    (* TODO: It is necessary to design callback to permit adding new row.
     if Key = #9 then
         if (not RowNumFixed) and (Col = 1) and (Row = 1) then
         begin
@@ -1391,7 +1388,9 @@ begin
             ColOptArray[Index] := Value;
         if Value = coDisabled then
         begin
-            (*???TabStops[Index] := False;*)
+{$IFNDEF Lazarus}
+            TabStops[Index] := False;
+{$ENDIF}
             if Assigned(FColorMatrix) then
                 for i := 0 to RowCount - 1 do
                     CellsColors[Index, i] := DisabledColor;
@@ -2039,13 +2038,6 @@ begin
     Selection := R;
 end;
 
-(*???
-function TColorStringGrid.CreateEditor: TInplaceEdit;
-begin
-//  Result := TModifiedEditor.Create(Self);
-  Result := inherited CreateEditor;
-end;
-*)
 {$hints off}
 function TNumericGrid.CheckingTextValidity(St: string; ACol, ARow: longint): boolean;
 begin
@@ -2525,12 +2517,12 @@ begin
 end;
 
 { TGEFGrid }
-(*???
 function TGEFGrid.CanEditAcceptKey(Key: Char): Boolean;
 begin
-    Result := inherited CanEditAcceptKey(Key) and CanEditModify;
+    Result := {$IFNDEF Lazarus} inherited CanEditAcceptKey(Key) and
+        CanEditModify; {$ELSE} True; {$ENDIF}
 end;
-*)
+
 procedure TGEFGrid.DoExit;
 begin
     if Modified then
@@ -2549,8 +2541,7 @@ end;
 
 procedure TGEFGrid.KeyPress(var Key: char);
 begin
-    if (goEditing in Options)
-    (*???and CanEditAcceptKey(Key)*) then
+    if (goEditing in Options) and CanEditAcceptKey(Key) then
         Modified := True;
     inherited;
 end;
@@ -2735,12 +2726,11 @@ begin
     RowHeights[ARow] := Height;
 end;
 
-(*???
 function TIDAGrid.CanEditModify: Boolean;
 begin
     Result := Changeable;
 end;
-*)
+
 constructor TIDAGrid.Create(AOwner: TComponent);
 begin
     inherited;
@@ -2761,25 +2751,23 @@ begin
     FillArea(Left, Top, Right, Bottom);
 end;
 
-(*???
 function TDataGrid.CanEditModify: Boolean;
 begin
     if GetMyGridDataSource <> nil then
         with GetMyGridDataSource do
-            Result := inherited CanEditModify and (not IsCellDisabled(Col, Row))
-    else Result := inherited CanEditModify;
+            Result := {$IFNDEF Lazarus} inherited CanEditModify and {$ENDIF}
+                (not IsCellDisabled(Col, Row))
+    else Result := {$IFNDEF Lazarus} inherited CanEditModify; {$ELSE} True; {$ENDIF}
 end;
-*)
-(*???
+
 function TDataGrid.CanEditAcceptKey(Key: Char): Boolean;
 begin
     if GetMyGridDataSource <> nil then
         with GetMyGridDataSource do
-            Result := inherited CanEditAcceptKey(Key) and
+            Result := {$IFNDEF Lazarus} inherited CanEditAcceptKey(Key) and {$ENDIF}
                 (Key in GetCellEnabledCharSet(Col, Row))
-    else Result := inherited CanEditAcceptKey(Key);
+    else Result := {$IFNDEF Lazarus} inherited CanEditAcceptKey(Key); {$ELSE} True; {$ENDIF}
 end;
-*)
 
 procedure TDataGrid.FillArea(const Left, Top, Right, Bottom: integer);
 var
