@@ -215,7 +215,7 @@ type
 
         FOnGridResized: TGridResizedEvent;
 
-        (*???function CanEditModify: Boolean; override;*)
+        function CanEditModify: Boolean; {$IFNDEF Lazarus} override; {$ENDIF}
         //  Add new row when key Tab is pressed at the end of row if allowed.
         procedure KeyPress(var Key: char); override;
 
@@ -318,7 +318,7 @@ type
             ); override;
         (*???function CanEditAcceptKey(Key: Char): Boolean; override;*)
         //  Check if cell editing is possible
-        (*???function CanEditModify: Boolean; override;*)
+        function CanEditModify: Boolean; {$IFNDEF Lazarus} override; {$ENDIF}
         procedure _InsertRows(StartRow, RowsCount: longint; Clear: boolean); override;
         procedure _DeleteRows(StartRow, RowsCount: longint); override;
         procedure _AddRow; override;
@@ -626,8 +626,8 @@ begin
             ClearSelection;
             Col := Coord.X;
             Row := Coord.Y;
-            (*???if CanEditModify then*)
-            Options := EditingOptions;
+            if CanEditModify then
+                Options := EditingOptions;
         end;
     end
     else
@@ -2726,12 +2726,11 @@ begin
     RowHeights[ARow] := Height;
 end;
 
-(*???
 function TIDAGrid.CanEditModify: Boolean;
 begin
     Result := Changeable;
 end;
-*)
+
 constructor TIDAGrid.Create(AOwner: TComponent);
 begin
     inherited;
@@ -2752,15 +2751,15 @@ begin
     FillArea(Left, Top, Right, Bottom);
 end;
 
-(*???
 function TDataGrid.CanEditModify: Boolean;
 begin
     if GetMyGridDataSource <> nil then
         with GetMyGridDataSource do
-            Result := inherited CanEditModify and (not IsCellDisabled(Col, Row))
-    else Result := inherited CanEditModify;
+            Result := {$IFNDEF Lazarus} inherited CanEditModify and {$ENDIF}
+                (not IsCellDisabled(Col, Row))
+    else Result := {$IFNDEF Lazarus} inherited CanEditModify {$ELSE} True {$ENDIF};
 end;
-*)
+
 (*???
 function TDataGrid.CanEditAcceptKey(Key: Char): Boolean;
 begin
