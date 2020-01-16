@@ -173,7 +173,8 @@ type
         //  Control exit from the table.
         procedure DoExit; override;
         //  Check if input into given cell is possible.
-        (*???function CanEditAcceptKey(Key: Char): Boolean; override;*)
+        function CanEditAcceptKey(Key: Char): Boolean;
+            {$IFNDEF Lazarus} override; {$ELSE} virtual; {$ENDIF}
         //  Set Modified state to True if CanEditAcceptKey returns True.
         procedure KeyPress(var Key: char); override;
         //  Call EditingFinished according to Modified state.
@@ -316,7 +317,8 @@ type
         procedure EditingFinished(
             const ACol, ARow: longint   //  Coordinates of edited cell.
             ); override;
-        (*???function CanEditAcceptKey(Key: Char): Boolean; override;*)
+        function CanEditAcceptKey(Key: Char): Boolean;
+            {$IFNDEF Lazarus} override; {$ELSE} virtual; {$ENDIF}
         //  Check if cell editing is possible
         function CanEditModify: Boolean; {$IFNDEF Lazarus} override; {$ENDIF}
         procedure _InsertRows(StartRow, RowsCount: longint; Clear: boolean); override;
@@ -478,11 +480,8 @@ type
         procedure SetColCount(Value: longint); override;
         function CheckingTextValidity(St: string; ACol, ARow: longint): boolean;
             override;
-{$IFDEF Lazarus}
-        function CanEditAcceptKey(Key: char): boolean; virtual;
-{$ELSE}
-        function CanEditAcceptKey(Key: char): boolean; override;
-{$ENDIF}
+        function CanEditAcceptKey(Key: char): boolean;
+            {$IFNDEF Lazarus} override; {$ELSE} virtual; {$ENDIF}
         procedure KeyPress(var Key: char); override;
 
         procedure MouseUp(Button: TMouseButton; Shift: TShiftState;
@@ -2516,12 +2515,12 @@ begin
 end;
 
 { TGEFGrid }
-(*???
 function TGEFGrid.CanEditAcceptKey(Key: Char): Boolean;
 begin
-    Result := inherited CanEditAcceptKey(Key) and CanEditModify;
+    Result := {$IFNDEF Lazarus} inherited CanEditAcceptKey(Key) and
+        CanEditModify; {$ELSE} True; {$ENDIF}
 end;
-*)
+
 procedure TGEFGrid.DoExit;
 begin
     if Modified then
@@ -2540,8 +2539,7 @@ end;
 
 procedure TGEFGrid.KeyPress(var Key: char);
 begin
-    if (goEditing in Options)
-    (*???and CanEditAcceptKey(Key)*) then
+    if (goEditing in Options) and CanEditAcceptKey(Key) then
         Modified := True;
     inherited;
 end;
@@ -2757,19 +2755,17 @@ begin
         with GetMyGridDataSource do
             Result := {$IFNDEF Lazarus} inherited CanEditModify and {$ENDIF}
                 (not IsCellDisabled(Col, Row))
-    else Result := {$IFNDEF Lazarus} inherited CanEditModify {$ELSE} True {$ENDIF};
+    else Result := {$IFNDEF Lazarus} inherited CanEditModify; {$ELSE} True; {$ENDIF}
 end;
 
-(*???
 function TDataGrid.CanEditAcceptKey(Key: Char): Boolean;
 begin
     if GetMyGridDataSource <> nil then
         with GetMyGridDataSource do
-            Result := inherited CanEditAcceptKey(Key) and
+            Result := {$IFNDEF Lazarus} inherited CanEditAcceptKey(Key) and {$ENDIF}
                 (Key in GetCellEnabledCharSet(Col, Row))
-    else Result := inherited CanEditAcceptKey(Key);
+    else Result := {$IFNDEF Lazarus} inherited CanEditAcceptKey(Key); {$ELSE} True; {$ENDIF}
 end;
-*)
 
 procedure TDataGrid.FillArea(const Left, Top, Right, Bottom: integer);
 var
