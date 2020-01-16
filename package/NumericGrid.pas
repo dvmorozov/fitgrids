@@ -424,8 +424,6 @@ type
             AState: TGridDrawState); override;
 
         function GetCellColor(const ColNum, RowNum: longint): TColor;
-        (*function CreateEditor: TInplaceEdit; override;*)
-
         procedure SetColCount(Value: longint); override;
         function GetColCount: longint; override;
         procedure SetRowCount(Value: longint); override;
@@ -2039,13 +2037,6 @@ begin
     Selection := R;
 end;
 
-(*???
-function TColorStringGrid.CreateEditor: TInplaceEdit;
-begin
-//  Result := TModifiedEditor.Create(Self);
-  Result := inherited CreateEditor;
-end;
-*)
 {$hints off}
 function TNumericGrid.CheckingTextValidity(St: string; ACol, ARow: longint): boolean;
 begin
