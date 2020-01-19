@@ -317,8 +317,7 @@ type
         procedure EditingFinished(
             const ACol, ARow: longint   //  Coordinates of edited cell.
             ); override;
-        function CanEditAcceptKey(Key: Char): Boolean;
-            {$IFNDEF Lazarus} override; {$ELSE} virtual; {$ENDIF}
+        function CanEditAcceptKey(Key: Char): Boolean; override;
         //  Check if cell editing is possible
         function CanEditModify: Boolean; {$IFNDEF Lazarus} override; {$ENDIF}
         procedure _InsertRows(StartRow, RowsCount: longint; Clear: boolean); override;
@@ -552,13 +551,13 @@ implementation
 
 procedure Register;
 begin
-    RegisterComponents('FitGrids', [TColorStringGrid]);
-    RegisterComponents('FitGrids', [TNumericGrid]);
+    RegisterComponents('Fit', [TColorStringGrid]);
+    RegisterComponents('Fit', [TNumericGrid]);
 
-    RegisterComponents('FitGrids', [TGEFGrid]);
-    RegisterComponents('FitGrids', [TIDAGrid]);
-    RegisterComponents('FitGrids', [TDataGrid]);
-    RegisterComponents('FitGrids', [TColoredGrid]);
+    RegisterComponents('Fit', [TGEFGrid]);
+    RegisterComponents('Fit', [TIDAGrid]);
+    RegisterComponents('Fit', [TDataGrid]);
+    RegisterComponents('Fit', [TColoredGrid]);
 
     RegisterPropertyEditor(TypeInfo(TColor), TColorStringGrid,
         'OddRowColor', TColorProperty);
@@ -2517,11 +2516,13 @@ begin
 end;
 
 { TGEFGrid }
+{$hints off}
 function TGEFGrid.CanEditAcceptKey(Key: Char): Boolean;
 begin
     Result := {$IFNDEF Lazarus} inherited CanEditAcceptKey(Key) and
         CanEditModify; {$ELSE} True; {$ENDIF}
 end;
+{$hints on}
 
 procedure TGEFGrid.DoExit;
 begin
@@ -2765,7 +2766,7 @@ begin
     if GetMyGridDataSource <> nil then
         with GetMyGridDataSource do
             Result := {$IFNDEF Lazarus} inherited CanEditAcceptKey(Key) and {$ENDIF}
-                (Key in GetCellEnabledCharSet(Col, Row))
+                CharInSet(Key, GetCellEnabledCharSet(Col, Row))
     else Result := {$IFNDEF Lazarus} inherited CanEditAcceptKey(Key); {$ELSE} True; {$ENDIF}
 end;
 
