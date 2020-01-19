@@ -337,8 +337,7 @@ type
         procedure EditingFinished(
             const ACol, ARow: LongInt   //  Coordinates of edited cell.
             ); override;
-        function CanEditAcceptKey(Key: Char): Boolean;
-            {$IFNDEF Lazarus} override; {$ELSE} virtual; {$ENDIF}
+        function CanEditAcceptKey(Key: Char): Boolean; override;
         //  Check if cell editing is possible
         function CanEditModify: Boolean; {$IFNDEF Lazarus} override; {$ENDIF}
         procedure _InsertRows(StartRow, RowsCount: LongInt; Clear: Boolean
@@ -2293,11 +2292,13 @@ begin
 end;
 
 { TGEFGrid }
+{$HINTS OFF}
 function TGEFGrid.CanEditAcceptKey(Key: Char): Boolean;
 begin
     Result := {$IFNDEF Lazarus} inherited CanEditAcceptKey(Key) and
         CanEditModify; {$ELSE} True; {$ENDIF}
 end;
+{$HINTS ON}
 
 procedure TGEFGrid.DoExit;
 begin

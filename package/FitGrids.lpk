@@ -10,11 +10,12 @@
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
       <Other>
-        <CustomOptions Value="-dLazarus"/>
+        <CustomOptions Value="-dLazarus
+"/>
         <CompilerPath Value="$(CompPath)"/>
       </Other>
     </CompilerOptions>
-    <Version Minor="1" Release="9" Build="11"/>
+    <Version Minor="1" Release="10" Build="12"/>
     <Files Count="1">
       <Item1>
         <Filename Value="NumericGrid.pas"/>
@@ -25,13 +26,13 @@
     <Type Value="RunAndDesignTime"/>
     <RequiredPkgs Count="3">
       <Item1>
-        <PackageName Value="IDEIntf"/>
+        <PackageName Value="FCL"/>
       </Item1>
       <Item2>
         <PackageName Value="LCL"/>
       </Item2>
       <Item3>
-        <PackageName Value="FCL"/>
+        <PackageName Value="IDEIntf"/>
       </Item3>
     </RequiredPkgs>
     <UsageOptions>
