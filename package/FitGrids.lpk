@@ -4,6 +4,7 @@
     <PathDelim Value="\"/>
     <Name Value="FitGrids"/>
     <Type Value="RunAndDesignTime"/>
+    <AutoUpdate Value="OnRebuildingAll"/>
     <CompilerOptions>
       <Version Value="11"/>
       <PathDelim Value="\"/>
@@ -20,13 +21,21 @@
         <CustomOptions Value="-dLazarus"/>
       </Other>
     </CompilerOptions>
-    <Version Minor="1" Release="13" Build="14"/>
-    <Files Count="1">
+    <Version Minor="1" Release="16" Build="17"/>
+    <Files Count="3">
       <Item1>
         <Filename Value="NumericGrid.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="NumericGrid"/>
       </Item1>
+      <Item2>
+        <Filename Value="FitGrids.pas"/>
+        <UnitName Value="FitGrids"/>
+      </Item2>
+      <Item3>
+        <Filename Value="FitGrids.lpk"/>
+        <Type Value="Text"/>
+      </Item3>
     </Files>
     <RequiredPkgs Count="3">
       <Item1>
