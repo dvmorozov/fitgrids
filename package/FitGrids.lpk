@@ -22,20 +22,16 @@
       </Other>
     </CompilerOptions>
     <Version Minor="1" Release="16" Build="17"/>
-    <Files Count="3">
+    <Files Count="2">
       <Item1>
         <Filename Value="NumericGrid.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="NumericGrid"/>
       </Item1>
       <Item2>
-        <Filename Value="FitGrids.pas"/>
-        <UnitName Value="FitGrids"/>
-      </Item2>
-      <Item3>
         <Filename Value="FitGrids.lpk"/>
         <Type Value="Text"/>
-      </Item3>
+      </Item2>
     </Files>
     <RequiredPkgs Count="3">
       <Item1>
