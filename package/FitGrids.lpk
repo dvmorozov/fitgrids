@@ -17,11 +17,8 @@
           <SyntaxMode Value="Delphi"/>
         </SyntaxOptions>
       </Parsing>
-      <Other>
-        <CustomOptions Value="-dLazarus"/>
-      </Other>
     </CompilerOptions>
-    <Version Minor="1" Release="16" Build="17"/>
+    <Version Minor="1" Release="17" Build="18"/>
     <Files Count="2">
       <Item1>
         <Filename Value="NumericGrid.pas"/>
