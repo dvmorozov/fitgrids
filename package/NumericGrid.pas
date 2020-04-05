@@ -10,7 +10,7 @@ unit NumericGrid;
 interface
 
 uses
-{$IFDEF Lazarus}
+{$IF DEFINED(FPC)}
     LCLIntf, PropEdits, GraphPropEdits,
 {$ELSE}
     System.Types, Windows, DesignIntf, DesignEditors, VclEditors,
@@ -174,7 +174,7 @@ type
         procedure DoExit; override;
         //  Check if input into given cell is possible.
         function CanEditAcceptKey(Key: Char): Boolean;
-            {$IFNDEF Lazarus} override; {$ELSE} virtual; {$ENDIF}
+            {$IF NOT DEFINED(FPC)} override; {$ELSE} virtual; {$ENDIF}
         //  Set Modified state to True if CanEditAcceptKey returns True.
         procedure KeyPress(var Key: char); override;
         //  Call EditingFinished according to Modified state.
@@ -216,7 +216,7 @@ type
 
         FOnGridResized: TGridResizedEvent;
 
-        function CanEditModify: Boolean; {$IFNDEF Lazarus} override; {$ENDIF}
+        function CanEditModify: Boolean; {$IF NOT DEFINED(FPC)} override; {$ENDIF}
         //  Add new row when key Tab is pressed at the end of row if allowed.
         procedure KeyPress(var Key: char); override;
 
@@ -319,7 +319,7 @@ type
             ); override;
         function CanEditAcceptKey(Key: Char): Boolean; override;
         //  Check if cell editing is possible
-        function CanEditModify: Boolean; {$IFNDEF Lazarus} override; {$ENDIF}
+        function CanEditModify: Boolean; {$IF NOT DEFINED(FPC)} override; {$ENDIF}
         procedure _InsertRows(StartRow, RowsCount: longint; Clear: boolean); override;
         procedure _DeleteRows(StartRow, RowsCount: longint); override;
         procedure _AddRow; override;
@@ -480,7 +480,7 @@ type
         function CheckingTextValidity(St: string; ACol, ARow: longint): boolean;
             override;
         function CanEditAcceptKey(Key: char): boolean;
-            {$IFNDEF Lazarus} override; {$ELSE} virtual; {$ENDIF}
+            {$IF NOT DEFINED(FPC)} override; {$ELSE} virtual; {$ENDIF}
         procedure KeyPress(var Key: char); override;
 
         procedure MouseUp(Button: TMouseButton; Shift: TShiftState;
@@ -1387,7 +1387,7 @@ begin
             ColOptArray[Index] := Value;
         if Value = coDisabled then
         begin
-{$IFNDEF Lazarus}
+{$IF NOT DEFINED(FPC)}
             TabStops[Index] := False;
 {$ENDIF}
             if Assigned(FColorMatrix) then
@@ -2519,7 +2519,7 @@ end;
 {$hints off}
 function TGEFGrid.CanEditAcceptKey(Key: Char): Boolean;
 begin
-    Result := {$IFNDEF Lazarus} inherited CanEditAcceptKey(Key) and
+    Result := {$IF NOT DEFINED(FPC)} inherited CanEditAcceptKey(Key) and
         CanEditModify; {$ELSE} True; {$ENDIF}
 end;
 {$hints on}
