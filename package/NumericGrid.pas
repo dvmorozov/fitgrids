@@ -25,8 +25,6 @@ var
     CL_DISABLED_ROW: TColor = clGray;
     CL_SELECTED: TColor = $2A92B0;
 
-    GridDataSourceGUID: TGUID = '{401B6CC0-0915-11D5-968F-8FBD7448F374}';
-
     MIN_HEIGHT: longint = 10;
     MIN_WIDTH: longint = 40;
 
@@ -47,7 +45,6 @@ type
     TCharSet = set of AnsiChar;
 
     IGridDataSource = interface
-        ['{401B6CC0-0915-11D5-968F-8FBD7448F374}']
         //  Convert data value obtained from data source into string
         //  representation. Can be used also to number rows or columns.
         function ValueToString(const ACol, ARow: longint): string;

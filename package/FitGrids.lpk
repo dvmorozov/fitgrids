@@ -18,7 +18,7 @@
         </SyntaxOptions>
       </Parsing>
     </CompilerOptions>
-    <Version Minor="1" Release="17" Build="18"/>
+    <Version Minor="1" Release="18" Build="19"/>
     <Files Count="2">
       <Item1>
         <Filename Value="NumericGrid.pas"/>
