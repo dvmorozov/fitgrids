@@ -1,0 +1,17 @@
+# Lazarus/FPC build artifacts
+lib/
+backup/
+*.o
+*.ppu
+*.compiled
+*.or
+*.obj
+*.dcu
+*.exe
+*.res
+*.tmp
+*.bak
+*.~*
+*.lps
+*.local
+*.identcache
