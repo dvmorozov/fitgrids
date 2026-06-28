@@ -10,7 +10,7 @@
       <PathDelim Value="\"/>
       <SearchPaths>
         <OtherUnitFiles Value="."/>
-        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
       <Parsing>
         <SyntaxOptions>
@@ -19,16 +19,20 @@
       </Parsing>
     </CompilerOptions>
     <Version Minor="1" Release="18" Build="19"/>
-    <Files Count="2">
+    <Files Count="3">
       <Item1>
+        <Filename Value="FitGrids.pas"/>
+        <UnitName Value="FitGrids"/>
+      </Item1>
+      <Item2>
         <Filename Value="NumericGrid.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="NumericGrid"/>
-      </Item1>
-      <Item2>
+      </Item2>
+      <Item3>
         <Filename Value="FitGrids.lpk"/>
         <Type Value="Text"/>
-      </Item2>
+      </Item3>
     </Files>
     <RequiredPkgs Count="3">
       <Item1>

@@ -1,0 +1,25 @@
+# Lazarus/FPC & Delphi build artifacts
+lib/
+bin/
+backup/
+__history/
+__recovery/
+Win32/
+Win64/
+*.o
+*.ppu
+*.compiled
+*.or
+*.obj
+*.dcu
+*.a
+*.so
+*.exe
+*.dll
+*.res
+*.tmp
+*.bak
+*.~*
+*.lps
+*.local
+*.identcache
