@@ -3,7 +3,7 @@ A few grid components for Delphi/Lazarus.
 
 ## More info
 
-[fitgrids on GitHub](https://dvmorozov.github.io/fitgrids/)
+[Documentation and class diagram](https://dvmorozov.github.io/fitgrids/)
 
 ## License
 
