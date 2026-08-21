@@ -21,7 +21,7 @@ uses
 var
     //  Cell colors by default.
     CL_ODD_ROW: TColor = clWhite;
-    CL_EVEN_ROW: TColor = clYellow;
+    CL_EVEN_ROW: TColor = $00E8E8E8;  //  Light gray.
     CL_DISABLED_ROW: TColor = clGray;
     CL_SELECTED: TColor = $2A92B0;
 
@@ -546,6 +546,25 @@ procedure Register;
 
 implementation
 
+//  Returns text color which is well readable on the given background color.
+//  Cell backgrounds are set explicitly by the grid, so the font color inherited
+//  from the widget theme (light text under dark themes) can't be used.
+function ContrastingTextColor(ABackgroundColor: TColor): TColor;
+var
+    RGBValue: longint;
+    Luminance: longint;
+begin
+    RGBValue := ColorToRGB(ABackgroundColor);
+    //  Perceptual luminance, TColor stores components as $00BBGGRR.
+    Luminance := (299 * (RGBValue and $FF) +
+        587 * ((RGBValue shr 8) and $FF) +
+        114 * ((RGBValue shr 16) and $FF)) div 1000;
+    if Luminance < 128 then
+        Result := clWhite
+    else
+        Result := clBlack;
+end;
+
 procedure Register;
 begin
     RegisterComponents('Fit', [TColorStringGrid]);
@@ -959,7 +978,7 @@ procedure TColoredGrid.DrawCell(ACol, ARow: longint; ARect: TRect;
     {$hints on}
 
 var
-    SaveColor, TempColor: TColor;
+    SaveColor, SaveFontColor, TempColor: TColor;
     X, Y: integer;
 begin
     if Assigned(OnDrawCell) then
@@ -1000,9 +1019,12 @@ begin
             Inc(ARect.Top);
             Dec(ARect.Bottom);
             Canvas.FillRect(ARect);
+            SaveFontColor := Canvas.Font.Color;
+            Canvas.Font.Color := ContrastingTextColor(Canvas.Brush.Color);
             X := ARect.Right - Canvas.TextWidth(Cells[ACol, ARow]) - 2;
             Y := ARect.Bottom - Canvas.TextHeight(Cells[ACol, ARow]) - 2;
             Canvas.TextRect(ARect, X, Y, Cells[ACol, ARow]);
+            Canvas.Font.Color := SaveFontColor;
         end
         else
             inherited DrawCell(ACol, ARow, ARect, AState);
@@ -1654,10 +1676,11 @@ end;
 procedure TColorStringGrid.DrawCell(ACol, ARow: longint; ARect: TRect;
     AState: TGridDrawState);
 var
-    SaveColor: TColor;
+    SaveColor, SaveFontColor: TColor;
     X, Y: integer;
 begin
     SaveColor := Canvas.Brush.Color;
+    SaveFontColor := Canvas.Font.Color;
     if not (gdFixed in AState) then
     begin
         //  Inherited method is called to draw cell borders
@@ -1680,6 +1703,7 @@ begin
             ARect.Right := ARect.Right - GridLineWidth;
         end;
         Canvas.FillRect(ARect);
+        Canvas.Font.Color := ContrastingTextColor(Canvas.Brush.Color);
         X := ARect.Right - Canvas.TextWidth(Cells[ACol, ARow]) - 2;
         Y := ARect.Bottom - Canvas.TextHeight(Cells[ACol, ARow]) - 2;
         Canvas.TextRect(ARect, X, Y, Cells[ACol, ARow]);
@@ -1690,6 +1714,7 @@ begin
     else
         inherited DrawCell(ACol, ARow, ARect, AState);
     Canvas.Brush.Color := SaveColor;
+    Canvas.Font.Color := SaveFontColor;
 end;
 
 function TColorStringGrid.GetCellColor(const ColNum, RowNum: longint): TColor;
@@ -1718,7 +1743,7 @@ begin
     if csDesigning in ComponentState then
     begin
         OddRowColor := clWhite;
-        EvenRowColor := clYellow;
+        EvenRowColor := $00E8E8E8;
         SelectedRegionColor := $0064CCEA - $003A3A3A;
     end;
 end;

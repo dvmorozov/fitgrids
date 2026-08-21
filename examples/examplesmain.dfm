@@ -176,7 +176,7 @@ object Form1: TForm1
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing]
     TabOrder = 1
     OddRowColor = clWhite
-    EvenRowColor = clYellow
+    EvenRowColor = 15263976
     SelectedRegionColor = 2790064
     ColNumFixed = False
     RowNumFixed = False
@@ -235,7 +235,7 @@ object Form1: TForm1
     RowNumFixed = False
     Changeable = True
     OddRowColor = clWhite
-    EvenRowColor = clYellow
+    EvenRowColor = 15263976
     SelectedRegionColor = 2790064
     DisabledColor = clBlack
   end
