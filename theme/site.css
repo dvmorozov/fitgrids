@@ -1,0 +1,239 @@
+/*  The one design every site shares: free Fit's three and a module product's.
+
+    BUILT ON BOOTSTRAP 5 (bootstrap.min.css beside this file, MIT - see
+    LICENSE-bootstrap.txt), coloured here. Kept once, in fit/site/theme, and
+    copied into every site as theme/ (New-SiteTree), so the sites cannot drift.
+
+    NO SCRIPT DECIDES THE COLOURS. Light is defined on :root and dark only
+    overrides Bootstrap's own variables under prefers-color-scheme, so a page
+    follows the reader's system with nothing to run - a module product's site
+    runs no scripts at all.
+
+    THE LOOK: a deep navy frame - the bar, the hero band, the footer - with a
+    teal accent, and graph paper with a fitted curve behind the hero: what every
+    one of these programs and packages is about.
+*/
+
+:root {
+    --fit-navy:        #0b1d33;
+    --fit-navy-2:      #10294a;
+    --fit-navy-line:   rgba(148, 189, 230, .14);
+    --fit-teal:        #14b8a6;
+    --fit-teal-deep:   #0f766e;
+    --fit-on-navy:     #e6eef7;
+    --fit-on-navy-dim: #a9bbd0;
+    --fit-shadow:      0 1px 2px rgba(15, 23, 42, .06), 0 8px 24px rgba(15, 23, 42, .08);
+    --fit-radius:      .75rem;
+    --fit-measure:     46rem;
+
+    --bs-body-font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    --bs-body-font-size: 1.0625rem;
+    --bs-body-line-height: 1.65;
+    --bs-body-bg: #f5f7fb;
+    --bs-body-bg-rgb: 245, 247, 251;
+    --bs-body-color: #142033;
+    --bs-body-color-rgb: 20, 32, 51;
+    --bs-secondary-color: rgba(20, 32, 51, .68);
+    --bs-tertiary-bg: #eaf0f6;
+    --bs-tertiary-bg-rgb: 234, 240, 246;
+    --bs-border-color: #d7dfe8;
+    --bs-link-color: #0f766e;
+    --bs-link-color-rgb: 15, 118, 110;
+    --bs-link-hover-color: #0b5550;
+    --bs-link-hover-color-rgb: 11, 85, 80;
+    --bs-primary: #0f8f82;
+    --bs-primary-rgb: 15, 143, 130;
+    --bs-code-color: #b4235a;
+    --bs-emphasis-color: #0b1d33;
+
+    --fit-surface: #ffffff;
+    --ok-bg:   #dff3e4;  --ok-fg:   #10502a;  --ok-edge:   #9ed4b2;
+    --warn-bg: #fdf0d5;  --warn-fg: #6b4a06;  --warn-edge: #e3c377;
+    --idle-bg: #e9ecf0;  --idle-fg: #4a5563;  --idle-edge: #c4cad2;
+    --notice-bg: #fff7e6; --notice-edge: #f2c66d;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        color-scheme: dark;
+        --bs-body-bg: #08111f;
+        --bs-body-bg-rgb: 8, 17, 31;
+        --bs-body-color: #dfe7f1;
+        --bs-body-color-rgb: 223, 231, 241;
+        --bs-secondary-color: rgba(223, 231, 241, .7);
+        --bs-tertiary-bg: #0e1a2d;
+        --bs-tertiary-bg-rgb: 14, 26, 45;
+        --bs-border-color: #22344f;
+        --bs-link-color: #5eead4;
+        --bs-link-color-rgb: 94, 234, 212;
+        --bs-link-hover-color: #99f6e4;
+        --bs-link-hover-color-rgb: 153, 246, 228;
+        --bs-code-color: #f9a8d4;
+        --bs-emphasis-color: #ffffff;
+        --fit-surface: #0f1c31;
+        --fit-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px rgba(0, 0, 0, .35);
+        --ok-bg:   #16321f;  --ok-fg:   #8fdca9;  --ok-edge:   #2f6640;
+        --warn-bg: #34290f;  --warn-fg: #f0cd82;  --warn-edge: #6d5620;
+        --idle-bg: #1c2638;  --idle-fg: #aab3bf;  --idle-edge: #3c4a60;
+        --notice-bg: #2a2212; --notice-edge: #7a5b1d;
+    }
+}
+
+body { -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4 { color: var(--bs-emphasis-color); font-weight: 700; letter-spacing: -.01em; }
+a { text-underline-offset: .18em; }
+
+/* ---------------------------------------------------------------- the bar */
+
+.site-nav { background: var(--fit-navy); border-bottom: 1px solid var(--fit-navy-line); }
+.site-nav .navbar-brand { font-weight: 800; letter-spacing: -.01em; color: #fff; display: flex; align-items: center; gap: .55rem; }
+.site-nav .navbar-brand img { width: 1.6rem; height: 1.6rem; }
+.site-nav .nav-link { color: var(--fit-on-navy-dim); font-weight: 500; }
+.site-nav .nav-link:hover, .site-nav .nav-link:focus { color: #fff; }
+.site-nav .nav-link[aria-current="page"] { color: #fff; box-shadow: inset 0 -2px 0 var(--fit-teal); }
+.site-nav { position: sticky; top: 0; z-index: 1030; }
+
+/* ---------------------------------------------------------------- the hero */
+
+/*  Graph paper - a fine grid and a coarser one - under a soft light from the
+    side the picture is on. Each site's front page shows its own picture
+    (hero.svg, in its project's site/) beside its name: what it is about, drawn. */
+.site-hero {
+    position: relative;
+    color: var(--fit-on-navy);
+    background-color: var(--fit-navy);
+    background-image:
+        radial-gradient(60% 90% at 80% 40%, rgba(20, 184, 166, .16) 0%, rgba(20, 184, 166, 0) 70%),
+        linear-gradient(var(--fit-navy-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--fit-navy-line) 1px, transparent 1px),
+        linear-gradient(rgba(148, 189, 230, .06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 189, 230, .06) 1px, transparent 1px),
+        radial-gradient(120% 140% at 85% 0%, var(--fit-navy-2) 0%, var(--fit-navy) 60%);
+    background-size: 100% 100%, 96px 96px, 96px 96px, 24px 24px, 24px 24px, 100% 100%;
+    background-position: 0 0, -1px -1px, -1px -1px, -1px -1px, -1px -1px, 0 0;
+    background-repeat: no-repeat, repeat, repeat, repeat, repeat, no-repeat;
+    padding: 4.5rem 0 5rem;
+}
+.site-hero.compact { padding: 1.6rem 0 1.8rem; }
+.site-hero.compact .h4 { color: #fff; font-weight: 800; }
+.site-hero.compact p { color: var(--fit-on-navy-dim); }
+.site-hero h1 { color: #fff; font-size: clamp(2.2rem, 4.6vw, 3.5rem); line-height: 1.1; letter-spacing: -.025em; font-weight: 800; }
+.site-hero .lead { color: var(--fit-on-navy-dim); font-size: 1.2rem; }
+.site-hero a:not(.btn) { color: #7ee8d8; }
+.site-hero .eyebrow { color: var(--fit-teal); font-weight: 700; text-transform: uppercase; letter-spacing: .12em; font-size: .8rem; }
+.site-hero .hero-media { filter: drop-shadow(0 20px 40px rgba(0, 0, 0, .45)); }
+.hero-art { display: block; width: 100%; height: auto; filter: drop-shadow(0 24px 48px rgba(0, 0, 0, .45)) drop-shadow(0 0 32px rgba(20, 184, 166, .12)); }
+.site-hero .figure-card { border-color: rgba(255, 255, 255, .12); }
+
+.btn-primary {
+    --bs-btn-bg: #0f8f82; --bs-btn-border-color: #0f8f82;
+    --bs-btn-hover-bg: #0c766b; --bs-btn-hover-border-color: #0c766b;
+    --bs-btn-active-bg: #0a6259; --bs-btn-active-border-color: #0a6259;
+    --bs-btn-disabled-bg: #0f8f82; --bs-btn-disabled-border-color: #0f8f82;
+    --bs-btn-font-weight: 600;
+}
+.btn { --bs-btn-padding-x: 1.25rem; --bs-btn-padding-y: .7rem; border-radius: .6rem; }
+/*  A store that is not open yet: a greyed button saying so, linking nowhere. */
+.btn.closed { display: inline-flex; flex-direction: column; align-items: center; line-height: 1.25; cursor: default; opacity: .7; }
+.btn.closed small { font-weight: 400; font-size: .78rem; opacity: .85; }
+
+/* ---------------------------------------------------------------- sections */
+
+.band { padding: 4.5rem 0; }
+.band + .band { border-top: 1px solid var(--bs-border-color); }
+.band.alt { background: var(--bs-tertiary-bg); }
+.measure { max-width: var(--fit-measure); }
+.feature-media { position: sticky; top: 5.5rem; }
+@media (max-width: 991.98px) { .feature-media { position: static; } }
+
+.figure-card {
+    margin: 0; background: var(--fit-surface); border: 1px solid var(--bs-border-color);
+    border-radius: var(--fit-radius); overflow: hidden; box-shadow: var(--fit-shadow);
+}
+.figure-card a { display: block; }
+/*  A window's screenshot is 16:10; cropped from its top left when it is not,
+    so a row of them lines up. Clicking one opens it at full size. */
+.figure-card img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top left; }
+.figure-card video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; background: #000; }
+.figure-card figcaption { padding: .65rem 1rem; color: var(--bs-secondary-color); font-size: .92rem; }
+.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); gap: 1.5rem; }
+.gallery .wide { grid-column: 1 / -1; }
+
+.card { --bs-card-bg: var(--fit-surface); --bs-card-border-color: var(--bs-border-color); border-radius: var(--fit-radius); box-shadow: var(--fit-shadow); }
+.card.notice { --bs-card-bg: var(--notice-bg); --bs-card-border-color: var(--notice-edge); }
+.downloads { list-style: none; padding: 0; margin: 0; }
+.downloads li { padding: .55rem 0; border-bottom: 1px solid var(--bs-border-color); }
+
+/* ---------------------------------------------------------------- reading pages */
+
+/*  Pages written as plain HTML - the generated ones above all - styled where
+    they sit, so their markup needs no classes of its own. */
+.site-content { padding-top: 3rem; padding-bottom: 4rem; }
+/*  A readable measure for TEXT; tables, diagrams, galleries and layout rows
+    keep the container's width. */
+.site-content > :is(p, h1, h2, h3, h4, ul, ol, dl, blockquote, hr, nav) { max-width: var(--fit-measure); }
+.site-content h1 { font-size: 2.2rem; margin-bottom: 1rem; }
+.site-content h2 { font-size: 1.55rem; margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--bs-border-color); }
+.site-content h3, .measure h3, .guide h3 { font-size: 1.15rem; margin-top: 2rem; }
+.site-content blockquote { margin: 1rem 0 1.25rem; padding: .35rem 1rem; border-left: 3px solid var(--fit-teal); color: var(--bs-secondary-color); }
+.site-content pre:not(.mermaid) { background: var(--bs-tertiary-bg); border: 1px solid var(--bs-border-color); border-radius: .5rem; padding: .9rem 1rem; }
+.site-content img { max-width: 100%; height: auto; border-radius: .5rem; }
+.site-content video { display: block; width: 100%; height: auto; border-radius: var(--fit-radius); box-shadow: var(--fit-shadow); }
+.site-content table, .site-bands table, .guide table { width: 100%; margin: 0 0 1.5rem; border-collapse: collapse; font-size: .95rem; background: var(--fit-surface); }
+.site-content th, .site-content td, .site-bands th, .site-bands td, .guide th, .guide td { border: 1px solid var(--bs-border-color); padding: .45rem .7rem; text-align: left; vertical-align: top; }
+.site-content th, .site-bands th, .guide th { background: var(--bs-tertiary-bg); font-weight: 600; }
+.table-scroll, .mermaid-scroll { overflow-x: auto; margin: 0 0 1.5rem; }
+.crumbs { margin: 0 0 .25rem; font-size: .95rem; }
+ul.contents { padding-left: 1.2rem; }
+.lead-in { font-size: 1.2rem; }
+.site-bands .band h2 { margin-bottom: 1rem; }
+.site-bands .card table { box-shadow: none; }
+
+pre.mermaid {
+    background: var(--fit-surface); border: 1px solid var(--bs-border-color); border-radius: var(--fit-radius);
+    padding: 1.25rem; overflow-x: auto; text-align: center; box-shadow: var(--fit-shadow);
+    /*  Until mermaid has drawn it, the block is unrendered source; a diagram
+        that FAILS to render is shown again as its source - broken should look
+        broken. */
+    visibility: hidden;
+}
+pre.mermaid[data-rendered] { visibility: visible; }
+pre.mermaid svg { max-width: 100%; height: auto; }
+
+/*  The WORD is the meaning; the colour only agrees with it. */
+.status { display: inline-block; padding: .08em .55em; border-radius: 999px; border: 1px solid; font-size: .78rem; font-weight: 600; white-space: nowrap; line-height: 1.5; }
+.status--implemented { background: var(--ok-bg);   color: var(--ok-fg);   border-color: var(--ok-edge); }
+.status--partial     { background: var(--warn-bg); color: var(--warn-fg); border-color: var(--warn-edge); }
+.status--planned     { background: var(--idle-bg); color: var(--idle-fg); border-color: var(--idle-edge); }
+
+/* ---------------------------------------------------------------- a guide */
+
+.doc-toc { position: sticky; top: 5.5rem; max-height: calc(100vh - 7rem); overflow-y: auto; font-size: .95rem; }
+.doc-toc .toc-title { font-weight: 700; margin-bottom: .5rem; }
+.doc-toc .toc-title a { color: var(--bs-emphasis-color); text-decoration: none; }
+.doc-toc ol { list-style: none; padding: 0; margin: 0; border-left: 1px solid var(--bs-border-color); }
+.doc-toc ol a { display: block; padding: .32rem .9rem; margin-left: -1px; color: var(--bs-secondary-color); text-decoration: none; border-left: 2px solid transparent; }
+.doc-toc ol a:hover { color: var(--bs-emphasis-color); }
+.doc-toc a[aria-current="page"] { color: var(--bs-emphasis-color); font-weight: 600; border-left-color: var(--fit-teal); background: var(--bs-tertiary-bg); }
+@media (max-width: 991.98px) {
+    .doc-toc { position: static; max-height: none; }
+    .doc-toc ol { display: flex; flex-wrap: wrap; gap: .25rem; border-left: 0; }
+    .doc-toc ol a { border: 1px solid var(--bs-border-color); border-radius: 999px; padding: .2rem .75rem; }
+}
+/*  Beside the chapter column the text still keeps a readable line. */
+.guide { max-width: 50rem; }
+.guide h2 { margin-top: 2.75rem; padding-top: 1.25rem; border-top: 1px solid var(--bs-border-color); }
+.guide .standing { color: var(--bs-secondary-color); font-size: .9rem; margin-bottom: .25rem; }
+.guide .lead { font-size: 1.15rem; }
+.guide blockquote { margin: 1rem 0; padding: .35rem 1rem; border-left: 3px solid var(--fit-teal); color: var(--bs-secondary-color); }
+.guide table { display: block; overflow-x: auto; }
+.chapters { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 1rem; margin: 2.5rem 0 0; font-size: .95rem; }
+.contents li { margin: .6rem 0; }
+pre.licence { white-space: pre-wrap; overflow-wrap: anywhere; background: var(--bs-tertiary-bg); border: 1px solid var(--bs-border-color); border-radius: .5rem; padding: 1rem; font-size: .85rem; line-height: 1.5; }
+
+/* ---------------------------------------------------------------- the footer */
+
+.site-footer { background: var(--fit-navy); color: var(--fit-on-navy-dim); padding: 2.5rem 0; font-size: .92rem; margin-top: 0; }
+.site-footer a { color: #7ee8d8; }
+.site-footer p { margin: 0 0 .4rem; max-width: var(--fit-measure); }
+.site-footer .brand { color: #fff; font-weight: 800; }
