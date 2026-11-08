@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="4">
+    <PathDelim Value="\"/>
+    <Name Value="FitGrids"/>
+    <Type Value="RunAndDesignTime"/>
+    <AutoUpdate Value="OnRebuildingAll"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <PathDelim Value="\"/>
+      <SearchPaths>
+        <OtherUnitFiles Value="."/>
+        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+      </SearchPaths>
+      <Parsing>
+        <SyntaxOptions>
+          <SyntaxMode Value="Delphi"/>
+        </SyntaxOptions>
+      </Parsing>
+    </CompilerOptions>
+    <License Value="MPL-2.0 (Mozilla Public License 2.0); see LICENSE"/>
+    <Version Minor="1" Release="18" Build="19"/>
+    <Files Count="3">
+      <Item1>
+        <Filename Value="FitGrids.pas"/>
+        <UnitName Value="FitGrids"/>
+      </Item1>
+      <Item2>
+        <Filename Value="NumericGrid.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="NumericGrid"/>
+      </Item2>
+      <Item3>
+        <Filename Value="FitGrids.lpk"/>
+        <Type Value="Text"/>
+      </Item3>
+    </Files>
+    <RequiredPkgs Count="3">
+      <Item1>
+        <PackageName Value="IDEIntf"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="LCL"/>
+      </Item2>
+      <Item3>
+        <PackageName Value="FCL"/>
+      </Item3>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>
