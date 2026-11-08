@@ -1,0 +1,25 @@
+#  A stub, on purpose. With Pages set to the GitHub Actions builder, pushing this
+#  branch only publishes it if THIS branch carries a workflow - a push event runs
+#  the workflows of the branch pushed, not the ones on main. The work itself
+#  (deploying, and clearing the runs it supersedes) stays in one place on main,
+#  so the release path and the site path cannot drift apart.
+name: Pages
+
+on:
+  push:
+    branches: [ gh-pages ]
+  workflow_dispatch:
+
+#  What the called workflow is allowed to ask for. A called workflow cannot
+#  request more than its caller granted, so `actions: write` has to be here as
+#  well as in the workflow on main - it is what the tidy job needs to delete the
+#  runs this one supersedes, and without it the run fails before it starts.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  actions: write
+
+jobs:
+  deploy:
+    uses: dvmorozov/fit/.github/workflows/pages.yml@main
